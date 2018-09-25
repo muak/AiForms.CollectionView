@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:cr="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+    xmlns:ef="clr-namespace:AiForms.Effects;assembly=AiForms.Effects"
+    x:Class="Sample.Views.TestForm">
+   
+    <cr:CarouselViewControl x:Name="carousel" ItemsSource="{Binding ItemsSource}" ShowIndicators="false" 
+                            PositionSelectedCommand="{Binding SelectedCommand}" ShowArrows="true"
+                            Position="{Binding Position.Value,Mode=TwoWay}">
+        <cr:CarouselViewControl.ItemTemplate>
+            <DataTemplate>
+                <StackLayout Padding="25,10,25,10">
+                    <Label Text="{Binding Message}" VerticalOptions="FillAndExpand" VerticalTextAlignment="Center" />
+                    <FlexLayout Direction="Row" VerticalOptions="End">
+                       <Button FlexLayout.Grow="1" Command="{Binding BindingContext.NGCommand,Source={x:Reference carousel}}" CommandParameter="{Binding}" HorizontalOptions="FillAndExpand" Text="NG" TextColor="Red" BackgroundColor="Transparent" BorderWidth="0" HeightRequest="20" ef:ToFlatButton.On="true" />
+                        <Button FlexLayout.Grow="1" Command="{Binding BindingContext.OKCommand,Source={x:Reference carousel}}" CommandParameter="{Binding}" HorizontalOptions="FillAndExpand" Text="OK" TextColor="Blue" BackgroundColor="Transparent" BorderWidth="0" HeightRequest="20" ef:ToFlatButton.On="true"   />
+                    </FlexLayout>
+                </StackLayout>
+            </DataTemplate>
+        </cr:CarouselViewControl.ItemTemplate>
+    </cr:CarouselViewControl>
+</ContentView>

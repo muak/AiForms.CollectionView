@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:local="clr-namespace:Sample.Views;assembly=Sample"
+    xmlns:ai="clr-namespace:AiForms.Renderers;assembly=CollectionView"
+    xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    x:Class="Sample.Views.HCollectionViewTest">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+" Command="{Binding AddCommand}" />
+        <ToolbarItem Text="-" Command="{Binding DelCommand}" />
+        <ToolbarItem Text="R" Command="{Binding RepCommand}" />
+        <ToolbarItem Text="M" Command="{Binding MoveCommand}" />
+        <ToolbarItem Text="S+" Command="{Binding AddSecCommand}" />
+        <ToolbarItem Text="S-" Command="{Binding DelSecCommand}" />
+        <ToolbarItem Text="Scrl" Clicked="Handle_Clicked" />
+    </ContentPage.ToolbarItems>
+    <StackLayout>
+        <ai:HCollectionView x:Name="collectionView"
+                            ScrollController="{Binding ScrollController}"
+                            ItemsSource="{Binding ItemsSource}" 
+                            ItemTapCommand="{Binding TapCommand}" 
+                            ItemLongTapCommand="{Binding LongTapCommand}"
+                            Spacing="{Binding Spacing.Value}"
+                            IsGroupingEnabled="true"
+                            GroupHeaderWidth="{Binding GroupWidth.Value}"
+                            IsInfinite="{Binding IsInfinite.Value}"
+                            BackgroundColor="{Binding Background.Value}"
+                            TouchFeedbackColor="{Binding FeedbackColor.Value}"
+                            ColumnWidth="{Binding ColumnWidth.Value}"
+                            HeightRequest="{Binding RowHeight.Value}"
+                            >
+            <x:Arguments>
+                <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+            </x:Arguments>
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <ai:ContentCell>
+                        <Label Text="{Binding Head}" BackgroundColor="#E6DAB9" />
+                    </ai:ContentCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ai:ContentCell>
+                        <StackLayout Spacing="0" Margin="0" BackgroundColor="Transparent">
+                            <ff:CachedImage HeightRequest="75" StyleId="Image" LoadingPlaceholder="icon.png" DownsampleWidth="180" 
+                                            RetryCount="3" RetryDelay="500" Aspect="AspectFill" Source="{Binding PhotoUrl}" 
+                                            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                            <Label x:Name="label1" VerticalOptions="End" HorizontalOptions="FillAndExpand" Text="{Binding Title}" />
+                        </StackLayout>
+                    </ai:ContentCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ai:HCollectionView>
+        <ai:HCollectionView x:Name="collectionView2"
+                            ScrollController="{Binding ScrollController2}"
+                            ItemsSource="{Binding ItemsSource2}"  
+                            ItemTapCommand="{Binding TapCommand}" 
+                            ItemLongTapCommand="{Binding LongTapCommand}" 
+                            Spacing="{Binding Spacing.Value}"
+                            IsGroupingEnabled="false"
+                            GroupHeaderWidth="{Binding GroupWidth.Value}"
+                            IsInfinite="{Binding IsInfinite.Value}"
+                            BackgroundColor="{Binding Background.Value}"
+                            TouchFeedbackColor="{Binding FeedbackColor.Value}"
+                            ColumnWidth="{Binding ColumnWidth.Value}"
+                            HeightRequest="{Binding RowHeight.Value}"
+                            >
+            <x:Arguments>
+                <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+            </x:Arguments>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ai:ContentCell>
+                        <StackLayout Spacing="0" Margin="0" BackgroundColor="Transparent">
+                            <ff:CachedImage HeightRequest="75" StyleId="Image" LoadingPlaceholder="icon.png" DownsampleWidth="180" RetryCount="3" RetryDelay="500" Aspect="AspectFill" Source="{Binding PhotoUrl}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                            <Label x:Name="label1" VerticalOptions="End" HorizontalOptions="FillAndExpand" Text="{Binding Title}" />
+                        </StackLayout>
+                    </ai:ContentCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ai:HCollectionView>
+        
+        <ContentView VerticalOptions="FillAndExpand" />
+        
+        <local:TestForm BindingContext="{Binding TestSource}">
+            <ContentView.HeightRequest>
+                <!-- Carousel で iOS サイズを動的にすると落ちるバグ対策 -->
+                <OnPlatform x:TypeArguments="x:Double" iOS="150" />
+            </ContentView.HeightRequest>
+            <ContentView.VerticalOptions>
+                <OnPlatform x:TypeArguments="LayoutOptions" iOS="End" Android="FillAndExpand" />
+            </ContentView.VerticalOptions>
+        </local:TestForm>
+    </StackLayout>
+</ContentPage>

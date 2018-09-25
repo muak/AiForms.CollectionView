@@ -1,0 +1,351 @@
+﻿using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Windows.Input;
+using AiForms.Renderers;
+using AiForms.Renderers.iOS;
+using AiForms.Renderers.iOS.Cells;
+using CoreGraphics;
+using Foundation;
+using UIKit;
+using Xamarin.Forms;
+using Xamarin.Forms.Internals;
+using Xamarin.Forms.Platform.iOS;
+using RectangleF = CoreGraphics.CGRect;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace AiForms.Renderers.iOS
+{
+    [Foundation.Preserve(AllMembers = true)]
+    public class CollectionViewRenderer : ViewRenderer<CollectionView, UICollectionView>
+    {
+        public const string SectionHeaderId = "SectionHeader";
+        protected CollectionViewSource DataSource;
+        protected UICollectionViewFlowLayout ViewLayout;
+        protected ITemplatedItemsView<Cell> TemplatedItemsView => Element;
+        ScrollToRequestedEventArgs _requestedScroll;
+        bool _disposed;
+
+
+        protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
+        {
+            base.OnElementChanged(e);
+
+            if (e.OldElement != null)
+            {
+                var templatedItems = ((ITemplatedItemsView<Cell>)e.OldElement).TemplatedItems;
+                templatedItems.CollectionChanged -= OnCollectionChanged;
+                templatedItems.GroupedCollectionChanged -= OnGroupedCollectionChanged;
+                e.OldElement.ScrollToRequested -= OnScrollToRequested;
+            }
+
+            if (e.NewElement != null)
+            {
+
+                var templatedItems = ((ITemplatedItemsView<Cell>)e.NewElement).TemplatedItems;
+
+                templatedItems.CollectionChanged += OnCollectionChanged;
+                templatedItems.GroupedCollectionChanged += OnGroupedCollectionChanged;
+                e.NewElement.ScrollToRequested += OnScrollToRequested;
+
+                UpdateBackgroundColor();
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                ViewLayout?.Dispose();
+                ViewLayout = null;
+
+                foreach (UIView subview in Subviews)
+                {
+                    DisposeSubviews(subview);
+                }
+
+                if (Element != null)
+                {
+                    var templatedItems = TemplatedItemsView.TemplatedItems;
+                    templatedItems.CollectionChanged -= OnCollectionChanged;
+                    templatedItems.GroupedCollectionChanged -= OnGroupedCollectionChanged;
+                    Element.ScrollToRequested -= OnScrollToRequested;
+                }
+            }
+
+            _disposed = true;
+
+            base.Dispose(disposing);
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+            if (e.PropertyName == Xamarin.Forms.ListView.IsGroupingEnabledProperty.PropertyName)
+            {
+                Control.ReloadData();
+            }
+            else if (e.PropertyName == VisualElement.BackgroundColorProperty.PropertyName)
+            {
+                UpdateBackgroundColor();
+            }
+
+        }
+
+        protected virtual async void OnScrollToRequested(object sender, ScrollToRequestedEventArgs e)
+        {
+            if (Superview == null)
+            {
+                _requestedScroll = e;
+                return;
+            }
+
+            var position = GetScrollPosition(e.Position);
+            var scrollArgs = (ITemplatedItemsListScrollToRequestedEventArgs)e;
+
+            if (scrollArgs.Item == null)
+            {
+                // What the Item is null means that either ScrollToStart or ScrollToEnd has been sent from FormsView.
+                if (e.Position == ScrollToPosition.Start)
+                {
+                    Control.SetContentOffset(CGPoint.Empty, e.ShouldAnimate);
+                    return;
+                }
+
+                CGPoint offsetPoint = CGPoint.Empty;
+                if (ViewLayout.ScrollDirection == UICollectionViewScrollDirection.Horizontal)
+                {
+                    offsetPoint = new CGPoint(Control.ContentSize.Width - Control.Frame.Size.Width, 0);
+                }
+                else
+                {
+                    offsetPoint = new CGPoint(0, Control.ContentSize.Height - Control.Frame.Size.Height);
+                }
+
+                Control.SetContentOffset(offsetPoint, e.ShouldAnimate);
+
+                return;
+            }
+
+            var templatedItems = TemplatedItemsView.TemplatedItems;
+            if (Element.IsGroupingEnabled)
+            {
+                var result = templatedItems.GetGroupAndIndexOfItem(scrollArgs.Group, scrollArgs.Item);
+                if (result.Item1 != -1 && result.Item2 != -1)
+                {
+                    if (result.Item2 + result.Item1 == 0 && e.Position == ScrollToPosition.Start)
+                    {
+                        Control.SetContentOffset(CGPoint.Empty, e.ShouldAnimate);
+                    }
+                    else if (result.Item2 == 0 && e.Position == ScrollToPosition.Start)
+                    {
+                        var attr = Control.GetLayoutAttributesForSupplementaryElement(UICollectionElementKindSectionKey.Header, NSIndexPath.FromRowSection(0, result.Item1));
+                        var offset = 0d;
+                        CGPoint headerPoint = CGPoint.Empty;
+                        if (ViewLayout.ScrollDirection == UICollectionViewScrollDirection.Horizontal)
+                        {
+                            offset = Math.Min(Math.Max(0, attr.Frame.X), Control.ContentSize.Width - Control.Frame.Size.Width);
+                            headerPoint = new CGPoint(offset, 0);
+                        }
+                        else
+                        {
+                            offset = Math.Min(Math.Max(0, attr.Frame.Y), Control.ContentSize.Height - Control.Frame.Size.Height);
+                            headerPoint = new CGPoint(0, offset);
+                        }
+
+                        Control.SetContentOffset(headerPoint, e.ShouldAnimate);
+                    }
+                    else
+                    {
+                        Control.ScrollToItem(NSIndexPath.FromRowSection(result.Item2, result.Item1), position, e.ShouldAnimate);
+                    }
+                }
+            }
+            else
+            {
+                var index = templatedItems.GetGlobalIndexOfItem(scrollArgs.Item);
+                if (index != -1)
+                {
+                    Control.Layer.RemoveAllAnimations();
+
+                    await Task.Delay(1); // iOS11 hack
+
+                    Control.ScrollToItem(NSIndexPath.FromRowSection(index, 0), position, e.ShouldAnimate);
+                }
+            }
+        }
+
+        protected virtual UICollectionViewScrollPosition GetScrollPosition(ScrollToPosition position)
+        {
+            return UICollectionViewScrollPosition.None;
+        }
+
+        void DisposeSubviews(UIView view)
+        {
+            var ver = view as IVisualElementRenderer;
+
+            if (ver == null)
+            {
+                // VisualElementRenderers should implement their own dispose methods that will appropriately dispose and remove their child views.
+                // Attempting to do this work twice could cause a SIGSEGV (only observed in iOS8), so don't do this work here.
+                // Non-renderer views, such as separator lines, etc., can be removed here.
+                foreach (UIView subView in view.Subviews)
+                {
+                    DisposeSubviews(subView);
+                }
+
+                view.RemoveFromSuperview();
+            }
+
+            view.Dispose();
+        }
+
+        void UpdateBackgroundColor()
+        {
+            if (Element.BackgroundColor.IsDefault)
+            {
+                Control.BackgroundColor = UIColor.Clear;
+            }
+            else
+            {
+                Control.BackgroundColor = Element.BackgroundColor.ToUIColor();
+            }
+        }
+
+        protected virtual void OnGroupedCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+
+            var til = (TemplatedItemsList<ItemsView<Cell>, Cell>)sender;
+
+            var templatedItems = TemplatedItemsView.TemplatedItems;
+            var groupIndex = templatedItems.IndexOf(til.HeaderContent);
+
+            UpdateItems(e, groupIndex, false);
+        }
+
+        protected virtual void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateItems(e, 0, true);
+        }
+
+        protected virtual void UpdateItems(NotifyCollectionChangedEventArgs e, int section, bool resetWhenGrouped, bool forceReset = false)
+        {
+            var exArgs = e as NotifyCollectionChangedEventArgsEx;
+            if (exArgs != null)
+                DataSource.Counts[section] = exArgs.Count;
+
+            // This means the UITableView hasn't rendered any cells yet
+            // so there's no need to synchronize the rows on the UITableView
+            if (Control.IndexPathsForVisibleItems == null && e.Action != NotifyCollectionChangedAction.Reset)
+                return;
+
+            var groupReset = (resetWhenGrouped && Element.IsGroupingEnabled) || forceReset;
+
+            // We can't do this check on grouped lists because the index doesn't match the number of rows in a section.
+            // Likewise, we can't do this check on lists using RecycleElement because the number of rows in a section will remain constant because they are reused.
+            if (!groupReset && Element.CachingStrategy == ListViewCachingStrategy.RetainElement)
+            {
+                var lastIndex = Control.NumberOfItemsInSection(section);
+                if (e.NewStartingIndex > lastIndex || e.OldStartingIndex > lastIndex)
+                    throw new ArgumentException(
+                        $"Index '{Math.Max(e.NewStartingIndex, e.OldStartingIndex)}' is greater than the number of rows '{lastIndex}'.");
+            }
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+
+                    if (e.NewStartingIndex == -1 || groupReset)
+                    {
+                        goto case NotifyCollectionChangedAction.Reset;
+                    }
+
+                    Control.PerformBatchUpdates(() =>
+                    {
+                        Control.InsertItems(GetPaths(section, e.NewStartingIndex, e.NewItems.Count));
+                    }, (finished) =>
+                    {
+                    });
+
+                    break;
+
+                case NotifyCollectionChangedAction.Remove:
+                    if (e.OldStartingIndex == -1 || groupReset)
+                    {
+                        goto case NotifyCollectionChangedAction.Reset;
+                    }
+                    Control.PerformBatchUpdates(() =>
+                    {
+                        Control.DeleteItems(GetPaths(section, e.OldStartingIndex, e.OldItems.Count));
+                    }, (finished) =>
+                    {
+                    });
+
+                    break;
+
+                case NotifyCollectionChangedAction.Move:
+                    if (e.OldStartingIndex == -1 || e.NewStartingIndex == -1 || groupReset)
+                    {
+                        goto case NotifyCollectionChangedAction.Reset;
+                    }
+                    Control.PerformBatchUpdates(() =>
+                    {
+                        for (var i = 0; i < e.OldItems.Count; i++)
+                        {
+                            var oldi = e.OldStartingIndex;
+                            var newi = e.NewStartingIndex;
+
+                            if (e.NewStartingIndex < e.OldStartingIndex)
+                            {
+                                oldi += i;
+                                newi += i;
+                            }
+
+                            Control.MoveItem(NSIndexPath.FromRowSection(oldi, section), NSIndexPath.FromRowSection(newi, section));
+                        }
+                    }, (finished) =>
+                    {
+                    });
+
+                    break;
+
+                case NotifyCollectionChangedAction.Replace:
+                    if (e.OldStartingIndex == -1 || groupReset)
+                    {
+                        goto case NotifyCollectionChangedAction.Reset;
+                    }
+
+                    Control.PerformBatchUpdates(() =>
+                    {
+                        Control.ReloadItems(GetPaths(section, e.OldStartingIndex, e.OldItems.Count));
+                    }, (finished) =>
+                    {
+                    });
+
+                    break;
+
+                case NotifyCollectionChangedAction.Reset:
+                    Control.ReloadData();
+                    return;
+            }
+        }
+
+        NSIndexPath[] GetPaths(int section, int index, int count)
+        {
+            var paths = new NSIndexPath[count];
+            for (var i = 0; i < paths.Length; i++)
+            {
+                paths[i] = NSIndexPath.FromRowSection(index + i, section);
+            }
+
+            return paths;
+        }
+    }
+}

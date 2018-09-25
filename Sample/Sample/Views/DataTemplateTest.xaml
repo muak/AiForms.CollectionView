@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:me="clr-namespace:Sample.Views;assembly=Sample"
+    xmlns:ai="clr-namespace:AiForms.Renderers;assembly=CollectionView"
+    xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    x:Class="Sample.Views.DataTemplateTest">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="templateA">
+                <ai:ContentCell>
+                    <AbsoluteLayout Margin="0" BackgroundColor="Transparent">
+                        <ff:CachedImage StyleId="Image" LoadingPlaceholder="icon.png" DownsampleWidth="180" 
+                                        RetryCount="3" RetryDelay="500" Aspect="AspectFill" 
+                                        Source="{Binding PhotoUrl}" 
+                                        AbsoluteLayout.LayoutFlags="SizeProportional" AbsoluteLayout.LayoutBounds="0,0,1,1" />
+                        <Label x:Name="label1" HeightRequest="18" Text="{Binding Title}" TextColor="Black" BackgroundColor="#AAFFFFFF"
+                               AbsoluteLayout.LayoutFlags="YProportional,WidthProportional" AbsoluteLayout.LayoutBounds="0,1,1,AutoSize" />
+                    </AbsoluteLayout>
+                </ai:ContentCell>
+            </DataTemplate>
+            <DataTemplate x:Key="templateB">
+                <ai:ContentCell>
+                    <AbsoluteLayout Margin="0" BackgroundColor="Transparent">
+                        <ff:CachedImage StyleId="Image" LoadingPlaceholder="icon.png" DownsampleWidth="180" 
+                                        RetryCount="3" RetryDelay="500" Aspect="AspectFill" 
+                                        Source="{Binding PhotoUrl}" 
+                                        AbsoluteLayout.LayoutFlags="SizeProportional" AbsoluteLayout.LayoutBounds="0,0,1,1" />
+                        <Label x:Name="label1" HeightRequest="18" Text="{Binding Title}" TextColor="White" BackgroundColor="#AA000000"
+                               AbsoluteLayout.LayoutFlags="YProportional,WidthProportional" AbsoluteLayout.LayoutBounds="0,1,1,AutoSize" />
+                    </AbsoluteLayout>
+                </ai:ContentCell>
+            </DataTemplate>
+            <me:TestSelector x:Key="selector" TemplateA="{StaticResource templateA}" TemplateB="{StaticResource templateB}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <FlexLayout Direction="Column">
+        <ai:HCollectionView FlexLayout.Shrink="0" Margin="0,0,0,10"
+                            x:Name="collectionView"
+                            ItemsSource="{Binding ItemsSource}" 
+                            ItemTapCommand="{Binding TapCommand}" 
+                            ItemLongTapCommand="{Binding LongTapCommand}"
+                            Spacing="4"
+                            IsGroupingEnabled="true"
+                            GroupHeaderWidth="80"
+                            IsInfinite="true"
+                            BackgroundColor="White"
+                            ColumnWidth="100"
+                            HeightRequest="100"
+                            ItemTemplate="{StaticResource selector}"
+                            >
+            <x:Arguments>
+                <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+            </x:Arguments>
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <ai:ContentCell>
+                        <Label Text="{Binding Head}" BackgroundColor="#E6DAB9" />
+                    </ai:ContentCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+        </ai:HCollectionView>
+        <ai:GridCollectionView FlexLayout.Grow="1" FlexLayout.Shrink="1" Margin="0,0,0,0" 
+                              ItemsSource="{Binding ItemsSource}"
+                              IsGroupingEnabled="true"
+                              GroupHeaderHeight="36" 
+                              GridType="UniformGrid"
+                              PortraitColumns="3"
+                              LandscapeColumns="5"
+                              ColumnSpacing="4"
+                              RowSpacing="4" 
+                              ColumnHeight="1.0"
+                              ItemTemplate="{StaticResource selector}"
+                              >
+            <x:Arguments>
+                <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+            </x:Arguments>
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <ai:ContentCell>
+                        <Label Text="{Binding Head}" BackgroundColor="#E6DAB9" />
+                    </ai:ContentCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+        </ai:GridCollectionView>
+    </FlexLayout>
+</ContentPage>

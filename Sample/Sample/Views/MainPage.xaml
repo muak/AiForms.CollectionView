@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms" 
+	prism:ViewModelLocator.AutowireViewModel="True" 
+	x:Class="Sample.Views.MainPage" Title="MainPage">
+    <ScrollView>
+	<StackLayout>
+        <Button Text="HCollectionView" Command="{Binding GoToTest}"  CommandParameter="HCollectionViewTest" />
+        <Button Text="GridCollectionView" Command="{Binding GoToTest}"  CommandParameter="CollectionViewTest" />
+        <Button Text="GridCollectionView(Group)" Command="{Binding GoToTest}"  CommandParameter="CollectionViewGroupTest" />
+        <Button Text="DataTemplateTest" Command="{Binding GoToTest}"  CommandParameter="DataTemplateTest" />
+	</StackLayout>
+    </ScrollView>
+</ContentPage>
