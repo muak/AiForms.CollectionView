@@ -118,6 +118,49 @@ namespace AiForms.Renderers
                 defaultBindingMode: BindingMode.OneWay
             );
 
+        public static BindableProperty AdditionalHeightProperty =
+            BindableProperty.Create(
+                nameof(AdditionalHeight),
+                typeof(double),
+                typeof(GridCollectionView),
+                default(double),
+                defaultBindingMode: BindingMode.OneWay
+            );
+
+        public double AdditionalHeight
+        {
+            get { return (double)GetValue(AdditionalHeightProperty); }
+            set { SetValue(AdditionalHeightProperty, value); }
+        }
+
+        public static BindableProperty ComputedWidthProperty =
+            BindableProperty.Create(
+                nameof(ComputedWidth),
+                typeof(double),
+                typeof(GridCollectionView),
+                default(double),
+                defaultBindingMode: BindingMode.TwoWay
+            );
+
+        public double ComputedWidth
+        {
+            get { return (double)GetValue(ComputedWidthProperty); }
+        }
+
+        public static BindableProperty ComputedHeightProperty =
+            BindableProperty.Create(
+                nameof(ComputedHeight),
+                typeof(double),
+                typeof(GridCollectionView),
+                default(double),
+                defaultBindingMode: BindingMode.OneWayToSource
+            );
+
+        public double ComputedHeight
+        {
+            get { return (double)GetValue(ComputedHeightProperty); }
+        }
+
         public double GroupHeaderHeight
         {
             get { return (double)GetValue(GroupHeaderHeightProperty); }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Prism.Navigation;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Sample.ViewModels
 {

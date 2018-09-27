@@ -38,7 +38,7 @@ namespace Sample.ViewModels
         public ReactivePropertySlim<double> RowSpacing { get; } = new ReactivePropertySlim<double>(4);
         public ReactivePropertySlim<bool> EnabledPullToRefresh { get; } = new ReactivePropertySlim<bool>(false);
         public ReactivePropertySlim<Color> RefreshIconColor { get; } = new ReactivePropertySlim<Color>(Color.DimGray);
-
+        public ReactivePropertySlim<double> AdditionalHeight { get; } = new ReactivePropertySlim<double>(0);
         public IScrollController ScrollController { get; set; }
 
         IPageDialogService _pageDlg;
@@ -93,6 +93,14 @@ namespace Sample.ViewModels
                 },
                 () => {
                     ColumnHeight.Value = 1.0;
+                }
+            ).Add(
+                "Has ColumnHeight been changed to 1.0 + 50px by AdditionalHeight?",
+                () => {
+                    AdditionalHeight.Value = 50;
+                },
+                () => {
+                    AdditionalHeight.Value = 0;
                 }
             ).Add(
                 "Has Background turned from Yellow to White to Green to transparent?",

@@ -134,7 +134,8 @@ namespace AiForms.Renderers.iOS
                      e.PropertyName == GridCollectionView.LandscapeColumnsProperty.PropertyName ||
                      e.PropertyName == GridCollectionView.ColumnSpacingProperty.PropertyName ||
                      e.PropertyName == GridCollectionView.ColumnHeightProperty.PropertyName ||
-                     e.PropertyName == GridCollectionView.SpacingTypeProperty.PropertyName )
+                     e.PropertyName == GridCollectionView.SpacingTypeProperty.PropertyName ||
+                     e.PropertyName == GridCollectionView.AdditionalHeightProperty.PropertyName)
             {
                 UpdateGridType();
                 ViewLayout.InvalidateLayout();
@@ -275,6 +276,9 @@ namespace AiForms.Renderers.iOS
                 itemSize = GetAutoSpacingItemSize();
             }
 
+            _gridCollectionView.SetValue(GridCollectionView.ComputedWidthProperty, itemSize.Width);
+            _gridCollectionView.SetValue(GridCollectionView.ComputedHeightProperty, itemSize.Height);
+
             DataSource.CellSize = itemSize;
         }
 
@@ -282,10 +286,10 @@ namespace AiForms.Renderers.iOS
         {
             if (_isRatioHeight)
             {
-                return itemWidth * _gridCollectionView.ColumnHeight;
+                return itemWidth * _gridCollectionView.ColumnHeight + _gridCollectionView.AdditionalHeight;
             }
 
-            return _gridCollectionView.ColumnHeight;
+            return _gridCollectionView.ColumnHeight + _gridCollectionView.AdditionalHeight;
         }
 
         CGSize GetUniformItemSize(int columns)

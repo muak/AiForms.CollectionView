@@ -36,6 +36,7 @@
                               SpacingType="{Binding SpacingType.Value}"
                               ColumnWidth="{Binding ColumnWidth.Value}"
                               ColumnHeight="{Binding ColumnHeight.Value}"
+                              AdditionalHeight="{Binding AdditionalHeight.Value}"
                               >
             <x:Arguments>
                 <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
@@ -51,6 +52,16 @@
                                             AbsoluteLayout.LayoutFlags="SizeProportional" AbsoluteLayout.LayoutBounds="0,0,1,1" />
                             <Label x:Name="label1" HeightRequest="18" Text="{Binding Title}" BackgroundColor="#AAFFFFFF"
                                    AbsoluteLayout.LayoutFlags="YProportional,WidthProportional" AbsoluteLayout.LayoutBounds="0,1,1,AutoSize" />
+                            <Label FontSize="8" TextColor="Black" BackgroundColor="#AAFFFFFF" VerticalTextAlignment="Center" 
+                                   AbsoluteLayout.LayoutBounds="0,0,AutoSize,10">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding ComputedWidth,Mode=OneWay,Source={x:Reference collectionView},StringFormat='{0:0.0}'}" />
+                                        <Span Text="x" />
+                                        <Span Text="{Binding ComputedHeight,Mode=OneWay,Source={x:Reference collectionView},StringFormat='{0:0.0}'}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
                         </AbsoluteLayout>
                     </ai:ContentCell>
                 </DataTemplate>

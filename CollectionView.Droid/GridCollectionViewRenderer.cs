@@ -127,7 +127,8 @@ namespace AiForms.Renderers.Droid
                      e.PropertyName == GridCollectionView.RowSpacingProperty.PropertyName ||
                      e.PropertyName == GridCollectionView.ColumnHeightProperty.PropertyName ||
                      e.PropertyName == GridCollectionView.ColumnWidthProperty.PropertyName ||
-                     e.PropertyName == GridCollectionView.SpacingTypeProperty.PropertyName)
+                     e.PropertyName == GridCollectionView.SpacingTypeProperty.PropertyName ||
+                     e.PropertyName == GridCollectionView.AdditionalHeightProperty.PropertyName)
             {
                 UpdateGridType();
                 RefreshAll();
@@ -289,18 +290,21 @@ namespace AiForms.Renderers.Droid
 
         double CalcurateColumnHeight(double itemWidth)
         {
-            if (_isRatioHeight)
-            {
-                return itemWidth * _gridCollectionView.ColumnHeight;
-            }
+            var height = _isRatioHeight ? itemWidth * _gridCollectionView.ColumnHeight : 
+                                          Context.ToPixels(_gridCollectionView.ColumnHeight);
 
-            return Context.ToPixels(_gridCollectionView.ColumnHeight);
+            var actualHeight = height + Context.ToPixels(_gridCollectionView.AdditionalHeight);
+            _gridCollectionView.SetValue(GridCollectionView.ComputedHeightProperty, 
+                                         Context.FromPixels(actualHeight));
+
+            return actualHeight;
         }
 
         int GetUniformItemHeight(int containerWidth, int columns)
         {
             float actualWidth = containerWidth - (float)ColumnSpacing * (float)(columns - 1.0f);
             var itemWidth = (float)(actualWidth / (float)columns);
+            _gridCollectionView.SetValue(GridCollectionView.ComputedWidthProperty, Context.FromPixels(itemWidth));
             return (int)CalcurateColumnHeight(itemWidth);
         }
 
@@ -311,6 +315,8 @@ namespace AiForms.Renderers.Droid
 
             var itemWidth = Math.Min(containerWidth, columnWidth);
             var itemHeight = CalcurateColumnHeight(itemWidth);
+
+            _gridCollectionView.SetValue(GridCollectionView.ComputedWidthProperty, Context.FromPixels(itemWidth));
 
             var leftSize = containerWidth;
             var spacing = _gridCollectionView.SpacingType == SpacingType.Between ? 0 : Context.ToPixels(_gridCollectionView.ColumnSpacing);
