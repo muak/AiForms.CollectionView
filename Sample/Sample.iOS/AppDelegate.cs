@@ -5,6 +5,8 @@ using UIKit;
 using FFImageLoading.Forms;
 using FFImageLoading.Forms.Touch;
 using CarouselView.FormsPlugin.iOS;
+using AiForms.Extras.Abstractions;
+using AiForms.Extras;
 
 namespace Sample.iOS
 {
@@ -41,6 +43,7 @@ namespace Sample.iOS
     {
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterInstance(Toast.Instance);
         }
     }
 }

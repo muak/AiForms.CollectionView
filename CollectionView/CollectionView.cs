@@ -72,7 +72,7 @@ namespace AiForms.Renderers
                 nameof(TouchFeedbackColor),
                 typeof(Color),
                 typeof(CollectionView),
-                Color.Accent,
+                default(Color),
                 defaultBindingMode: BindingMode.OneWay
             );
 

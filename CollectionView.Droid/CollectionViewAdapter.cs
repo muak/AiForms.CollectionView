@@ -320,7 +320,7 @@ namespace AiForms.Renderers.Droid
             }
 
             // check again to guard against DataTemplateSelectors that return null
-            if (itemTemplate == null)
+            if (itemTemplate == null) 
                 return DefaultItemTemplateId;
 
             if (!_templateToId.TryGetValue(itemTemplate, out int key))

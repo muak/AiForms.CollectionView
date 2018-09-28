@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extra:ToastView
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:extra="clr-namespace:AiForms.Extras.Abstractions;assembly=AiForms.Extras"
+    x:Class="Sample.Views.MyToastView">
+    <Label Text="{Binding Message}" TextColor="White" FontSize="18"
+           HorizontalTextAlignment="Center"
+           VerticalTextAlignment="Center" />
+</extra:ToastView>

@@ -325,7 +325,41 @@ namespace AiForms.Renderers.iOS
 
                 case NotifyCollectionChangedAction.Reset:
                     Control.ReloadData();
+                    Control.CollectionViewLayout.InvalidateLayout(); // for iOS10
                     return;
+            }
+        }
+
+        // TODO: For the next version, group changed event will appropriately be done, too.  
+        protected virtual void UpdateGroups(NotifyCollectionChangedEventArgs e)
+        {
+            var exArgs = e as NotifyCollectionChangedEventArgsEx;
+            if (exArgs != null)
+                DataSource.Counts[e.NewStartingIndex] = exArgs.Count;
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+
+                    Control.PerformBatchUpdates(() =>
+                    {
+                        Control.InsertSections(NSIndexSet.FromIndex(e.NewStartingIndex));
+                    }, (finished) =>
+                    {
+                    });
+
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+
+                    Control.PerformBatchUpdates(() =>
+                    {
+                        Control.DeleteSections(NSIndexSet.FromIndex(e.OldStartingIndex));
+                    }, (finished) =>
+                    {
+                    });
+
+                    break;
+                // the other pattern
             }
         }
 

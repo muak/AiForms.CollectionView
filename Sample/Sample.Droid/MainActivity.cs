@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using AiForms.Extras;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using CarouselView.FormsPlugin.Android;
@@ -22,9 +23,10 @@ namespace Sample.Droid
             Xamarin.Forms.Svg.Droid.SvgImage.Init();
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
             CarouselViewRenderer.Init();
+            AiForms.Extras.Extras.Init(this);
 
 
-			LoadApplication(new App(new AndroidInitializer()));
+            LoadApplication(new App(new AndroidInitializer()));
 		}
 	}
 
@@ -32,6 +34,7 @@ namespace Sample.Droid
     {
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterInstance(Toast.Instance);
         }
     }
 }

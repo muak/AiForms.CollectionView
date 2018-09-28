@@ -9,7 +9,14 @@ This is a flexible ListView that has a grid and horizontal layout with reusable 
 * [HCollectionView](#hcollectionview) (HorizontalCollectionView)
     * The ListView that lays out each item horizontally.
 
+## Minimum Platform OS Version 
+
+iOS: iOS10  
+Android: version 5.1.1 (only FormsAppcompatActivity) / API22
+
 ### Demo
+
+
 
 ## Get Started
 
@@ -50,7 +57,7 @@ public override bool FinishedLaunching(UIApplication app, NSDictionary options) 
     xmlns:ai="clr-namespace:AiForms.Renderers;assembly=CollectionView"
     x:Class="Sample.Views.Test">
     <ai:GridCollectionView 
-        ItemsSource="{Binding ItemsSource}"
+        ItemsSource="{Binding ItemsSource}" TouchFeedbackColor="Yellow"
         ColumnWidth="100" ColumnHeight="1.0" >
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -68,7 +75,7 @@ public override bool FinishedLaunching(UIApplication app, NSDictionary options) 
 ```xml
     ...
     <ai:HCollectionView 
-        ItemsSource="{Binding ItemsSource}"
+        ItemsSource="{Binding ItemsSource}" TouchFeedbackColor="Yellow"
         ColumnWidth="100" HeightRequest="100" Spacing="4" IsInfinite="true" >
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -85,7 +92,7 @@ public override bool FinishedLaunching(UIApplication app, NSDictionary options) 
 ```xml
     ...
     <ai:GridCollectionView 
-        ItemsSource="{Binding ItemsSource}"
+        ItemsSource="{Binding ItemsSource}" TouchFeedbackColor="Yellow"
         ColumnWidth="100" ColumnHeight="1.0"
         IsGroupingEnabled="true" GroupHeaderHeight="36"   >
         <ListView.GroupHeaderTemplate>
@@ -250,7 +257,9 @@ This is the ListView that lays out each item in a grid pattern. Though this is s
 
 * ComputedWidth – ReadOnly
     * The column width after being calculated when using UniformGrid in particular. 
+  
     > Note that this value can sometimes make 1 pixel difference from the actual width.
+
 * ComputedHeight – ReadOnly
   * The column height after being calculated.
 
@@ -282,6 +291,10 @@ This is the ListView that lays out each item horizontally. This can make the scr
     * The width of a group header cell.
 * IsInfinite
     * Whether making the scroll circulated. (Default: false)
+
+    > On iOS, it must be the number of cells enough to fill the container width.
+    > On Android, it could reach each edge if keep scrolling for so long, because it is semi-infinite.
+
 * ItemTapCommand
   * The command invoked when an item is tapped.
 * ItemLongTapCommand

@@ -181,6 +181,12 @@
     <Reference Include="Xamarin.Forms.Xaml">
       <HintPath>..\packages\Xamarin.Forms.3.2.0.839982\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="AiForms.Extras.Abstractions">
+      <HintPath>..\packages\AiForms.Extras.0.1.0-pre1\lib\Xamarin.iOS10\AiForms.Extras.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="AiForms.Extras">
+      <HintPath>..\packages\AiForms.Extras.0.1.0-pre1\lib\Xamarin.iOS10\AiForms.Extras.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sample\Sample.csproj">

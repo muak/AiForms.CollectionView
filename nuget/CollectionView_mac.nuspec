@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>AiForms.CollectionView</id>
-        <version>0.1.0</version>
+        <version>0.1.0-pre1</version>
         <title>CollectionView for Xamarin.Forms</title>
         <authors>kamu</authors>
         <owners>kamu</owners>
@@ -20,9 +20,6 @@ First Release.
         <language>en-US</language>
         <dependencies>
             <group targetFramework="netstandard2.0">
-                <dependency id="Xamarin.Forms" version="3.0.0.482510" />
-            </group>
-            <group targetFramework="portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
                 <dependency id="Xamarin.Forms" version="3.0.0.482510" />
             </group>
             <group targetFramework="MonoAndroid">
@@ -58,7 +55,7 @@ First Release.
         <!-- Xamarin.iOS10 -->
         <file src="../CollectionView/bin/Release/netstandard2.0/CollectionView.dll" target="lib/Xamarin.iOS10" />
         <file src="../CollectionView/bin/Release/netstandard2.0/CollectionView.xml" target="lib/Xamarin.iOS10" />
-        <file src="../CollectionView/bin/Release/netstandard2.0/SettCollectionViewingsView.pdb" target="lib/Xamarin.iOS10" />
+        <file src="../CollectionView/bin/Release/netstandard2.0/CollectionView.pdb" target="lib/Xamarin.iOS10" />
         <file src="../CollectionView.iOS/bin/Release/CollectionView.iOS.dll" target="lib/Xamarin.iOS10" />
         <file src="../CollectionView.iOS/bin/Release/CollectionView.iOS.xml" target="lib/Xamarin.iOS10" />
         <file src="../CollectionView.iOS/bin/Release/CollectionView.iOS.pdb" target="lib/Xamarin.iOS10" />
