@@ -206,7 +206,7 @@ var collectionView = new HCollectionView(ListViewCachingStrategy.RetainElement);
 
 ## For images
 
-If you use images for a data template item, using [FFImageLoading](https://github.com/luberda-molinet/FFImageLoading) is recommended powerfully.
+If you use images for a data template item, using **[FFImageLoading](https://github.com/luberda-molinet/FFImageLoading)** is recommended powerfully.
 Because this library doesn't contain the feature of such as dealing with images asynchronously and caching.
 
 ## GridCollectionView
