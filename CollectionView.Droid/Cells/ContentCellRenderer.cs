@@ -9,7 +9,7 @@ using AView = Android.Views.View;
 namespace AiForms.Renderers.Droid.Cells
 {
     [Android.Runtime.Preserve(AllMembers = true)]
-    public class ContentCellRenderer:IRegisterable
+    public class ContentCellRenderer : IRegisterable
     {
         static readonly BindableProperty RendererProperty = BindableProperty.CreateAttached("Renderer", typeof(ContentCellRenderer), typeof(ContentCell), null);
 
@@ -17,7 +17,7 @@ namespace AiForms.Renderers.Droid.Cells
         {
             Performance.Start(out string reference);
 
-            if(nativeCell.ContentCell != null)
+            if (nativeCell.ContentCell != null)
             {
                 ClearPropertyChanged(nativeCell);
             }
@@ -40,7 +40,8 @@ namespace AiForms.Renderers.Droid.Cells
 
             formsCell.PropertyChanged += nativeCell.CellPropertyChanged;
 
-            if (parentElement != null) {
+            if (parentElement != null)
+            {
                 parentElement.PropertyChanged += nativeCell.ParentPropertyChanged;
             }
         }
@@ -51,7 +52,8 @@ namespace AiForms.Renderers.Droid.Cells
             var parentElement = formsCell.Parent as CollectionView;
 
             formsCell.PropertyChanged -= nativeCell.CellPropertyChanged;
-            if (parentElement != null) {
+            if (parentElement != null)
+            {
                 parentElement.PropertyChanged -= nativeCell.ParentPropertyChanged;
             }
         }

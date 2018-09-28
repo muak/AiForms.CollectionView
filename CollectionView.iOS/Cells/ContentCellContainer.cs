@@ -36,9 +36,9 @@ namespace AiForms.Renderers.iOS.Cells
             }
         }
 
-        public ContentCellContainer(){}
+        public ContentCellContainer() { }
 
-        public ContentCellContainer(IntPtr handle):base(handle)
+        public ContentCellContainer(IntPtr handle) : base(handle)
         {
             _selectedForegroundView = new UIView();
 
@@ -56,11 +56,13 @@ namespace AiForms.Renderers.iOS.Cells
         protected override void Dispose(bool disposing)
         {
             if (_disposed)
+            {
                 return;
+            }
 
             if (disposing)
             {
-                if(_contentCell != null)
+                if (_contentCell != null)
                 {
                     _contentCell.PropertyChanged -= CellPropertyChanged;
                     CellParent.PropertyChanged -= ParentPropertyChanged;
@@ -91,7 +93,7 @@ namespace AiForms.Renderers.iOS.Cells
 
         public override void LayoutSubviews()
         {
-            if(ContentCell == null)
+            if (ContentCell == null)
             {
                 return;
             }
@@ -118,43 +120,26 @@ namespace AiForms.Renderers.iOS.Cells
 
         public override SizeF SizeThatFits(SizeF size)
         {
-            // 今は決め打ちサイズだけど、より細かい制御を行う場合（成り行きサイズなど）は
-            // ここで計算する
+            // TODO: Fixed size is used at current version. If detail process such as variable size is needed, calculate here.
             return base.SizeThatFits(size);
-
-            //Performance.Start(out string reference);
-
-            //IVisualElementRenderer renderer;
-            //if (!_rendererRef.TryGetTarget(out renderer))
-            //    return base.SizeThatFits(size);
-
-            //if (renderer.Element == null)
-            //    return SizeF.Empty;
-
-            //double width = size.Width;
-            //var height = size.Height > 0 ? size.Height : double.PositiveInfinity;
-            //var result = renderer.Element.Measure(width, height, MeasureFlags.IncludeMargins);
-
-            //// make sure to add in the separator if needed
-            //var finalheight = (float)result.Request.Height + (SupressSeparator ? 0f : 1f) / UIScreen.MainScreen.Scale;
-
-            //Performance.Stop(reference);
-
-            //return new SizeF(size.Width, finalheight);
         }
 
 
         public virtual void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Cell.IsEnabledProperty.PropertyName)
+            {
                 UpdateIsEnabled();
+            }
         }
 
         public virtual void ParentPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == CollectionView.TouchFeedbackColorProperty.PropertyName)
+            {
                 UpdateTouchFeedbackColor();
-            
+            }
+
         }
 
         public virtual void UpdateNativeCell()
@@ -166,7 +151,8 @@ namespace AiForms.Renderers.iOS.Cells
 
         protected virtual void UpdateTouchFeedbackColor()
         {
-            if (CellParent != null && !CellParent.TouchFeedbackColor.IsDefault) {
+            if (CellParent != null && !CellParent.TouchFeedbackColor.IsDefault)
+            {
                 _selectedForegroundView.BackgroundColor = CellParent.TouchFeedbackColor.ToUIColor();
             }
         }
@@ -179,15 +165,18 @@ namespace AiForms.Renderers.iOS.Cells
         public virtual async void SelectedAnimation(double duration, double start = 1, double end = 0)
         {
             _selectedForegroundView.Alpha = (float)start;
-            await AnimateAsync(duration, () => {
+            await AnimateAsync(duration, () =>
+            {
                 _selectedForegroundView.Alpha = (float)end;
             });
         }
 
-        IVisualElementRenderer GetNewRenderer()
+        protected virtual IVisualElementRenderer GetNewRenderer()
         {
             if (_contentCell.View == null)
+            {
                 throw new InvalidOperationException($"ViewCell must have a {nameof(_contentCell.View)}");
+            }
 
             var newRenderer = Platform.CreateRenderer(_contentCell.View);
             _rendererRef = new WeakReference<IVisualElementRenderer>(newRenderer);
@@ -195,12 +184,14 @@ namespace AiForms.Renderers.iOS.Cells
             return newRenderer;
         }
 
-        void UpdateCell(ContentCell cell)
+        protected virtual void UpdateCell(ContentCell cell)
         {
             Performance.Start(out string reference);
 
             if (_contentCell != null)
+            {
                 Device.BeginInvokeOnMainThread(_contentCell.SendDisappearing);
+            }
 
             _contentCell = cell;
 
@@ -208,7 +199,9 @@ namespace AiForms.Renderers.iOS.Cells
 
             IVisualElementRenderer renderer;
             if (_rendererRef == null || !_rendererRef.TryGetTarget(out renderer))
+            {
                 renderer = GetNewRenderer();
+            }
             else
             {
                 if (renderer.Element != null && renderer == Platform.GetRenderer(renderer.Element))
@@ -254,10 +247,10 @@ namespace AiForms.Renderers.iOS.Cells
             {
                 if (renderer.ViewController != null)
                 {
-                    if(renderer.ViewController.ParentViewController.GetType() == ModalWrapper)
+                    if (renderer.ViewController.ParentViewController.GetType() == ModalWrapper)
                     {
                         var modalWrapper = Convert.ChangeType(renderer.ViewController.ParentViewController, ModalWrapper);
-                        ModalWapperDispose.Invoke(modalWrapper, new object[]{});
+                        ModalWapperDispose.Invoke(modalWrapper, new object[] { });
                     }
                 }
 

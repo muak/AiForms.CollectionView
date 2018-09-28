@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Windows.Input;
 using AiForms.Renderers;
 using AiForms.Renderers.iOS;
 using AiForms.Renderers.iOS.Cells;
 using CoreGraphics;
-using Foundation;
 using UIKit;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.iOS;
 using RectangleF = CoreGraphics.CGRect;
-using System.Linq;
 
 [assembly: ExportRenderer(typeof(GridCollectionView), typeof(GridCollectionViewRenderer))]
 namespace AiForms.Renderers.iOS
@@ -28,7 +23,6 @@ namespace AiForms.Renderers.iOS
         GridCollectionView _gridCollectionView => (GridCollectionView)Element;
         GridCollectionViewSource _gridSource => DataSource as GridCollectionViewSource;
         bool _isRatioHeight => _gridCollectionView.ColumnHeight <= 5.0;
-
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
         {
@@ -183,7 +177,7 @@ namespace AiForms.Renderers.iOS
             }
         }
 
-        void RefreshControl_ValueChanged(object sender, EventArgs e)
+        protected virtual void RefreshControl_ValueChanged(object sender, EventArgs e)
         {
             if (_refreshControl.Refreshing)
             {
@@ -192,7 +186,7 @@ namespace AiForms.Renderers.iOS
             _gridCollectionView.IsRefreshing = _refreshControl.Refreshing;
         }
 
-        void UpdateIsRefreshing()
+        protected virtual void UpdateIsRefreshing()
         {
             var refreshing = Element.IsRefreshing;
             if (_gridCollectionView == null)
@@ -213,7 +207,7 @@ namespace AiForms.Renderers.iOS
 
         }
 
-        void UpdatePullToRefreshColor()
+        protected virtual void UpdatePullToRefreshColor()
         {
             if (!_gridCollectionView.PullToRefreshColor.IsDefault)
             {
@@ -221,7 +215,7 @@ namespace AiForms.Renderers.iOS
             }
         }
 
-        void UpdatePullToRefreshEnabled()
+        protected virtual void UpdatePullToRefreshEnabled()
         {
             _refreshControl.Enabled = Element.IsPullToRefreshEnabled && (Element as IListViewController).RefreshAllowed;
             if (_refreshControl.Enabled)
@@ -234,21 +228,20 @@ namespace AiForms.Renderers.iOS
             }
         }
 
-        void UpdateRowSpacing()
+        protected virtual void UpdateRowSpacing()
         {
             ViewLayout.MinimumLineSpacing = (System.nfloat)_gridCollectionView.RowSpacing;
         }
 
-        void UpdateGroupHeaderHeight()
+        protected virtual void UpdateGroupHeaderHeight()
         {
             if (_gridCollectionView.IsGroupingEnabled)
             {
-                // TODO: 細かいサイズ調整をする場合はサブクラスで対応する
                 ViewLayout.HeaderReferenceSize = new CGSize(Bounds.Width, _gridCollectionView.GroupHeaderHeight);
             }
         }
 
-        void UpdateGridType()
+        protected virtual void UpdateGridType()
         {
             ViewLayout.SectionInset = new UIEdgeInsets(0, 0, 0, 0); // Reset insets
             ViewLayout.MinimumInteritemSpacing = 0;
@@ -282,7 +275,7 @@ namespace AiForms.Renderers.iOS
             DataSource.CellSize = itemSize;
         }
 
-        double CalcurateColumnHeight(double itemWidth)
+        protected virtual double CalcurateColumnHeight(double itemWidth)
         {
             if (_isRatioHeight)
             {
@@ -292,7 +285,7 @@ namespace AiForms.Renderers.iOS
             return _gridCollectionView.ColumnHeight + _gridCollectionView.AdditionalHeight;
         }
 
-        CGSize GetUniformItemSize(int columns)
+        protected virtual CGSize GetUniformItemSize(int columns)
         {
             float width = (float)Frame.Width - (float)_gridCollectionView.ColumnSpacing * (float)(columns - 1.0f);
 
@@ -303,7 +296,7 @@ namespace AiForms.Renderers.iOS
             return new CGSize(itemWidth, itemHeight);
         }
 
-        CGSize GetAutoSpacingItemSize()
+        protected virtual CGSize GetAutoSpacingItemSize()
         {
             var itemWidth = (float)Math.Min(Frame.Width, _gridCollectionView.ColumnWidth);
             var itemHeight = CalcurateColumnHeight(itemWidth);

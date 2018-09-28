@@ -1,14 +1,13 @@
-﻿using System;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using AiForms.Renderers;
 using AiForms.Renderers.iOS;
-using Xamarin.Forms;
-using UIKit;
-using Xamarin.Forms.Platform.iOS;
-using CoreGraphics;
 using AiForms.Renderers.iOS.Cells;
-using System.ComponentModel;
-using System.Collections.Specialized;
+using CoreGraphics;
+using UIKit;
+using Xamarin.Forms;
 using Xamarin.Forms.Internals;
+using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(HCollectionView), typeof(HCollectionViewRenderer))]
 namespace AiForms.Renderers.iOS
@@ -145,7 +144,7 @@ namespace AiForms.Renderers.iOS
 
         protected override void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(_hCollectionView.IsInfinite)
+            if (_hCollectionView.IsInfinite)
             {
                 UpdateItems(e, 0, true, true);
                 return;
@@ -153,26 +152,26 @@ namespace AiForms.Renderers.iOS
             base.OnCollectionChanged(sender, e);
         }
 
-        void UpdateCellSize()
+        protected virtual void UpdateCellSize()
         {
             if (Element.Height < 0)
             {
                 return;
             }
+
             var height = Element.HeightRequest >= 0 ? Element.HeightRequest : Bounds.Height;
             DataSource.CellSize = new CGSize((float)_hCollectionView.ColumnWidth, (float)height);
         }
 
-        void UpdateSpacing()
+        protected virtual void UpdateSpacing()
         {
             ViewLayout.MinimumLineSpacing = (System.nfloat)_hCollectionView.Spacing;
         }
 
-        void UpdateGroupHeaderWidth()
+        protected virtual void UpdateGroupHeaderWidth()
         {
             if (_hCollectionView.IsGroupingEnabled)
             {
-                // TODO: 細かいサイズ調整をする場合はサブクラスで対応する
                 ViewLayout.HeaderReferenceSize = new CGSize(_hCollectionView.GroupHeaderWidth, Bounds.Height);
             }
         }

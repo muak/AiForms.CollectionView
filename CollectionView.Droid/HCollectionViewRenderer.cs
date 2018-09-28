@@ -1,15 +1,11 @@
-﻿using System;
-using Xamarin.Forms.Platform.Android;
+﻿using System.ComponentModel;
 using AiForms.Renderers;
-using Android.Support.V7.Widget;
-using Android.Content;
-using Java.Lang;
-using System.ComponentModel;
-using Xamarin.Forms;
-using Android.Graphics;
-using Android.Views;
 using AiForms.Renderers.Droid;
-using Android.Content.Res;
+using Android.Content;
+using Android.Graphics;
+using Android.Support.V7.Widget;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(HCollectionView), typeof(HCollectionViewRenderer))]
 namespace AiForms.Renderers.Droid
@@ -24,7 +20,7 @@ namespace AiForms.Renderers.Droid
         bool _disposed;
 
         public HCollectionViewRenderer(Context context) : base(context)
-        {          
+        {
         }
 
         protected override void Dispose(bool disposing)
@@ -51,7 +47,8 @@ namespace AiForms.Renderers.Droid
 
             if (e.NewElement != null)
             {
-                if(Control == null) {
+                if (Control == null)
+                {
                     RecyclerView = new RecyclerView(Context);
                     LayoutManager = new LinearLayoutManager(Context);
                     LayoutManager.Orientation = LinearLayoutManager.Horizontal;
@@ -67,7 +64,7 @@ namespace AiForms.Renderers.Droid
                     _itemDecoration = new HSpacingDecoration(this);
                     RecyclerView.AddItemDecoration(_itemDecoration);
 
-                    Adapter = new HCollectionViewAdapter(Context,e.NewElement, RecyclerView, this);
+                    Adapter = new HCollectionViewAdapter(Context, e.NewElement, RecyclerView, this);
                     RecyclerView.SetAdapter(Adapter);
 
                     RecyclerView.SetLayoutManager(LayoutManager);
@@ -128,7 +125,7 @@ namespace AiForms.Renderers.Droid
 
         protected override void ExecuteScroll(int targetPosition, ScrollToRequestedEventArgs eventArgs)
         {
-            if(_hCollectionView.IsInfinite) 
+            if (_hCollectionView.IsInfinite)
             {
                 int fixPosition = _hAdapter.GetInitialPosition();
                 if (targetPosition == Adapter.ItemCount - 1)
@@ -145,14 +142,15 @@ namespace AiForms.Renderers.Droid
             base.ExecuteScroll(targetPosition, eventArgs);
         }
 
-        void UpdateIsInfinite() {
+        protected virtual void UpdateIsInfinite()
+        {
             if (_hCollectionView.IsInfinite)
             {
                 LayoutManager.ScrollToPositionWithOffset(_hAdapter.GetInitialPosition(), 0);
             }
         }
 
-        void UpdateCellSize()
+        protected virtual void UpdateCellSize()
         {
             if (Element.Height < 0)
             {
@@ -163,12 +161,12 @@ namespace AiForms.Renderers.Droid
             CellHeight = (int)Context.ToPixels(height);
         }
 
-        void UpdateSpacing()
+        protected virtual void UpdateSpacing()
         {
             _spacing = (int)Context.ToPixels(_hCollectionView.Spacing);
         }
 
-        void UpdateGroupHeaderWidth()
+        protected virtual void UpdateGroupHeaderWidth()
         {
             if (_hCollectionView.IsGroupingEnabled)
             {
@@ -177,7 +175,7 @@ namespace AiForms.Renderers.Droid
             }
         }
 
-        internal class HSpacingDecoration : RecyclerView.ItemDecoration
+        public class HSpacingDecoration : RecyclerView.ItemDecoration
         {
             HCollectionViewRenderer _renderer;
 
@@ -188,7 +186,8 @@ namespace AiForms.Renderers.Droid
 
             protected override void Dispose(bool disposing)
             {
-                if(disposing) {
+                if (disposing)
+                {
                     _renderer = null;
                 }
                 base.Dispose(disposing);
@@ -199,10 +198,11 @@ namespace AiForms.Renderers.Droid
                 var holder = parent.GetChildViewHolder(view) as ContentViewHolder;
                 var position = parent.GetChildAdapterPosition(view);
                 var realPosition = position;
-                if(_renderer._hCollectionView.IsInfinite) {
+                if (_renderer._hCollectionView.IsInfinite)
+                {
                     realPosition = _renderer.Adapter.GetRealPosition(position);
                 }
-                if ( position == 0 || holder.IsHeader || _renderer.Adapter.FirstSectionItems.Contains(realPosition))
+                if (position == 0 || holder.IsHeader || _renderer.Adapter.FirstSectionItems.Contains(realPosition))
                 {
                     return;
                 }

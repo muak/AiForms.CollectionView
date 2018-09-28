@@ -2,10 +2,8 @@
 using Xamarin.Forms;
 namespace AiForms.Renderers
 {
-    public class ContentCell:ViewCell
-    {
-        public ContentCell()
-        {
-        }
-    }
+    /// <summary>
+    /// Content cell.
+    /// </summary>
+    public class ContentCell:ViewCell{}
 }

@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Windows.Input;
-using AiForms.Renderers;
-using AiForms.Renderers.iOS;
-using AiForms.Renderers.iOS.Cells;
+using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.iOS;
-using RectangleF = CoreGraphics.CGRect;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace AiForms.Renderers.iOS
 {
@@ -27,7 +20,6 @@ namespace AiForms.Renderers.iOS
         protected ITemplatedItemsView<Cell> TemplatedItemsView => Element;
         ScrollToRequestedEventArgs _requestedScroll;
         bool _disposed;
-
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
         {
@@ -187,7 +179,7 @@ namespace AiForms.Renderers.iOS
             return UICollectionViewScrollPosition.None;
         }
 
-        void DisposeSubviews(UIView view)
+        protected virtual void DisposeSubviews(UIView view)
         {
             var ver = view as IVisualElementRenderer;
 
@@ -207,7 +199,7 @@ namespace AiForms.Renderers.iOS
             view.Dispose();
         }
 
-        void UpdateBackgroundColor()
+        protected virtual void UpdateBackgroundColor()
         {
             if (Element.BackgroundColor.IsDefault)
             {
@@ -337,7 +329,7 @@ namespace AiForms.Renderers.iOS
             }
         }
 
-        NSIndexPath[] GetPaths(int section, int index, int count)
+        protected virtual NSIndexPath[] GetPaths(int section, int index, int count)
         {
             var paths = new NSIndexPath[count];
             for (var i = 0; i < paths.Length; i++)

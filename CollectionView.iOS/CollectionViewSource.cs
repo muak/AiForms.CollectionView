@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using AiForms.Renderers.iOS.Cells;
 using CoreGraphics;
 using Foundation;
@@ -10,7 +8,6 @@ using ObjCRuntime;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
-using Xamarin.Forms.Platform.iOS;
 
 namespace AiForms.Renderers.iOS
 {
@@ -21,14 +18,16 @@ namespace AiForms.Renderers.iOS
 
         public CGSize CellSize { get; set; }
         public Dictionary<int, int> Counts { get; set; }
+
+        protected CollectionView CollectionView;
+        protected ITemplatedItemsView<Cell> TemplatedItemsView => CollectionView;
+
         const int DefaultItemTemplateId = 1;
         bool _isLongTap;
         bool _disposed;
-        protected CollectionView CollectionView;
+
         UICollectionView _uiCollectionView;
         Dictionary<DataTemplate, int> _templateToId = new Dictionary<DataTemplate, int>();
-        protected ITemplatedItemsView<Cell> TemplatedItemsView => CollectionView;
-
 
         public CollectionViewSource(CollectionView collectionView, UICollectionView uiCollectionView)
         {
@@ -44,13 +43,13 @@ namespace AiForms.Renderers.iOS
             {
                 return;
             }
-            if(disposing)
+            if (disposing)
             {
                 Counts = null;
                 _templateToId = null;
                 CollectionView = null;
                 _uiCollectionView = null;
-               
+
             }
 
             _disposed = true;
@@ -130,7 +129,7 @@ namespace AiForms.Renderers.iOS
             return false;
         }
 
-        public override void PerformAction(UICollectionView collectionView, Selector action, NSIndexPath indexPath, NSObject sender){}
+        public override void PerformAction(UICollectionView collectionView, Selector action, NSIndexPath indexPath, NSObject sender) { }
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
@@ -176,10 +175,9 @@ namespace AiForms.Renderers.iOS
             }
             else if ((cachingStrategy & ListViewCachingStrategy.RecycleElement) != 0)
             {
-
                 var id = TemplateIdForPath(realIndexPath);
 
-                // ここのindexPathは引数のをそのまま使わないと無限スクロール時にヘッダーが表示されなくなる
+                // Here is used the argument indexPath as it is because header cell will be got not to displayed when IsInfinite.
                 nativeCell = collectionView.DequeueReusableSupplementaryView(
                     UICollectionElementKindSection.Header,
                     CollectionViewRenderer.SectionHeaderId,
@@ -207,7 +205,7 @@ namespace AiForms.Renderers.iOS
             }
 
             Performance.Stop(reference);
-           
+
             return nativeCell;
         }
 
@@ -289,7 +287,7 @@ namespace AiForms.Renderers.iOS
 
             var renderer = (ContentCellRenderer)Xamarin.Forms.Internals.Registrar.Registered.GetHandlerForObject<IRegisterable>(cell);
 
-            // UITableViewと違って初回でもインスタンスを返すので注意
+            // Note that UICollectionView returns the instance even if called in the first time, unlike UITableView.
             var reusableCell = _uiCollectionView.DequeueReusableCell(id, indexPath) as ContentCellContainer;
 
             var nativeCell = renderer.GetCell(cell, reusableCell, _uiCollectionView) as ContentCellContainer;
@@ -313,7 +311,9 @@ namespace AiForms.Renderers.iOS
             var itemTemplate = CollectionView.ItemTemplate;
             var selector = itemTemplate as DataTemplateSelector;
             if (selector == null)
+            {
                 return DefaultItemTemplateId;
+            }
 
             var templatedList = GetTemplatedItemsListForPath(indexPath);
             var item = templatedList.ListProxy[indexPath.Row];
@@ -342,7 +342,9 @@ namespace AiForms.Renderers.iOS
         {
             var templatedItems = TemplatedItemsView.TemplatedItems;
             if (CollectionView.IsGroupingEnabled)
+            {
                 templatedItems = (ITemplatedItemsList<Cell>)((IList)templatedItems)[indexPath.Section];
+            }
 
             return templatedItems;
         }

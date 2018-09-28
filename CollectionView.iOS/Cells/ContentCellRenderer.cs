@@ -8,13 +8,13 @@ using Xamarin.Forms.Internals;
 namespace AiForms.Renderers.iOS.Cells
 {
     [Foundation.Preserve(AllMembers = true)]
-    public class ContentCellRenderer:IRegisterable
+    public class ContentCellRenderer : IRegisterable
     {
         public virtual UICollectionViewCell GetCell(ContentCell item, ContentCellContainer reusableCell, UICollectionView cv)
         {
             Performance.Start(out string reference);
 
-            if(reusableCell.ContentCell != null)
+            if (reusableCell.ContentCell != null)
             {
                 ClearPropertyChanged(reusableCell);
             }
@@ -37,7 +37,8 @@ namespace AiForms.Renderers.iOS.Cells
 
             formsCell.PropertyChanged += nativeCell.CellPropertyChanged;
 
-            if (parentElement != null) {
+            if (parentElement != null)
+            {
                 parentElement.PropertyChanged += nativeCell.ParentPropertyChanged;
             }
         }
@@ -48,7 +49,9 @@ namespace AiForms.Renderers.iOS.Cells
             var parentElement = formsCell.Parent as CollectionView;
 
             formsCell.PropertyChanged -= nativeCell.CellPropertyChanged;
-            if (parentElement != null) {
+
+            if (parentElement != null)
+            {
                 parentElement.PropertyChanged -= nativeCell.ParentPropertyChanged;
             }
         }

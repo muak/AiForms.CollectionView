@@ -1,12 +1,10 @@
-﻿using System;
-using Android.Content;
+﻿using Android.Content;
 using Android.Support.V7.Widget;
-using Android.Views;
 using Xamarin.Forms;
 
 namespace AiForms.Renderers.Droid
 {
-    public class SelectableSmoothScroller:LinearSmoothScroller
+    public class SelectableSmoothScroller : LinearSmoothScroller
     {
         public ScrollToPosition SnapPosition { get; set; } = ScrollToPosition.Start;
 
@@ -19,14 +17,15 @@ namespace AiForms.Renderers.Droid
 
         public override int CalculateDtToFit(int viewStart, int viewEnd, int boxStart, int boxEnd, int snapPreference)
         {
-            if(SnapPosition == ScrollToPosition.Center){
+            if (SnapPosition == ScrollToPosition.Center)
+            {
                 return (boxStart + (boxEnd - boxStart) / 2) - (viewStart + (viewEnd - viewStart) / 2);
             }
 
             return base.CalculateDtToFit(viewStart, viewEnd, boxStart, boxEnd, snapPreference);
         }
 
-        int ToSnapPreference() 
+        int ToSnapPreference()
         {
             switch (SnapPosition)
             {

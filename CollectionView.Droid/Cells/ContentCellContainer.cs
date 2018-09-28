@@ -18,10 +18,18 @@ namespace AiForms.Renderers.Droid.Cells
         static Type DefaultRenderer = typeof(Platform).Assembly.GetType("Xamarin.Forms.Platform.Android.Platform+DefaultRenderer");
 
         public ContentViewHolder ViewHolder { get; set; }
+        public Element Element => ContentCell;
+        public bool IsEmpty => _contentCell == null;
 
         IVisualElementRenderer _contentViewRenderer;
         ContentCell _contentCell;
+        CollectionView CellParent => ContentCell.Parent as CollectionView;
+        ICellController _CellController => ContentCell;
 
+        public ContentCellContainer(Context context) : base(context)
+        {
+            Clickable = true;
+        }
 
         public ContentCell ContentCell
         {
@@ -32,16 +40,6 @@ namespace AiForms.Renderers.Droid.Cells
                     return;
                 UpdateCell(value);
             }
-        }
-        CollectionView CellParent => ContentCell.Parent as CollectionView;
-        ICellController _CellController => ContentCell;
-
-        public Element Element => ContentCell;
-        public bool IsEmpty => _contentCell == null;
-
-        public ContentCellContainer(Context context) : base(context)
-        {
-            Clickable = true;
         }
 
         protected override void Dispose(bool disposing)
@@ -79,7 +77,7 @@ namespace AiForms.Renderers.Droid.Cells
 
             Performance.Start(reference, "Element.Layout");
             var orientation = Context.Resources.Configuration.Orientation;
-            //System.Diagnostics.Debug.WriteLine($"{orientation} BoxSize:{width} / {height}");
+
             Xamarin.Forms.Layout.LayoutChildIntoBoundingRegion(_contentViewRenderer.Element, new Rectangle(0, 0, width, height));
             Performance.Stop(reference, "Element.Layout");
 
@@ -102,7 +100,9 @@ namespace AiForms.Renderers.Droid.Cells
         public virtual void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Cell.IsEnabledProperty.PropertyName)
+            {
                 UpdateIsEnabled();
+            }
         }
 
         public virtual void ParentPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -112,9 +112,10 @@ namespace AiForms.Renderers.Droid.Cells
             {
                 return;
             }
-
             if (e.PropertyName == CollectionView.TouchFeedbackColorProperty.PropertyName)
+            {
                 UpdateTouchFeedbackColor();
+            }
         }
 
         public virtual void UpdateNativeCell()
@@ -149,12 +150,14 @@ namespace AiForms.Renderers.Droid.Cells
         public override bool OnInterceptTouchEvent(MotionEvent ev)
         {
             if (!Enabled)
+            {
                 return true;
+            }
 
             return base.OnInterceptTouchEvent(ev);
         }
 
-        void CreateNewRenderer(ContentCell cell)
+        protected virtual void CreateNewRenderer(ContentCell cell)
         {
             if (cell.View == null)
             {

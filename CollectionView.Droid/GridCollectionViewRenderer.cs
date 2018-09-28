@@ -9,7 +9,6 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using AView = Android.Views.View;
 
 [assembly: ExportRenderer(typeof(GridCollectionView), typeof(GridCollectionViewRenderer))]
 namespace AiForms.Renderers.Droid
@@ -17,6 +16,9 @@ namespace AiForms.Renderers.Droid
     [Android.Runtime.Preserve(AllMembers = true)]
     public class GridCollectionViewRenderer : CollectionViewRenderer, SwipeRefreshLayout.IOnRefreshListener
     {
+        public int RowSpacing { get; set; }
+        public int ColumnSpacing { get; set; }
+
         SwipeRefreshLayout _refresh;
         GridLayoutManager _gridLayoutManager => LayoutManager as GridLayoutManager;
         CollectionViewSpanSizeLookup _spanSizeLookup;
@@ -26,24 +28,20 @@ namespace AiForms.Renderers.Droid
         bool _isRatioHeight => _gridCollectionView.ColumnHeight <= 5.0;
         bool _disposed;
 
-        public int RowSpacing { get; set; }
-        public int ColumnSpacing { get; set; }
-
-
         public GridCollectionViewRenderer(Context context) : base(context)
         {
-            CellWidth  = LayoutParams.MatchParent;
+            CellWidth = LayoutParams.MatchParent;
             GroupHeaderWidth = LayoutParams.MatchParent;
         }
 
         protected override void Dispose(bool disposing)
         {
-            if(_disposed)
+            if (_disposed)
             {
                 return;
             }
 
-            if(disposing)
+            if (disposing)
             {
                 RecyclerView?.SetAdapter(null);
                 RecyclerView?.RemoveItemDecoration(_itemDecoration);
@@ -153,7 +151,7 @@ namespace AiForms.Renderers.Droid
 
         protected virtual void RefreshAll()
         {
-            
+
             RecyclerView.RemoveItemDecoration(_itemDecoration);
             _gridLayoutManager.GetSpanSizeLookup().InvalidateSpanIndexCache();
 
@@ -161,11 +159,6 @@ namespace AiForms.Renderers.Droid
             RecyclerView.AddItemDecoration(_itemDecoration);
             RequestLayout();
             Invalidate();
-
-            //_recyclerView.RequestLayout();
-            //_recyclerView.Invalidate();
-            //_refresh.Invalidate();
-            //_refresh.RequestLayout();
         }
 
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
@@ -206,7 +199,7 @@ namespace AiForms.Renderers.Droid
         }
 
 
-        void UpdatePullToRefreshColor()
+        protected virtual void UpdatePullToRefreshColor()
         {
             if (!_gridCollectionView.PullToRefreshColor.IsDefault)
             {
@@ -215,13 +208,13 @@ namespace AiForms.Renderers.Droid
             }
         }
 
-        void UpdatePullToRefreshEnabled()
+        protected virtual void UpdatePullToRefreshEnabled()
         {
             if (_refresh != null)
                 _refresh.Enabled = Element.IsPullToRefreshEnabled && (Element as IListViewController).RefreshAllowed;
         }
 
-        void UpdateIsRefreshing(bool isInitialValue = false)
+        protected virtual void UpdateIsRefreshing(bool isInitialValue = false)
         {
             if (_refresh != null)
             {
@@ -239,7 +232,7 @@ namespace AiForms.Renderers.Droid
             }
         }
 
-        void UpdateGroupHeaderHeight()
+        protected virtual void UpdateGroupHeaderHeight()
         {
             if (_gridCollectionView.IsGroupingEnabled)
             {
@@ -247,7 +240,7 @@ namespace AiForms.Renderers.Droid
             }
         }
 
-        void UpdateGridType(int containerWidth = 0)
+        protected virtual void UpdateGridType(int containerWidth = 0)
         {
             containerWidth = containerWidth == 0 ? Width : containerWidth;
             if (containerWidth <= 0)
@@ -288,19 +281,19 @@ namespace AiForms.Renderers.Droid
             _spanSizeLookup.SpanSize = spanCount;
         }
 
-        double CalcurateColumnHeight(double itemWidth)
+        protected virtual double CalcurateColumnHeight(double itemWidth)
         {
-            var height = _isRatioHeight ? itemWidth * _gridCollectionView.ColumnHeight : 
+            var height = _isRatioHeight ? itemWidth * _gridCollectionView.ColumnHeight :
                                           Context.ToPixels(_gridCollectionView.ColumnHeight);
 
             var actualHeight = height + Context.ToPixels(_gridCollectionView.AdditionalHeight);
-            _gridCollectionView.SetValue(GridCollectionView.ComputedHeightProperty, 
+            _gridCollectionView.SetValue(GridCollectionView.ComputedHeightProperty,
                                          Context.FromPixels(actualHeight));
 
             return actualHeight;
         }
 
-        int GetUniformItemHeight(int containerWidth, int columns)
+        protected virtual int GetUniformItemHeight(int containerWidth, int columns)
         {
             float actualWidth = containerWidth - (float)ColumnSpacing * (float)(columns - 1.0f);
             var itemWidth = (float)(actualWidth / (float)columns);
@@ -308,7 +301,7 @@ namespace AiForms.Renderers.Droid
             return (int)CalcurateColumnHeight(itemWidth);
         }
 
-        (int spanCount, int columnSpacing, int rowHeight) GetAutoSpacingItemSize(double containerWidth)
+        protected virtual (int spanCount, int columnSpacing, int rowHeight) GetAutoSpacingItemSize(double containerWidth)
         {
             var columnWidth = Context.ToPixels(_gridCollectionView.ColumnWidth);
             var columnHeight = Context.ToPixels(_gridCollectionView.ColumnHeight);
@@ -354,7 +347,7 @@ namespace AiForms.Renderers.Droid
         }
 
 
-        internal class CollectionViewSpanSizeLookup : GridLayoutManager.SpanSizeLookup
+        public class CollectionViewSpanSizeLookup : GridLayoutManager.SpanSizeLookup
         {
             GridCollectionViewRenderer _parent;
             GridCollectionView _gridCollectionView => _parent._gridCollectionView;
@@ -392,7 +385,7 @@ namespace AiForms.Renderers.Droid
             }
         }
 
-        internal class GridCollectionItemDecoration : RecyclerView.ItemDecoration
+        public class GridCollectionItemDecoration : RecyclerView.ItemDecoration
         {
             public bool IncludeEdge { get; set; }
 
@@ -408,7 +401,7 @@ namespace AiForms.Renderers.Droid
 
             protected override void Dispose(bool disposing)
             {
-                if(disposing)
+                if (disposing)
                 {
                     _parentRenderer = null;
                 }
@@ -432,7 +425,8 @@ namespace AiForms.Renderers.Droid
                         headparams.SetMargins(margin, headparams.TopMargin, margin, headparams.BottomMargin);
                         view.LayoutParameters = headparams;
                     }
-                    else if (headparams.LeftMargin < 0) {
+                    else if (headparams.LeftMargin < 0)
+                    {
                         headparams.SetMargins(margin, headparams.TopMargin, margin, headparams.BottomMargin);
                         view.LayoutParameters = headparams;
                     }

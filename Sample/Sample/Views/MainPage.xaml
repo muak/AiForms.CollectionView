@@ -10,6 +10,7 @@
         <Button Text="GridCollectionView" Command="{Binding GoToTest}"  CommandParameter="CollectionViewTest" />
         <Button Text="GridCollectionView(Group)" Command="{Binding GoToTest}"  CommandParameter="CollectionViewGroupTest" />
         <Button Text="DataTemplateTest" Command="{Binding GoToTest}"  CommandParameter="DataTemplateTest" />
+        <Button Text="DefaultValueTest" Command="{Binding GoToTest}"  CommandParameter="DefaultValueTest" />
 	</StackLayout>
     </ScrollView>
 </ContentPage>

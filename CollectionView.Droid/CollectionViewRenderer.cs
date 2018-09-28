@@ -8,7 +8,7 @@ using AView = Android.Views.View;
 namespace AiForms.Renderers.Droid
 {
     [Android.Runtime.Preserve(AllMembers = true)]
-    public abstract class CollectionViewRenderer : ViewRenderer<CollectionView, AView>,ICollectionViewRenderer
+    public abstract class CollectionViewRenderer : ViewRenderer<CollectionView, AView>, ICollectionViewRenderer
     {
         public int GroupHeaderHeight { get; set; }
         public int GroupHeaderWidth { get; set; }
@@ -23,7 +23,6 @@ namespace AiForms.Renderers.Droid
 
         SelectableSmoothScroller _scroller;
         ScrollToRequestedEventArgs _pendingScrollTo;
-
 
         bool _disposed;
 
@@ -94,7 +93,6 @@ namespace AiForms.Renderers.Droid
             Adapter.IsAttachedToWindow = IsAttached;
         }
 
-
         protected virtual void OnScrollToRequested(object sender, ScrollToRequestedEventArgs e)
         {
             if (!IsAttached)
@@ -115,7 +113,7 @@ namespace AiForms.Renderers.Droid
                 }
                 else
                 {
-                    ExecuteScroll(Adapter.ItemCount - 1,e);
+                    ExecuteScroll(Adapter.ItemCount - 1, e);
                 }
                 return;
             }
@@ -145,7 +143,7 @@ namespace AiForms.Renderers.Droid
             ExecuteScroll(position, e);
         }
 
-        protected virtual void ExecuteScroll(int targetPosition,ScrollToRequestedEventArgs eventArgs) 
+        protected virtual void ExecuteScroll(int targetPosition, ScrollToRequestedEventArgs eventArgs)
         {
             if (eventArgs.Position == ScrollToPosition.MakeVisible)
             {
@@ -169,7 +167,7 @@ namespace AiForms.Renderers.Droid
         }
 
 
-        int CalculateScrollOffset(ScrollToPosition snapPosition)
+        protected virtual int CalculateScrollOffset(ScrollToPosition snapPosition)
         {
             // TODO:
             // If variable cell height is wanted to use, must calculate real size here.
@@ -182,7 +180,8 @@ namespace AiForms.Renderers.Droid
             {
                 offset = containerSize / 2 - cellSize / 2;
             }
-            else if (snapPosition == ScrollToPosition.End) {
+            else if (snapPosition == ScrollToPosition.End)
+            {
                 offset = containerSize - cellSize;
             }
 

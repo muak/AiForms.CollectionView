@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:ai="clr-namespace:AiForms.Renderers;assembly=CollectionView"
+    xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    x:Class="Sample.Views.DefaultValueTest">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="template">
+                <ai:ContentCell>
+                    <AbsoluteLayout Margin="0" BackgroundColor="Transparent">
+                        <ff:CachedImage StyleId="Image" LoadingPlaceholder="icon.png" DownsampleWidth="180" 
+                                        RetryCount="3" RetryDelay="500" Aspect="AspectFill" 
+                                        Source="{Binding PhotoUrl}" 
+                                        AbsoluteLayout.LayoutFlags="SizeProportional" AbsoluteLayout.LayoutBounds="0,0,1,1" />
+                        <Label x:Name="label1" HeightRequest="18" Text="{Binding Title}" TextColor="Black" BackgroundColor="#AAFFFFFF"
+                               AbsoluteLayout.LayoutFlags="YProportional,WidthProportional" AbsoluteLayout.LayoutBounds="0,1,1,AutoSize" />
+                    </AbsoluteLayout>
+                </ai:ContentCell>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <FlexLayout Direction="Column">
+        <ai:HCollectionView 
+            FlexLayout.Shrink="0" Margin="0,0,0,10" HeightRequest="100"
+            ItemsSource="{Binding ItemsSource}" 
+            ItemTemplate="{StaticResource template}" />
+        
+        <ai:GridCollectionView 
+            FlexLayout.Grow="1" FlexLayout.Shrink="1" Margin="0,0,0,0" 
+            ItemsSource="{Binding ItemsSource}"
+            ItemTemplate="{StaticResource template}" />
+    </FlexLayout>
+</ContentPage>

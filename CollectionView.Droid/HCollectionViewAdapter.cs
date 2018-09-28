@@ -1,26 +1,28 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using Android.Content;
 using Android.Support.V7.Widget;
-using System.Threading.Tasks;
 
 namespace AiForms.Renderers.Droid
 {
     [Android.Runtime.Preserve(AllMembers = true)]
-    public class HCollectionViewAdapter:CollectionViewAdapter
+    public class HCollectionViewAdapter : CollectionViewAdapter
     {
         public readonly int InfiniteCount = 50000;
         HCollectionView _hCollectionView => _collectionView as HCollectionView;
 
         public HCollectionViewAdapter(Context context, CollectionView collectionView, RecyclerView recyclerView, ICollectionViewRenderer renderer)
-            :base(context,collectionView,recyclerView,renderer)
+            : base(context, collectionView, recyclerView, renderer)
         {
         }
 
-        public override int ItemCount {
-            get {
-                if(_hCollectionView.IsInfinite) {
-                    if(_listCount == -1) {
+        public override int ItemCount
+        {
+            get
+            {
+                if (_hCollectionView.IsInfinite)
+                {
+                    if (_listCount == -1)
+                    {
                         InvalidateCount();
                     }
                     return InfiniteCount;
@@ -31,7 +33,7 @@ namespace AiForms.Renderers.Droid
 
         protected override void OnGroupedCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(_hCollectionView.IsInfinite)
+            if (_hCollectionView.IsInfinite)
             {
                 UpdateItems(e, 0, true);
                 return;
@@ -41,7 +43,7 @@ namespace AiForms.Renderers.Droid
 
         protected override void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(_hCollectionView.IsInfinite) 
+            if (_hCollectionView.IsInfinite)
             {
                 UpdateItems(e, 0, true, true);
                 return;
@@ -55,12 +57,13 @@ namespace AiForms.Renderers.Droid
             return _hCollectionView.IsInfinite ? position % _listCount : position;
         }
 
-        public int GetInitialPosition() {
+        public virtual int GetInitialPosition()
+        {
             if (_listCount == -1)
             {
                 InvalidateCount();
             }
-            return InfiniteCount / 2 / _listCount * _listCount ;
+            return InfiniteCount / 2 / _listCount * _listCount;
         }
     }
 }

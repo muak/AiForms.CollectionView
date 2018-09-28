@@ -77,6 +77,7 @@ namespace AiForms.Renderers.iOS
 
             int sec = 0;
             int row = indexPath.Row;
+
             if (_hCollectionView.IsGroupingEnabled)
             {
                 sec = indexPath.Section % TemplatedItemsView.TemplatedItems.Count;

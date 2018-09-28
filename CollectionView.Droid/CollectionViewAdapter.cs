@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Linq;
 using AiForms.Renderers.Droid.Cells;
 using Android.Content;
 using Android.Support.V7.Widget;
@@ -9,28 +11,27 @@ using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.Android;
 using AView = Android.Views.View;
-using System.Linq;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace AiForms.Renderers.Droid
 {
     [Android.Runtime.Preserve(AllMembers = true)]
-    public class CollectionViewAdapter: RecyclerView.Adapter, AView.IOnClickListener, AView.IOnLongClickListener
+    public class CollectionViewAdapter : RecyclerView.Adapter, AView.IOnClickListener, AView.IOnLongClickListener
     {
         public bool IsAttachedToWindow { get; set; }
         public const int DefaultGroupHeaderTemplateId = 1000;
         public const int DefaultItemTemplateId = 1;
         public HashSet<int> FirstSectionItems = new HashSet<int>();
+        public int RealItemCount => _listCount;
 
         protected int _listCount = -1; // -1 we need to get count from the list
         protected Dictionary<int, List<int>> _sectionCache = new Dictionary<int, List<int>>();
         protected CollectionView _collectionView;
+
         int _dataTemplateIncrementer = 2;  // DataTemplate count is limited until 2-999
         int _headerTemplateIncrementer = 1001; // more than or equal to 1000 is group header.
 
         Context _context;
-        RecyclerView _recyclerView;       
+        RecyclerView _recyclerView;
         ICollectionViewRenderer _collectionViewRenderer;
         List<ViewHolder> _viewHolders = new List<ViewHolder>();
         Dictionary<DataTemplate, int> _templateToId = new Dictionary<DataTemplate, int>();
@@ -76,7 +77,7 @@ namespace AiForms.Renderers.Droid
             base.Dispose(disposing);
         }
 
-        public void OnClick(AView v)
+        public virtual void OnClick(AView v)
         {
             var container = v as ContentCellContainer;
             var formsCell = container.Element as ContentCell;
@@ -86,11 +87,11 @@ namespace AiForms.Renderers.Droid
                 return;
             }
 
-
             var position = GetRealPosition(_recyclerView.GetChildAdapterPosition(v));
             int group = 0;
             int row = position;
-            if(_collectionView.IsGroupingEnabled) {
+            if (_collectionView.IsGroupingEnabled)
+            {
                 group = TemplatedItemsView.TemplatedItems.GetGroupIndexFromGlobal(position, out row);
             }
 
@@ -102,7 +103,7 @@ namespace AiForms.Renderers.Droid
             Controller.NotifyRowTapped(group, row - 1, formsCell);
         }
 
-        public bool OnLongClick(AView v)
+        public virtual bool OnLongClick(AView v)
         {
             var container = v as ContentCellContainer;
             var formsCell = container.Element as ContentCell;
@@ -138,7 +139,7 @@ namespace AiForms.Renderers.Droid
             UpdateItems(e, 0, true);
         }
 
-        protected virtual void UpdateItems(NotifyCollectionChangedEventArgs e, int section, bool resetWhenGrouped,bool forceReset = false)
+        protected virtual void UpdateItems(NotifyCollectionChangedEventArgs e, int section, bool resetWhenGrouped, bool forceReset = false)
         {
             var exArgs = e as NotifyCollectionChangedEventArgsEx;
 
@@ -157,7 +158,6 @@ namespace AiForms.Renderers.Droid
 
                     InvalidateCount();
 
-                    Debug.WriteLine($"Add {_sectionCache[section][e.NewStartingIndex]} {e.NewItems.Count}");
                     NotifyItemRangeInserted(_sectionCache[section][e.NewStartingIndex], e.NewItems.Count);
 
                     InvalidateItemDecoration();
@@ -170,7 +170,6 @@ namespace AiForms.Renderers.Droid
                         goto case NotifyCollectionChangedAction.Reset;
                     }
 
-                    Debug.WriteLine("Removed");
                     NotifyItemRangeRemoved(_sectionCache[section][e.OldStartingIndex], e.OldItems.Count);
                     InvalidateCount();
 
@@ -184,7 +183,6 @@ namespace AiForms.Renderers.Droid
                         goto case NotifyCollectionChangedAction.Reset;
                     }
 
-                    Debug.WriteLine("Moved");
                     NotifyItemMoved(_sectionCache[section][e.OldStartingIndex], _sectionCache[section][e.NewStartingIndex]);
 
                     InvalidateItemDecoration();
@@ -197,14 +195,12 @@ namespace AiForms.Renderers.Droid
                         goto case NotifyCollectionChangedAction.Reset;
                     }
 
-                    Debug.WriteLine("Replace");
                     NotifyItemRangeChanged(_sectionCache[section][e.OldStartingIndex], e.OldItems.Count);
 
                     break;
 
                 case NotifyCollectionChangedAction.Reset:
                     InvalidateCount();
-                    Debug.WriteLine("Reset");
                     NotifyDataSetChanged();
                     break;
             }
@@ -212,7 +208,7 @@ namespace AiForms.Renderers.Droid
 
         }
 
-        void InvalidateItemDecoration()
+        protected virtual void InvalidateItemDecoration()
         {
             Device.StartTimer(TimeSpan.FromMilliseconds(250), () =>
             {
@@ -223,7 +219,7 @@ namespace AiForms.Renderers.Droid
         }
 
 
-        public void OnDataChanged()
+        public virtual void OnDataChanged()
         {
             InvalidateCount();
 
@@ -232,7 +228,6 @@ namespace AiForms.Renderers.Droid
                 NotifyDataSetChanged();
             }
         }
-
 
         protected virtual void InvalidateCount()
         {
@@ -259,8 +254,6 @@ namespace AiForms.Renderers.Droid
 
             _listCount = count;
         }
-
-        public int RealItemCount => _listCount;
 
         public override int ItemCount
         {
@@ -449,10 +442,6 @@ namespace AiForms.Renderers.Droid
             Performance.Stop(reference, "AddView");
 
 
-            // EditTextのフォーカス問題のやつ 今はスルー 必要ならLinearLayoutを継承して作る
-            // がこのRecyclerViewの用途でEditor使うことなんてないので優先度低
-            //layout.ApplyTouchListenersToSpecialCells(cell);
-
             Performance.Stop(reference);
         }
 
@@ -461,9 +450,8 @@ namespace AiForms.Renderers.Droid
             return position;
         }
 
-        AView GetCell(ContentCell item, ContentCellContainer convertView, ViewGroup parent, Context context, Xamarin.Forms.View view)
+        protected virtual AView GetCell(ContentCell item, ContentCellContainer convertView, ViewGroup parent, Context context, Xamarin.Forms.View view)
         {
-
             var renderer = ContentCellRenderer.GetRenderer(item);
             if (renderer == null)
             {
@@ -475,7 +463,7 @@ namespace AiForms.Renderers.Droid
         }
 
 
-        public Cell GetCellFromPosition(int position)
+        public virtual Cell GetCellFromPosition(int position)
         {
             var templatedItems = TemplatedItemsView.TemplatedItems;
             var templatedItemsCount = templatedItems.Count;
@@ -521,7 +509,7 @@ namespace AiForms.Renderers.Droid
             return null;
         }
 
-        Cell GetNewGroupHeaderCell(ITemplatedItemsList<Cell> group)
+        protected virtual Cell GetNewGroupHeaderCell(ITemplatedItemsList<Cell> group)
         {
             var groupHeaderCell = _collectionView.TemplatedItems.GroupHeaderTemplate?.CreateContent(group.ItemsSource, _collectionView) as Cell;
 
