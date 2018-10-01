@@ -1,22 +1,20 @@
 # CollectionView for Xamarin.Forms
 
-This is a flexible ListView that has a grid and horizontal layout with reusable cells for Xamarin.Forms (Android / iOS).
+CollectionViewは、Xamarin.Formsで使用できるGridや水平方向レイアウトに対応した柔軟なListViewです。AndroidとiOSに対応しています。
 
-[Japanese](./README-ja.md)
-
-## Available controls
+## コントロール
 
 * [GridCollectionView](#gridcollectionview)
-    * The ListView that lays out each item in a grid pattern.
+    * Grid状にアイテムを並べるListView
 * [HCollectionView](#hcollectionview) (HorizontalCollectionView)
-    * The ListView that lays out each item horizontally.
+    * 水平方向にアイテムを並べるListView
 
-## Minimum Platform OS Version 
+## 最小対応バージョン 
 
 iOS: iOS10  
 Android: version 5.1.1 (only FormsAppcompatActivity) / API22
 
-## Demo
+## デモ
 
 <img src="images/SS_ios.jpg" height="800" /> <img src="images/SS_android.jpg" height="800" />
 
@@ -24,21 +22,21 @@ Android: version 5.1.1 (only FormsAppcompatActivity) / API22
 " target="_blank"><img src="http://img.youtube.com/vi/qF4sVnE5Dao/0.jpg" 
 alt="" width="640" height="360" border="0" /></a>
 
-## Get Started
+## 使用方法
 
-### Nuget Installation
+### Nuget でのインストール
 
 [https://www.nuget.org/packages/AiForms.CollectionView/](https://www.nuget.org/packages/AiForms.CollectionView/)
 
 ```bash
-Install-Package AiForms.CollectionView
+Install-Package AiForms.CollectionView -pre
 ```
 
-You need to install this nuget package to .NETStandard project and each platform project.
+.NETStandardプロジェクトと各プラットフォームのプロジェクトにインストールする必要があります。
 
 ### For iOS project
 
-To use on iOS, you need to write some code in AppDelegate.cs.
+iOSの場合は AppDelegate.cs に以下の記述が必要です。
 
 ```csharp
 public override bool FinishedLaunching(UIApplication app, NSDictionary options) {
@@ -52,7 +50,7 @@ public override bool FinishedLaunching(UIApplication app, NSDictionary options) 
 }
 ```
 
-### Using with XAML 
+### Xaml からの使用方法 
 
 #### For GridCollectionView
 
@@ -93,7 +91,7 @@ public override bool FinishedLaunching(UIApplication app, NSDictionary options) 
     </ai:HCollectionView>
 ```
 
-#### For Grouped GridCollectionView 
+#### For GridCollectionView (グループ化)
 
 ```xml
     ...
@@ -118,11 +116,11 @@ public override bool FinishedLaunching(UIApplication app, NSDictionary options) 
     </ai:GridCollectionView>
 ```
 
-How to setting a Grouped HCollectionView is the same as the abobe.
+HCollectionViewのグループでの使用は上と同じです。
 
-> Note that the root of DataTemplate must be arranged not a ViewCell but a ContentCell.
+> DataTemplateのルートには ViewCell ではなく ContentCell を配置する必要があることに注意してください。
 
-### A example of how to create grouped items source
+### グループ化した ItemsSouce の作成例
 
 ```cs
 public class PhotoGroup : ObservableCollection<PhotoItem>
@@ -174,7 +172,7 @@ public class SomeViewModel
 }
 ```
 
-## Available functions deriving from ListView
+## 使用可能なListViewの機能
 
 ### Bindable properties
 
@@ -197,10 +195,10 @@ public class SomeViewModel
 
 ### Caching Strategy
 
-ListView's Caching Strategy is available for both GridCollectionView and HCollectionView.
-Note that ListView uses RetainElement by default but CollectionView uses RecycleElement.
+ListViewのCachingStrategyはGridCollectionViewとHCollectionViewの両方で使用可能です。
+ただし、ListViewはデフォルトでRetainElementを使用しますが、CollectionViewではRecycleElementを使用することに注意してください。
 
-Since ListViewCachingStrategy is not a property, it must be set using "x:Arguments" syntax from XAML for changing to the other value.
+ListViewCachingStrategyはプロパティではないので、もし変更する場合は、"x:Arguments" 構文を使用して設定する必要があります。
 
 ```xml
 <ai:HCollectionView ...>
@@ -211,113 +209,113 @@ Since ListViewCachingStrategy is not a property, it must be set using "x:Argumen
 </ai:HCollectionView>
 ```
 
-Alternatively, it is set using code from C#.
+あるいは、C#からコードで設定します。
 
 ```cs
 var collectionView = new HCollectionView(ListViewCachingStrategy.RetainElement);
 ```
 
-## For images
+## 画像を使う場合
 
-If you use images for a data template item, using **[FFImageLoading](https://github.com/luberda-molinet/FFImageLoading)** is recommended powerfully.
-Because this library doesn't contain the feature of such as dealing with images asynchronously and caching.
+DataTemplateの要素に画像を使用する場合は、**[FFImageLoading](https://github.com/luberda-molinet/FFImageLoading)** を利用することを強く推奨します。
+CollectionViewには画像を非同期で処理したりキャッシュしたりする機能がないためです。
 
 ## GridCollectionView
 
-This is the ListView that lays out each item in a grid pattern. Though this is similar to [WrapLayout](https://github.com/muak/AiForms.Layouts#wraplayout), is different from it in that cells can be recycled.
+Grid状に各要素を配置するListViewです。これは [WrapLayout](https://github.com/muak/AiForms.Layouts#wraplayout) に似ていますが、セルをリサイクルできるという点などで異なります。
 
 ### Bindable Properties
 
 * [GridType](#gridtype-enumeration)
-    * Select grid layout type using an enumeration value either UniformGrid or AutoSpacingGrid. (Default: AutoSpacingGrid)
+    * Gridレイアウトのタイプを UniformGrid か AutoSpacingGrid より選択します。(Default: AutoSpacingGrid)
 * PortraitColumns
-    * The number of columns displayed on portrait mode when GridType is UniformGrid.
+    * 縦向きの時に1行に表示する列数です。GridTypeがUniformGridの時のみ有効です。
 * LandscapeColumns
-    * The number of columns displayed on landscape mode when GridType is UniformGrid.
+    * 横向きの時に1行に表示する列数です。GridTypeがUniformGridの時のみ有効です。
 * RowSpacing
-    * The spacing between each row.
+    * 各行の間隔。
 * ColumnSpacing
-    * The spacing between each column when GridType is UniformGrid or AutoSpacingGrid with setting SpacingType to center.
+    * 各列の間隔。GridType が UniformGrid のときと、AutoSpacingGrid で SpacingType に Center が設定されているときのみ有効です。
 * ColumnWidth
-    * The width of a column when GridType is AutoSpacingGrid.
+    * 各アイテムの列幅。GridType が AutoSpacingGrid のときのみ有効です。
 * ColumnHeight
-    * The height of a column. If the value is less than or equal to 5.0, it is used as the ratio of the width: Otherwise used as the absolute size.
+    * 各アイテムの高さ。5.0以下の場合は、幅に対する比率として扱われ、それより大きい値の場合は絶対サイズとして扱われます。
 * AdditionalHeight
-    * The additional height of ColumnHeight. Combining this value with ColumnHeight ratio value, Total height can be set such as 100% + 15px for example.
+    * 追加のアイテムの高さ。この値と ColumnHeight を組み合わせると、高さを幅の100% + 15px にする といったような設定ができます。
 * GroupHeaderHeight
-    * The height of a group header cell.
+    * グループヘッダーのセルの高さ。
 * [SpacingType](#spacingtype-enumeration)
-    * Select the spacing type using an enumeration value either Between or Center. This is used only when GridType is AutoSpacingGrid. (Default: Between)
+    * 列間の間隔の決め方を、Between と Center から選択します。GridType が AutoSpacingGrid のときのみ有効です。(Default: Between)
 * PullToRefreshColor
-    * The color of the PullToRefresh indicator icon.
+    * PullToRefreshのインジケータに使用する色。
 * ItemTapCommand
-  * The command invoked when an item is tapped.
+  * アイテムがタップられた時に発火するコマンド。
 * ItemLongTapCommand
-  * The command invoked when an item is pressed longly.
+  * アイテムがロングタップされた時に発火するコマンド。
 * TouchFeedbackColor
-  * The color rendered when an item is touched.
+  * アイテムをタッチした時に表示するエフェクト色。
 * [ScrollController](#scrollcontroller)
-  * The object for manipulating the scroll from such as ViewModel.
+  * ViewModelなどでCollectionViewのスクロールを制御する場合に使用するオブジェクト。
 
 ### Special Properties
 
 * ComputedWidth – ReadOnly
-    * The column width after being calculated when using UniformGrid in particular. 
+    * 計算後の列幅。UniformGrid の場合に、実際のおおよその列幅を参照する場合などに使います。
   
-    > Note that this value can sometimes make 1 pixel difference from the actual width.
+    > この値は、実際の幅より1pxほど異なることがあります。
 
 * ComputedHeight – ReadOnly
-  * The column height after being calculated.
+  * 計算後のアイテムの高さ。
 
 ### <a href="#gridtype"></a>GridType Enumeration
 
 * UniformGrid
-    * The number of columns arranged in each row is specified. Each column width becomes the width obtained by dividing the row width by that value. This number of columns can be set by PortraitColumns and LandscapeColumns properties.
+    * 1行に配置する列数を指定します。各列幅は1行の幅をこの値で割った値になります。この列数は PortraitColumns と LandscapeColumns プロパティで指定できます。
 * AutoSpacingGrid
-    * Once a column width is specified, each column is arranged until fitting in each row and adjusted automatically each spacing. A column width can be set by ColumnWidth property and Setting SpacingType property can change how to adjust the spacing.
+    * 列幅を指定し、1行を満たすまでアイテムを配置して、各間隔を自動で調整します。列幅は ColumnWidth プロパティで指定でき、間隔の調整方法は、SpacingType プロパティで設定できます。
 
 ### <a href="#spacingtype"></a>SpacingType Enumeration
 
 * Between
-  * Both side items are arranged to each edge without spacing. The other items are uniformly arranged in the remained space.
+  * 両端に余白なしでアイテムを配置し、残りのスペースに他のアイテムを余白が均等になるように配置します。
 * Center
-  * Each item is uniformly arranged with the specified spacing, and the remained space is assigned to each edge.
+  * 各アイテムはColumnSpacingで設定された間隔で均等に配置され、両端に残りのスペースを割り当てます。
 
 ## HCollectionView
 
-This is the ListView that lays out each item horizontally. This can make the scroll circulated by setting IsInfinite property to true. HCollectionView also recycles cells.
+水平方向にアイテムを配置するListViewです。IsInfinite プロパティを設定することでスクロールを循環させる（無限にする）ことができます。HCollectionViewもセルをリサイクルします。
 
 ### Bindable Properties
 
 * ColumnWidth
-    * The width of a column.
+    * 列幅。
 * Spacing
-    * The spacing between each column.
+    * 各列の間隔。
 * GroupHeaderWidth
-    * The width of a group header cell.
+    * グループヘッダーの幅。
 * IsInfinite
-    * Whether making the scroll circulated. (Default: false)
+    * スクロールを循環させるかどうか。 (Default: false)
 
-    > On iOS, it must be the number of cells enough to fill the container width.
-    > On Android, it could reach each edge if keep scrolling for so long, because it is semi-infinite.
+    > iOSの場合、コンテナ幅を十分に満たす数のセルが必要です。
+    > Androidの場合、完全に無限ではないので長時間スクロールすると端に到達することがあります。
 
 * ItemTapCommand
-  * The command invoked when an item is tapped.
+  * アイテムがタップられた時に発火するコマンド。
 * ItemLongTapCommand
-  * The command invoked when an item is pressed longly.
+  * アイテムがロングタップされた時に発火するコマンド。
 * TouchFeedbackColor
-  * The color rendered when an item is touched.
+  * アイテムをタッチした時に表示するエフェクト色。
 * [ScrollController](#scrollcontroller)
-  * The object for manipulating the scroll from such as ViewModel.
+  * ViewModelなどでCollectionViewのスクロールを制御する場合に使用するオブジェクト。
 
-### About Row Height
+### 行の高さについて
 
-HCollectionView height is decided by the HeightRequest value or itself size.
+HCollectionView の行の高さは、HeightRequestの値や、自身のサイズによって決定されます。固定値にする場合はHeightRequestを指定してください。
 
 ## <a href="#scrollcontroller"></a>ScrollController
 
-This is the object which allows methods for scrolling to be called from such as ViewModel.
-The following code is the example calling ScrollTo method from ViewModel:
+これは、ViewModelなどからスクロールのメソッドを呼び出すことができるオブジェクトです。
+以下のコードは、ViewModelから ScrollTo メソッドを呼び出している例です。
 
 ```cs
 public class SomeViewModel
@@ -356,14 +354,14 @@ public class SomeViewModel
 * ScrollTo
     * ``void ScrollTo(object sourceItem, ScrollToPosition scrollToPosition, bool animated = true)``
     * ``void ScrollTo(object sourceItem, object sourceGroup ,ScrollToPosition scrollToPosition, bool animated = true)``
-    * Scroll to specified item. This method is the same as that of ListView.
-    * Note that the argument item is not a cell but an ItemsSource element.
+    * アイテムを指定して、スクロールします。これはListViewのそれと同じです。
+    * 引数のアイテムはセルではなくItemsSourceの要素であることに注意してください。
 * ScrollToStart
     * ``void ScrollToStart(bool animated = true)``
-    * Scroll to the top-most or left-most position.
+    * 一番上か一番左にスクロールします。
 * ScrollToEnd
     * ``void ScrollToEnd(bool animated = true)``
-    * Scroll to the bottom-most or right-most position.
+    * 一番下か一番右にスクロールします。
 
 ## License
 
