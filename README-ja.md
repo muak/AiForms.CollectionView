@@ -20,7 +20,7 @@ Android: version 5.1.1 (only FormsAppcompatActivity) / API22
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=qF4sVnE5Dao
 " target="_blank"><img src="http://img.youtube.com/vi/qF4sVnE5Dao/0.jpg" 
-alt="" width="640" height="360" border="0" /></a>
+alt="" width="462" height="462" border="0" /></a>
 
 ## 使用方法
 
