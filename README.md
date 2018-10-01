@@ -31,7 +31,7 @@ alt="" width="480" height="360" border="0" /></a>
 [https://www.nuget.org/packages/AiForms.CollectionView/](https://www.nuget.org/packages/AiForms.CollectionView/)
 
 ```bash
-Install-Package AiForms.CollectionView
+Install-Package AiForms.CollectionView -pre
 ```
 
 You need to install this nuget package to .NETStandard project and each platform project.
@@ -367,4 +367,6 @@ public class SomeViewModel
 
 ## License
 
-MIT Licensed.
+The MIT Licensed.
+
+Some code is taken from [Xamarin.Forms](https://github.com/xamarin/Xamarin.Forms).

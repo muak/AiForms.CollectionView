@@ -365,4 +365,6 @@ public class SomeViewModel
 
 ## License
 
-MIT Licensed.
+The MIT Licensed.
+
+コードの一部は [Xamarin.Forms](https://github.com/xamarin/Xamarin.Forms) から取得しています.
