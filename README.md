@@ -20,9 +20,9 @@ Android: version 5.1.1 (only FormsAppcompatActivity) / API22
 
 <img src="images/SS_ios.jpg" height="800" /> <img src="images/SS_android.jpg" height="800" />
 
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=qF4sVnE5Dao
-" target="_blank"><img src="http://img.youtube.com/vi/qF4sVnE5Dao/0.jpg" 
-alt="" width="462" height="462" border="0" /></a>
+<a href="https://www.youtube.com/watch?feature=player_embedded&v=qF4sVnE5Dao
+" target="_blank"><img src="https://img.youtube.com/vi/qF4sVnE5Dao/0.jpg" 
+alt="" width="480" height="360" border="0" /></a>
 
 ## Get Started
 
