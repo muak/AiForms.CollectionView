@@ -11,7 +11,7 @@ namespace Sample.Views
         public MyToastView()
         {
             InitializeComponent();
-            ToastWidth = 0.8;
+            ToastWidth = 0.9;
             ToastHeight = 30;
             Duration = 2000;
             LayoutAlignment = LayoutAlignment.Center;

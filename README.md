@@ -16,7 +16,9 @@ Android: version 5.1.1 (only FormsAppcompatActivity) / API22
 
 ### Demo
 
+<img src="images/SS_ios.jpg" height="800" /> <img src="images/SS_android.jpg" height="800" />
 
+[https://youtu.be/qF4sVnE5Dao](https://youtu.be/qF4sVnE5Dao)
 
 ## Get Started
 

@@ -46,23 +46,25 @@
     </ContentPage.Resources>
         
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Action" Command="{Binding NextCommand}" />
+        <ToolbarItem Text="Action" Command="{Binding NextCommand}"/>
     </ContentPage.ToolbarItems>
     
     <FlexLayout Direction="Column" BackgroundColor="White">
-        <Label Text="HorizontalCollectionView" FontSize="12" FlexLayout.Shrink="0" />
+        <Label Text="HorizontalCollectionView" FontSize="12" FlexLayout.Shrink="0" TextColor="Black" />
         <ai:HCollectionView FlexLayout.Shrink="0" Margin="0,0,0,0"
-                            ItemsSource="{Binding ItemsSource}" 
+                            ItemsSource="{Binding ItemsSourceH}" 
                             ItemTapCommand="{Binding TapCommand}" 
                             ItemLongTapCommand="{Binding LongTapCommand}"
                             Spacing="4"
                             IsGroupingEnabled="true"
                             GroupHeaderWidth="80"
-                            IsInfinite="true"
+                            IsInfinite="{Binding IsInfinite.Value}"
                             BackgroundColor="White"
                             ColumnWidth="80"
                             HeightRequest="80"
                             ItemTemplate="{StaticResource templateA}"
+                            TouchFeedbackColor="{Binding FeedbackColor.Value}"
+                            ScrollController="{Binding ScrollControllerH}"
                             >
             <x:Arguments>
                 <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
@@ -70,35 +72,43 @@
             <ListView.GroupHeaderTemplate>
                 <DataTemplate>
                     <ai:ContentCell>
-                        <Label Text="{Binding Head}" BackgroundColor="#E6DAB9" />
+                        <Label Text="{Binding Head}" BackgroundColor="#E6DAB9" TextColor="Black" />
                     </ai:ContentCell>
                 </DataTemplate>
             </ListView.GroupHeaderTemplate>
         </ai:HCollectionView>
-        <Label Text="GridCollectionView" FontSize="12" FlexLayout.Shrink="0" />
+        <Label Text="GridCollectionView" FontSize="12" FlexLayout.Shrink="0" TextColor="Black" />
         <ai:GridCollectionView
-                              x:Name="collectionView"
-                              FlexLayout.Grow="1" FlexLayout.Shrink="1" Margin="0,0,0,0" 
-                              ItemsSource="{Binding ItemsSource}"
-                              IsGroupingEnabled="true"
-                              GroupHeaderHeight="36" 
-                              GridType="UniformGrid"
-                              PortraitColumns="3"
-                              LandscapeColumns="5"
-                              ColumnSpacing="4"
-                              RowSpacing="4" 
-                              ColumnHeight="1.0"
-                              ItemTemplate="{StaticResource templateB}"
-                              ItemTapCommand="{Binding TapCommand}" 
-                              ItemLongTapCommand="{Binding LongTapCommand}" 
-                              >
+            x:Name="collectionView"
+            FlexLayout.Grow="1" FlexLayout.Shrink="1" Margin="0,0,0,0" 
+            ItemsSource="{Binding ItemsSource}"
+            IsGroupingEnabled="true"
+            GroupHeaderHeight="36" 
+            GridType="{Binding GridType.Value}"
+            SpacingType="{Binding SpacingType.Value}"
+            ColumnWidth="{Binding ColumnWidth.Value}"
+            PortraitColumns="{Binding PortraitColumns.Value}"
+            LandscapeColumns="5"
+            ColumnSpacing="4"
+            RowSpacing="4" 
+            ColumnHeight="1.0"
+            ItemTemplate="{StaticResource templateB}"
+            ItemTapCommand="{Binding TapCommand}" 
+            ItemLongTapCommand="{Binding LongTapCommand}" 
+            TouchFeedbackColor="{Binding FeedbackColor.Value}"
+            ScrollController="{Binding ScrollController}"
+            IsRefreshing="{Binding IsRefreshing.Value}"
+            RefreshCommand="{Binding RefreshCommand}"
+            IsPullToRefreshEnabled="{Binding EnabledPullToRefresh.Value}"
+            PullToRefreshColor="{Binding RefreshIconColor.Value}"
+        >
             <x:Arguments>
                 <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
             </x:Arguments>
             <ListView.GroupHeaderTemplate>
                 <DataTemplate>
                     <ai:ContentCell>
-                        <Label Text="{Binding Head}" BackgroundColor="#E6DAB9" />
+                        <Label Text="{Binding Head}" BackgroundColor="#E6DAB9" TextColor="Black" />
                     </ai:ContentCell>
                 </DataTemplate>
             </ListView.GroupHeaderTemplate>
