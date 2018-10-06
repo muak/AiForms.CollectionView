@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>AiForms.CollectionView</id>
-        <version>0.1.0-pre1</version>
+        <version>0.1.0-pre3</version>
         <title>CollectionView for Xamarin.Forms</title>
         <authors>kamu</authors>
         <owners>kamu</owners>
@@ -14,9 +14,9 @@ This has two layouts (GridCollectionView, HorizontalCollectonView). HorizontalCo
         </description>
         <summary></summary>
         <releaseNotes>
-First Release.
+Some bug fixes
         </releaseNotes>
-        <tags>Xamarin.Forms ListView CollectionView Grid Infinite Circular Scroll UICollectionView RecyclerView FlowLayout WrapLayout</tags>
+        <tags>Xamarin.Forms ListView CollectionView Grid Infinite Circular Scroll UICollectionView RecyclerView FlowLayout WrapLayout HorizontalListView</tags>
         <language>en-US</language>
         <dependencies>
             <group targetFramework="netstandard2.0">

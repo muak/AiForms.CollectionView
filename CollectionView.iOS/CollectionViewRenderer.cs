@@ -8,6 +8,7 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.iOS;
+using System.Linq;
 
 namespace AiForms.Renderers.iOS
 {
@@ -231,14 +232,25 @@ namespace AiForms.Renderers.iOS
         {
             var exArgs = e as NotifyCollectionChangedEventArgsEx;
             if (exArgs != null)
+            {
                 DataSource.Counts[section] = exArgs.Count;
+            }
 
             // This means the UITableView hasn't rendered any cells yet
             // so there's no need to synchronize the rows on the UITableView
             if (Control.IndexPathsForVisibleItems == null && e.Action != NotifyCollectionChangedAction.Reset)
+            {
                 return;
+            }
 
             var groupReset = (resetWhenGrouped && Element.IsGroupingEnabled) || forceReset;
+
+            // HACK: When an item is added for the first time, UICollectionView is sometimes crashed for some reason.
+            // So, in that case, ReloadData is called.
+            if (!Control.IndexPathsForVisibleItems.Any())
+            {
+                groupReset = true;
+            }
 
             // We can't do this check on grouped lists because the index doesn't match the number of rows in a section.
             // Likewise, we can't do this check on lists using RecycleElement because the number of rows in a section will remain constant because they are reused.

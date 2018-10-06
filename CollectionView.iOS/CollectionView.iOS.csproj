@@ -9,6 +9,7 @@
     <RootNamespace>AiForms.Renderers.iOS</RootNamespace>
     <AssemblyName>CollectionView.iOS</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <ReleaseVersion>1.1.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,12 +79,6 @@
     <Compile Include="HCollectionViewSource.cs" />
     <Compile Include="GridCollectionViewSource.cs" />
     <Compile Include="KeyboardInsetTracker.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CollectionView\CollectionView.csproj">
-      <Project>{6E8E8AAC-E482-4E9C-9759-27B03E4DC309}</Project>
-      <Name>CollectionView</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

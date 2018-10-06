@@ -7,7 +7,7 @@
     <ProjectGuid>{32BC5FF4-81FB-46DD-98ED-3D33C5318933}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>AiForms.Renderers.Droid</RootNamespace>
+    <RootNamespace>CollectionView.Droid</RootNamespace>
     <AssemblyName>CollectionView.Droid</AssemblyName>
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>

@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using Prism.Mvvm;
+using Prism.Navigation;
+using Reactive.Bindings;
+using System.Threading.Tasks;
+
 
 namespace Sample.ViewModels
 {
-    public class DefaultValueTestViewModel
+    public class DefaultValueTestViewModel:BindableBase,INavigatedAware
     {
-        public PhotoGroup ItemsSource { get; set; }
+        public ReactiveCollection<PhotoItem> ItemsSource { get; set; } = new ReactiveCollection<PhotoItem>();
 
         public DefaultValueTestViewModel()
         {
-            InitializeProperties();
         }
 
         void InitializeProperties()
@@ -27,7 +31,29 @@ namespace Sample.ViewModels
             }
 
 
-            ItemsSource = new PhotoGroup(list);
+            ItemsSource.AddRangeOnScheduler(list);
+        }
+
+        public void OnNavigatingTo(NavigationParameters parameters)
+        {
+        }
+
+        public void OnNavigatedFrom(NavigationParameters parameters)
+        {
+        }
+
+        public async void OnNavigatedTo(NavigationParameters parameters)
+        {
+            await Load();
+        }
+
+        internal async Task Load()
+        {
+            try
+            {
+                InitializeProperties();
+            }
+            finally {; }
         }
     }
 }
