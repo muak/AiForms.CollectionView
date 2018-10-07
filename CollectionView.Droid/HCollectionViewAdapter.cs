@@ -54,6 +54,10 @@ namespace AiForms.Renderers.Droid
 
         public override int GetRealPosition(int position)
         {
+            if (_listCount == 0)
+            {
+                return position;
+            }
             return _hCollectionView.IsInfinite ? position % _listCount : position;
         }
 

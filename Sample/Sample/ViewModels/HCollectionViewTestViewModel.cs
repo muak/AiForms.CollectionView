@@ -34,6 +34,8 @@ namespace Sample.ViewModels
         public ReactivePropertySlim<double> Spacing { get; } = new ReactivePropertySlim<double>(5);
         public ReactivePropertySlim<double> GroupWidth { get; } = new ReactivePropertySlim<double>(50);
         public ReactivePropertySlim<bool> IsInfinite { get; } = new ReactivePropertySlim<bool>(false);
+        public ReactivePropertySlim<double> GroupFirstSpacing { get; } = new ReactivePropertySlim<double>(0);
+        public ReactivePropertySlim<double> GroupLastSpacing { get; } = new ReactivePropertySlim<double>(0);
 
         public IScrollController ScrollController {get;set;}
         public IScrollController ScrollController2 { get; set; }
@@ -236,6 +238,18 @@ namespace Sample.ViewModels
                 () =>
                 {
                     Spacing.Value /= 2;
+                }
+            ).Add(
+                "Has Group First Spacing been 30px in Grouped?",
+                () =>
+                {
+                    GroupFirstSpacing.Value = 30;
+                }
+            ).Add(
+                "Has Group Last Spacing been 30px in Grouped?",
+                () =>
+                {
+                    GroupLastSpacing.Value = 30;
                 }
             ).Add(
                 "Has Column width been twice as large as previous?",

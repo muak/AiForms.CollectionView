@@ -40,6 +40,10 @@ namespace Sample.ViewModels
         public ReactivePropertySlim<Color> RefreshIconColor { get; } = new ReactivePropertySlim<Color>(Color.DimGray);
         public ReactivePropertySlim<double> AdditionalHeight { get; } = new ReactivePropertySlim<double>(0);
         public IScrollController ScrollController { get; set; }
+        public ReactivePropertySlim<double> GroupFirstSpacing { get; } = new ReactivePropertySlim<double>(0);
+        public ReactivePropertySlim<double> GroupLastSpacing { get; } = new ReactivePropertySlim<double>(0);
+        public ReactivePropertySlim<bool> IsGroupHeaderSticky { get; } = new ReactivePropertySlim<bool>(true);
+        public ReactivePropertySlim<double> BothSidesMargin { get; } = new ReactivePropertySlim<double>(0);
 
         IPageDialogService _pageDlg;
 
@@ -80,6 +84,26 @@ namespace Sample.ViewModels
                 },
                 () => {
                     RowSpacing.Value = 4;
+                }
+            ).Add(
+                "Has Group First Spacing been 30px in Grouped?",
+                () =>
+                {
+                    GroupFirstSpacing.Value = 30;
+                }
+            ).Add(
+                "Has Group Last Spacing been 30px in Grouped?",
+                () =>
+                {
+                    GroupLastSpacing.Value = 30;
+                }
+            ).Add(
+                "Has HeaderCell position been released from sticky?",
+                () => {
+                    IsGroupHeaderSticky.Value = false;
+                },
+                () => {
+                    IsGroupHeaderSticky.Value = true;
                 }
             ).Add(
                 "Has ColumnHeight been changed to absolute value(250px)?",
@@ -129,6 +153,7 @@ namespace Sample.ViewModels
                 () => {
                     GridType.Value = AiForms.Renderers.GridType.UniformGrid;
                     PortraitColumns.Value = 2;
+                    BothSidesMargin.Value = 10;
                 }
             ).Add(
                 "UniformGrid Test2. Has Colums number been changed 2 to 3 to 4 to 5 to 6 on Portrait?",
@@ -142,9 +167,10 @@ namespace Sample.ViewModels
                     PortraitColumns.Value = 6;
                 }
             ).Add(
-                "UniformGrid Test3. Has ColumnSpacing been changed 0?",
+                "UniformGrid Test3. Has ColumnSpacing / BothSidesMargin been changed 0?",
                 () => {
                     ColumnSpacing.Value = 0;
+                    BothSidesMargin.Value = 0;
                 }
             ).Add(
                 "UniformGrid Test4. Has Colums number been changed 6 to 5 to 4 to 3 to 2 on Portrait?",
@@ -420,13 +446,17 @@ namespace Sample.ViewModels
                 switch (addPtn)
                 {
                     case 0:
-                        ItemsSource.Insert(0, addItem);
+                        //ItemsSource.Insert(0, addItem);
+                        GridType.Value = AiForms.Renderers.GridType.AutoSpacingGrid;
+                        SpacingType.Value = AiForms.Renderers.SpacingType.Between;
                         break;
                     case 1:
-                        ItemsSource.Add(addItem);
+                        //ItemsSource.Add(addItem);
+                        SpacingType.Value = AiForms.Renderers.SpacingType.Center;
                         break;
                     case 2:
-                        ItemsSource.Insert(9, addItem);
+                        //ItemsSource.Insert(9, addItem);
+                        GridType.Value = AiForms.Renderers.GridType.UniformGrid;
                         break;
 
                 }

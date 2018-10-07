@@ -86,6 +86,50 @@ namespace AiForms.Renderers
         }
 
         /// <summary>
+        /// The group first spacing property.
+        /// </summary>
+        public static BindableProperty GroupFirstSpacingProperty =
+            BindableProperty.Create(
+                nameof(GroupFirstSpacing),
+                typeof(double),
+                typeof(CollectionView),
+                default(double),
+                defaultBindingMode: BindingMode.OneWay
+            );
+
+        /// <summary>
+        /// Gets or sets the group first spacing.
+        /// </summary>
+        /// <value>The group first spacing.</value>
+        public double GroupFirstSpacing
+        {
+            get { return (double)GetValue(GroupFirstSpacingProperty); }
+            set { SetValue(GroupFirstSpacingProperty, value); }
+        }
+
+        /// <summary>
+        /// The group last spacing property.
+        /// </summary>
+        public static BindableProperty GroupLastSpacingProperty =
+            BindableProperty.Create(
+                nameof(GroupLastSpacing),
+                typeof(double),
+                typeof(CollectionView),
+                default(double),
+                defaultBindingMode: BindingMode.OneWay
+            );
+
+        /// <summary>
+        /// Gets or sets the group last spacing.
+        /// </summary>
+        /// <value>The group last spacing.</value>
+        public double GroupLastSpacing
+        {
+            get { return (double)GetValue(GroupLastSpacingProperty); }
+            set { SetValue(GroupLastSpacingProperty, value); }
+        }
+
+        /// <summary>
         /// The scroll controller property.
         /// </summary>
         public static BindableProperty ScrollControllerProperty =

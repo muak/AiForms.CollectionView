@@ -17,7 +17,10 @@
     <StackLayout>
         <ai:GridCollectionView 
             x:Name="collectionView"
-                               
+            BothSidesMargin="{Binding BothSidesMargin.Value}"
+            IsGroupHeaderSticky="{Binding IsGroupHeaderSticky.Value}"
+            GroupFirstSpacing="{Binding GroupFirstSpacing.Value}"
+            GroupLastSpacing="{Binding GroupLastSpacing.Value}"
             ItemsSource="{Binding ItemsGroupSource}"
             IsGroupingEnabled="true"
             GroupHeaderHeight="{Binding HeaderHeight.Value}" 

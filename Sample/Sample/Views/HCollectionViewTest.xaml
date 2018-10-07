@@ -17,6 +17,8 @@
     </ContentPage.ToolbarItems>
     <StackLayout>
         <ai:HCollectionView x:Name="collectionView"
+                            GroupFirstSpacing="{Binding GroupFirstSpacing.Value}"
+                            GroupLastSpacing="{Binding GroupLastSpacing.Value}"
                             ScrollController="{Binding ScrollController}"
                             ItemsSource="{Binding ItemsSource}" 
                             ItemTapCommand="{Binding TapCommand}" 
@@ -54,6 +56,8 @@
             </ListView.ItemTemplate>
         </ai:HCollectionView>
         <ai:HCollectionView x:Name="collectionView2"
+                            GroupFirstSpacing="{Binding GroupFirstSpacing.Value}"
+                            GroupLastSpacing="{Binding GroupLastSpacing.Value}"
                             ScrollController="{Binding ScrollController2}"
                             ItemsSource="{Binding ItemsSource2}"  
                             ItemTapCommand="{Binding TapCommand}" 

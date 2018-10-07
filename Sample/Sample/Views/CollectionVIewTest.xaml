@@ -17,6 +17,9 @@
     
     <StackLayout>
        <ai:GridCollectionView x:Name="collectionView" 
+                              BothSidesMargin="{Binding BothSidesMargin.Value}"
+                              GroupFirstSpacing="{Binding GroupFirstSpacing.Value}"
+                              GroupLastSpacing="{Binding GroupLastSpacing.Value}"
                               ScrollController="{Binding ScrollController}"
                               ItemsSource="{Binding ItemsSource}"
                               ItemTapCommand="{Binding TapCommand}" 

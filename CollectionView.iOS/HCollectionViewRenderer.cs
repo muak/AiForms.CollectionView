@@ -19,6 +19,8 @@ namespace AiForms.Renderers.iOS
         CGRect _previousFrame = CGRect.Empty;
         bool _disposed;
         HCollectionView _hCollectionView => Element as HCollectionView;
+        float _firstSpacing => _hCollectionView.IsGroupingEnabled ? (float)_hCollectionView.GroupFirstSpacing : 0;
+        float _lastSpacing => _hCollectionView.IsGroupingEnabled ? (float)_hCollectionView.GroupLastSpacing : 0;
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
         {
@@ -89,14 +91,15 @@ namespace AiForms.Renderers.iOS
             {
                 UpdateCellSize();
                 ViewLayout.InvalidateLayout();
-
             }
             else if (e.PropertyName == HCollectionView.GroupHeaderWidthProperty.PropertyName)
             {
                 UpdateGroupHeaderWidth();
                 ViewLayout.InvalidateLayout();
             }
-            else if (e.PropertyName == HCollectionView.SpacingProperty.PropertyName)
+            else if (e.PropertyName == HCollectionView.SpacingProperty.PropertyName ||
+                     e.PropertyName == CollectionView.GroupFirstSpacingProperty.PropertyName ||
+                     e.PropertyName == CollectionView.GroupLastSpacingProperty.PropertyName)
             {
                 UpdateSpacing();
                 ViewLayout.InvalidateLayout();
@@ -166,6 +169,7 @@ namespace AiForms.Renderers.iOS
         protected virtual void UpdateSpacing()
         {
             ViewLayout.MinimumLineSpacing = (System.nfloat)_hCollectionView.Spacing;
+            ViewLayout.SectionInset = new UIEdgeInsets(0, _firstSpacing, 0, _lastSpacing);
         }
 
         protected virtual void UpdateGroupHeaderWidth()

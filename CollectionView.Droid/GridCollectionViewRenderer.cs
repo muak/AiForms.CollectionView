@@ -19,6 +19,10 @@ namespace AiForms.Renderers.Droid
         public int RowSpacing { get; set; }
         public int ColumnSpacing { get; set; }
 
+        int _bothSidesMargin;
+        int _firstSpacing;
+        int _lastSpacing;
+
         SwipeRefreshLayout _refresh;
         GridLayoutManager _gridLayoutManager => LayoutManager as GridLayoutManager;
         CollectionViewSpanSizeLookup _spanSizeLookup;
@@ -43,6 +47,7 @@ namespace AiForms.Renderers.Droid
 
             if (disposing)
             {
+                RecyclerView?.StopScroll();
                 RecyclerView?.SetAdapter(null);
                 RecyclerView?.RemoveItemDecoration(_itemDecoration);
                 _gridLayoutManager?.SetSpanSizeLookup(null);
@@ -126,7 +131,10 @@ namespace AiForms.Renderers.Droid
                      e.PropertyName == GridCollectionView.ColumnHeightProperty.PropertyName ||
                      e.PropertyName == GridCollectionView.ColumnWidthProperty.PropertyName ||
                      e.PropertyName == GridCollectionView.SpacingTypeProperty.PropertyName ||
-                     e.PropertyName == GridCollectionView.AdditionalHeightProperty.PropertyName)
+                     e.PropertyName == GridCollectionView.AdditionalHeightProperty.PropertyName ||
+                     e.PropertyName == CollectionView.GroupFirstSpacingProperty.PropertyName ||
+                     e.PropertyName == CollectionView.GroupLastSpacingProperty.PropertyName ||
+                     e.PropertyName == GridCollectionView.BothSidesMarginProperty.PropertyName)
             {
                 UpdateGridType();
                 RefreshAll();
@@ -250,6 +258,9 @@ namespace AiForms.Renderers.Droid
             RecyclerView.SetPadding(0, 0, 0, 0);
             RowSpacing = (int)Context.ToPixels(_gridCollectionView.RowSpacing);
 
+            _firstSpacing = (int)Context.ToPixels(_gridCollectionView.GroupFirstSpacing);
+            _lastSpacing = (int)Context.ToPixels(_gridCollectionView.GroupLastSpacing);
+
             int spanCount = 0;
             if (_gridCollectionView.GridType == GridType.UniformGrid)
             {
@@ -265,6 +276,7 @@ namespace AiForms.Renderers.Droid
                         spanCount = _gridCollectionView.LandscapeColumns;
                         break;
                 }
+                _bothSidesMargin = (int)Context.ToPixels(_gridCollectionView.BothSidesMargin);
                 ColumnSpacing = (int)(Context.ToPixels(_gridCollectionView.ColumnSpacing));
                 CellHeight = GetUniformItemHeight(containerWidth, spanCount);
                 System.Diagnostics.Debug.WriteLine($"Decided RowHeight {CellHeight}");
@@ -295,7 +307,8 @@ namespace AiForms.Renderers.Droid
 
         protected virtual int GetUniformItemHeight(int containerWidth, int columns)
         {
-            float actualWidth = containerWidth - (float)ColumnSpacing * (float)(columns - 1.0f);
+            RecyclerView.SetPadding(_bothSidesMargin, 0, _bothSidesMargin, 0);
+            float actualWidth = containerWidth - _bothSidesMargin * 2f - (float)ColumnSpacing * (float)(columns - 1.0f);
             var itemWidth = (float)(actualWidth / (float)columns);
             _gridCollectionView.SetValue(GridCollectionView.ComputedWidthProperty, Context.FromPixels(itemWidth));
             return (int)CalcurateColumnHeight(itemWidth);
@@ -413,13 +426,14 @@ namespace AiForms.Renderers.Droid
                 var param = view.LayoutParameters as GridLayoutManager.LayoutParams;
                 var spanIndex = param.SpanIndex;
                 var spanSize = param.SpanSize;
+                var position = parent.GetChildAdapterPosition(view);
 
                 if (spanSize == _spanCount)
                 {
                     var headparams = view.LayoutParameters as ViewGroup.MarginLayoutParams;
                     var margin = 0;
-                    if (_gridCollectionView.GridType == GridType.AutoSpacingGrid &&
-                       _gridCollectionView.SpacingType == SpacingType.Center)
+                    if (_gridCollectionView.GridType == GridType.AutoSpacingGrid && _gridCollectionView.SpacingType == SpacingType.Center || 
+                       _gridCollectionView.GridType == GridType.UniformGrid && _gridCollectionView.BothSidesMargin > 0)
                     {
                         margin = _parentRenderer.RecyclerView.PaddingLeft * -1;
                         headparams.SetMargins(margin, headparams.TopMargin, margin, headparams.BottomMargin);
@@ -429,6 +443,11 @@ namespace AiForms.Renderers.Droid
                     {
                         headparams.SetMargins(margin, headparams.TopMargin, margin, headparams.BottomMargin);
                         view.LayoutParameters = headparams;
+                    }
+
+                    outRect.Bottom = _parentRenderer._firstSpacing;
+                    if(position != 0) {
+                        outRect.Top = _parentRenderer._lastSpacing;
                     }
                     return;
                 }
@@ -447,9 +466,13 @@ namespace AiForms.Renderers.Droid
                 {
                     outRect.Left = spanIndex * _parentRenderer.ColumnSpacing / _spanCount; // column * ((1f / spanCount) * spacing)
                     outRect.Right = _parentRenderer.ColumnSpacing - (spanIndex + 1) * _parentRenderer.ColumnSpacing / _spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                }   
+
+                if(position == 0 || _parentRenderer.Adapter.FirstSectionItems.Contains(position)) {
+                    return;
                 }
 
-                outRect.Bottom = _parentRenderer.RowSpacing;
+                outRect.Top = _parentRenderer.RowSpacing;
             }
         }
     }

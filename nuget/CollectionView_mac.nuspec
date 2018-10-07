@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>AiForms.CollectionView</id>
-        <version>0.1.0-pre3</version>
+        <version>0.2.0-pre</version>
         <title>CollectionView for Xamarin.Forms</title>
         <authors>kamu</authors>
         <owners>kamu</owners>
@@ -14,7 +14,20 @@ This has two layouts (GridCollectionView, HorizontalCollectonView). HorizontalCo
         </description>
         <summary></summary>
         <releaseNotes>
-Some bug fixes
+## Bug fixes
+
+[iOS][GridCollectionView] When a item just exists in ItemsSource, it is arranged at center.
+
+## New Properties
+
+### GridCollectionView / HCollectionView
+
+* GroupFirstSpacing – The spacing of the first item's top or left in a group.
+* GroupLastSpacing – The spacing of the last item's bottom or right in a group.
+
+### GridCollectionView
+
+* IsGroupHeaderSticky – Whether a group header is fixed at the top. (iOS only) (default: true)
         </releaseNotes>
         <tags>Xamarin.Forms ListView CollectionView Grid Infinite Circular Scroll UICollectionView RecyclerView FlowLayout WrapLayout HorizontalListView</tags>
         <language>en-US</language>

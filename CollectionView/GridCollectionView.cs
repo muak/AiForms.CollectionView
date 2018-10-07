@@ -332,5 +332,51 @@ namespace AiForms.Renderers
             set { SetValue(PullToRefreshColorProperty, value); }
         }
 
+        /// <summary>
+        /// The both sides margin property.
+        /// </summary>
+        public static BindableProperty BothSidesMarginProperty =
+            BindableProperty.Create(
+                nameof(BothSidesMargin),
+                typeof(double),
+                typeof(GridCollectionView),
+                default(double),
+                defaultBindingMode: BindingMode.OneWay
+            );
+
+        /// <summary>
+        /// Gets or sets the both sides margin.
+        /// </summary>
+        /// <value>The both sides margin.</value>
+        public double BothSidesMargin
+        {
+            get { return (double)GetValue(BothSidesMarginProperty); }
+            set { SetValue(BothSidesMarginProperty, value); }
+        }
+
+
+        /// <summary>
+        /// The is group header sticky property.
+        /// </summary>
+        public static BindableProperty IsGroupHeaderStickyProperty =
+            BindableProperty.Create(
+                nameof(IsGroupHeaderSticky),
+                typeof(bool),
+                typeof(GridCollectionView),
+                true,
+                defaultBindingMode: BindingMode.OneWay
+            );
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:AiForms.Renderers.GridCollectionView"/> is group
+        /// header sticky.
+        /// </summary>
+        /// <value><c>true</c> if is group header sticky; otherwise, <c>false</c>.</value>
+        public bool IsGroupHeaderSticky
+        {
+            get { return (bool)GetValue(IsGroupHeaderStickyProperty); }
+            set { SetValue(IsGroupHeaderStickyProperty, value); }
+        }
+
     }
 }

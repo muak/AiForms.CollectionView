@@ -18,6 +18,8 @@ namespace AiForms.Renderers.Droid
         HCollectionViewAdapter _hAdapter => Adapter as HCollectionViewAdapter;
         int _spacing;
         bool _disposed;
+        int _firstSpacing;
+        int _lastSpacing;
 
         public HCollectionViewRenderer(Context context) : base(context)
         {
@@ -31,6 +33,7 @@ namespace AiForms.Renderers.Droid
             }
             if (disposing)
             {
+                RecyclerView?.StopScroll();
                 RecyclerView?.SetAdapter(null);
                 RecyclerView?.RemoveItemDecoration(_itemDecoration);
 
@@ -89,7 +92,9 @@ namespace AiForms.Renderers.Droid
                 UpdateGroupHeaderWidth();
                 RefreshAll();
             }
-            else if (e.PropertyName == HCollectionView.SpacingProperty.PropertyName)
+            else if (e.PropertyName == HCollectionView.SpacingProperty.PropertyName ||
+                     e.PropertyName == CollectionView.GroupFirstSpacingProperty.PropertyName ||
+                     e.PropertyName == CollectionView.GroupLastSpacingProperty.PropertyName)
             {
                 UpdateSpacing();
                 RefreshAll();
@@ -164,6 +169,8 @@ namespace AiForms.Renderers.Droid
         protected virtual void UpdateSpacing()
         {
             _spacing = (int)Context.ToPixels(_hCollectionView.Spacing);
+            _firstSpacing = (int)Context.ToPixels(_hCollectionView.GroupFirstSpacing);
+            _lastSpacing = (int)Context.ToPixels(_hCollectionView.GroupLastSpacing);
         }
 
         protected virtual void UpdateGroupHeaderWidth()
@@ -202,7 +209,19 @@ namespace AiForms.Renderers.Droid
                 {
                     realPosition = _renderer.Adapter.GetRealPosition(position);
                 }
-                if (position == 0 || holder.IsHeader || _renderer.Adapter.FirstSectionItems.Contains(realPosition))
+
+                if(holder.IsHeader)
+                {
+                    outRect.Right = _renderer._firstSpacing;
+                    if (position != 0)
+                    {
+                        outRect.Left = _renderer._lastSpacing;
+                    }
+
+                    return;
+                }
+
+                if (position == 0 || _renderer.Adapter.FirstSectionItems.Contains(realPosition))
                 {
                     return;
                 }
