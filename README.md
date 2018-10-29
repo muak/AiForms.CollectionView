@@ -4,6 +4,8 @@ This is a flexible ListView that has a grid and horizontal layout with reusable 
 
 [Japanese](./README-ja.md)
 
+[![Build status](https://kamusoft.visualstudio.com/NugetCI/_apis/build/status/AiForms.CollectionView)](https://kamusoft.visualstudio.com/NugetCI/_build/latest?definitionId=4)
+
 ## Available controls
 
 * [GridCollectionView](#gridcollectionview)
