@@ -247,10 +247,10 @@ namespace AiForms.Renderers.iOS
 
             // HACK: When an item is added for the first time, UICollectionView is sometimes crashed for some reason.
             // So, in that case, ReloadData is called.
-            if (!Control.IndexPathsForVisibleItems.Any())
-            {
-                groupReset = true;
-            }
+            //if (!Control.IndexPathsForVisibleItems.Any())
+            //{
+            //    groupReset = true;
+            //}
 
             // We can't do this check on grouped lists because the index doesn't match the number of rows in a section.
             // Likewise, we can't do this check on lists using RecycleElement because the number of rows in a section will remain constant because they are reused.

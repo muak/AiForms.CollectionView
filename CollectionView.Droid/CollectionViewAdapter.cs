@@ -399,8 +399,10 @@ namespace AiForms.Renderers.Droid
                 var group = 0;
                 var templatedItems = TemplatedItemsView.TemplatedItems;
                 if (_collectionView.IsGroupingEnabled)
+                {
                     group = templatedItems.GetGroupIndexFromGlobal(realPosition, out row);
-
+                    if (group < 0) return;
+                }
                 var templatedList = templatedItems.GetGroup(group);
 
                 if (_collectionView.IsGroupingEnabled)
@@ -422,6 +424,8 @@ namespace AiForms.Renderers.Droid
 
                 return;
             }
+
+            if (cell == null) return;
 
             AView view = GetCell(cell, container, _recyclerView, _context, _collectionView);
 

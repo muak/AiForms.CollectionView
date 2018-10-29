@@ -208,11 +208,17 @@
     <Reference Include="Xamarin.Forms.Xaml">
       <HintPath>..\packages\Xamarin.Forms.3.2.0.839982\lib\MonoAndroid10\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="AiForms.Extras.Abstractions">
-      <HintPath>..\packages\AiForms.Extras.0.1.0-pre1\lib\MonoAndroid\AiForms.Extras.Abstractions.dll</HintPath>
+    <Reference Include="SettingsView">
+      <HintPath>..\packages\AiForms.SettingsView.0.3.2\lib\MonoAndroid\SettingsView.dll</HintPath>
     </Reference>
-    <Reference Include="AiForms.Extras">
-      <HintPath>..\packages\AiForms.Extras.0.1.0-pre1\lib\MonoAndroid\AiForms.Extras.dll</HintPath>
+    <Reference Include="SettingsView.Droid">
+      <HintPath>..\packages\AiForms.SettingsView.0.3.2\lib\MonoAndroid\SettingsView.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="AiForms.Dialogs.Abstractions">
+      <HintPath>..\packages\AiForms.Dialogs.0.3.2-pre\lib\MonoAndroid\AiForms.Dialogs.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="AiForms.Dialogs">
+      <HintPath>..\packages\AiForms.Dialogs.0.3.2-pre\lib\MonoAndroid\AiForms.Dialogs.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

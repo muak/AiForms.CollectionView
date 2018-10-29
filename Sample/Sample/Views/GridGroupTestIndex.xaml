@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sv="clr-namespace:AiForms.Renderers;assembly=SettingsView"
+    x:Class="Sample.Views.GridGroupTestIndex">
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="All" Command="{Binding AllCheckCommand}" />
+        <ToolbarItem Text="None" Command="{Binding NoneCheckCommand}" />
+        <ToolbarItem Text="Save" Command="{Binding SaveCommand}" />
+    </ContentPage.ToolbarItems>
+    
+    <sv:SettingsView HeaderHeight="20" HeaderPadding="10,0,0,0" BackgroundColor="#EFEFEF" CellBackgroundColor="White">
+        <sv:Section HeaderHeight="10">
+            <sv:ButtonCell Title="Run" Command="{Binding RunCommand}" />
+        </sv:Section>
+        <sv:Section Title="{Binding TestSections[0].SectionTitle}" ItemsSource="{Binding TestSections[0]}">
+            <sv:Section.ItemTemplate>
+                <DataTemplate>
+                    <sv:CheckboxCell Title="{Binding GroupTitle}" Checked="{Binding Check.Value}" />
+                </DataTemplate>
+            </sv:Section.ItemTemplate>
+        </sv:Section>
+        
+        <sv:Section Title="{Binding TestSections[1].SectionTitle}" ItemsSource="{Binding TestSections[1]}">
+            <sv:Section.ItemTemplate>
+                <DataTemplate>
+                    <sv:CheckboxCell Title="{Binding GroupTitle}" Checked="{Binding Check.Value}" />
+                </DataTemplate>
+            </sv:Section.ItemTemplate>
+        </sv:Section>
+        
+        <sv:Section Title="{Binding TestSections[2].SectionTitle}" ItemsSource="{Binding TestSections[2]}">
+            <sv:Section.ItemTemplate>
+                <DataTemplate>
+                    <sv:CheckboxCell Title="{Binding GroupTitle}" Checked="{Binding Check.Value}" />
+                </DataTemplate>
+            </sv:Section.ItemTemplate>
+        </sv:Section>
+       
+    </sv:SettingsView>
+</ContentPage>

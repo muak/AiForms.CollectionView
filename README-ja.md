@@ -2,6 +2,8 @@
 
 CollectionViewは、Xamarin.Formsで使用できるGridや水平方向レイアウトに対応した柔軟なListViewです。AndroidとiOSに対応しています。
 
+[![Build status](https://kamusoft.visualstudio.com/NugetCI/_apis/build/status/AiForms.CollectionView)](https://kamusoft.visualstudio.com/NugetCI/_build/latest?definitionId=4)
+
 ## コントロール
 
 * [GridCollectionView](#gridcollectionview)
@@ -246,6 +248,12 @@ Grid状に各要素を配置するListViewです。これは [WrapLayout](https:
     * グループヘッダーのセルの高さ。
 * [SpacingType](#spacingtype-enumeration)
     * 列間の間隔の決め方を、Between と Center から選択します。GridType が AutoSpacingGrid のときのみ有効です。(Default: Between)
+* GroupFirstSpacing
+  * グループ内の最初のアイテムの上の間隔。
+* GroupLastSpacing
+  * グループ内の最後のアイテムの下の間隔。
+* BothSidesMargin
+  * グループヘッダーセル以外のコンテンツ領域の左右の余白。GridType が UniformGrid のときのみ有効です。 (Default: 0)
 * PullToRefreshColor
     * PullToRefreshのインジケータに使用する色。
 * ItemTapCommand
@@ -256,6 +264,8 @@ Grid状に各要素を配置するListViewです。これは [WrapLayout](https:
   * アイテムをタッチした時に表示するエフェクト色。
 * [ScrollController](#scrollcontroller)
   * ViewModelなどでCollectionViewのスクロールを制御する場合に使用するオブジェクト。
+* IsGroupHeaderSticky
+  * グループヘッダーを上に固定するかどうか (iOS のみ) (default: true)
 
 ### Special Properties
 
@@ -307,6 +317,10 @@ Grid状に各要素を配置するListViewです。これは [WrapLayout](https:
   * アイテムをタッチした時に表示するエフェクト色。
 * [ScrollController](#scrollcontroller)
   * ViewModelなどでCollectionViewのスクロールを制御する場合に使用するオブジェクト。
+* GroupFirstSpacing
+  * グループ内の最初のアイテムの左の間隔。
+* GroupLastSpacing
+  * グループ内の最後のアイテムの右の間隔。
 
 ### 行の高さについて
 

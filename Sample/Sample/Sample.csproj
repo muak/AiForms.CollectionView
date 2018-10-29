@@ -14,12 +14,16 @@
     <PackageReference Include="Xamarin.Forms" Version="3.2.0.839982" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.3.840" />
     <PackageReference Include="CarouselView.FormsPlugin" Version="5.2.0" />
-    <PackageReference Include="AiForms.Extras" Version="0.1.0-pre1" />
+    <PackageReference Include="AiForms.SettingsView" Version="0.3.2" />
+    <PackageReference Include="AiForms.Dialogs" Version="0.3.2-pre" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\ButtonCellTest.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CollectionView\CollectionView.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\Tests\" />
   </ItemGroup>
 </Project>

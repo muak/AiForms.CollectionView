@@ -9,7 +9,6 @@
     <RootNamespace>AiForms.Renderers.iOS</RootNamespace>
     <AssemblyName>CollectionView.iOS</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <ReleaseVersion>1.1.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -79,9 +78,16 @@
     <Compile Include="HCollectionViewSource.cs" />
     <Compile Include="GridCollectionViewSource.cs" />
     <Compile Include="KeyboardInsetTracker.cs" />
+    <Compile Include="GridViewLayout.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CollectionView\CollectionView.csproj">
+      <Project>{D5C93D88-A5D6-4843-935B-CC72F073B54E}</Project>
+      <Name>CollectionView</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.3.2.0.839982\build\netstandard2.0\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.3.2.0.839982\build\netstandard2.0\Xamarin.Forms.targets')" />

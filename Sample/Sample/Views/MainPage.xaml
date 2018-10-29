@@ -7,10 +7,12 @@
     <ScrollView>
 	<StackLayout>
         <Button Text="HCollectionView" Command="{Binding GoToTest}"  CommandParameter="HCollectionViewTest" />
-        <Button Text="GridCollectionView" Command="{Binding GoToTest}"  CommandParameter="CollectionViewTest" />
-        <Button Text="GridCollectionView(Group)" Command="{Binding GoToTest}"  CommandParameter="CollectionViewGroupTest" />
+        <!--<Button Text="GridCollectionView" Command="{Binding GoToTest}"  CommandParameter="CollectionViewTest" />
+        <Button Text="GridCollectionView(Group)" Command="{Binding GoToTest}"  CommandParameter="CollectionViewGroupTest" />-->
         <Button Text="DataTemplateTest" Command="{Binding GoToTest}"  CommandParameter="DataTemplateTest" />
         <Button Text="DefaultValueTest" Command="{Binding GoToTest}"  CommandParameter="DefaultValueTest" />
+        <Button Text="GridTestIndex" Command="{Binding GoToTest}"  CommandParameter="GridTestIndex" />
+        <Button Text="GridGroupTestIndex" Command="{Binding GoToTest}"  CommandParameter="GridGroupTestIndex" />
         <Button Text="DemoPage" Command="{Binding GoToTest}"  CommandParameter="DemoPage" />
 	</StackLayout>
     </ScrollView>

@@ -2,8 +2,8 @@
 <extra:ToastView
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:extra="clr-namespace:AiForms.Extras.Abstractions;assembly=AiForms.Extras"
-    x:Class="Sample.Views.MyToastView">
+    xmlns:extra="clr-namespace:AiForms.Dialogs.Abstractions;assembly=AiForms.Dialogs.Abstractions"
+    x:Class="Sample.Views.MyToastView" Padding="6" VerticalLayoutAlignment="{Binding VAlign}">
     <Label Text="{Binding Message}" TextColor="White" FontSize="14"
            HorizontalTextAlignment="Center"
            VerticalTextAlignment="Center" />

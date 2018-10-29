@@ -4,6 +4,8 @@ This is a flexible ListView that has a grid and horizontal layout with reusable 
 
 [Japanese](./README-ja.md)
 
+[![Build status](https://kamusoft.visualstudio.com/NugetCI/_apis/build/status/AiForms.CollectionView)](https://kamusoft.visualstudio.com/NugetCI/_build/latest?definitionId=4)
+
 ## Available controls
 
 * [GridCollectionView](#gridcollectionview)
@@ -248,6 +250,12 @@ This is the ListView that lays out each item in a grid pattern. Though this is s
     * The height of a group header cell.
 * [SpacingType](#spacingtype-enumeration)
     * Select the spacing type using an enumeration value either Between or Center. This is used only when GridType is AutoSpacingGrid. (Default: Between)
+* GroupFirstSpacing
+  * The spacing of the first item's top in a group.
+* GroupLastSpacing
+  * The spacing of the last item's bottom in a group.
+* BothSidesMargin
+  * The margin of the right and left sides in the content area except for a group header cell. This is used only when GridType is UniformGrid. (Default: 0)
 * PullToRefreshColor
     * The color of the PullToRefresh indicator icon.
 * ItemTapCommand
@@ -258,6 +266,8 @@ This is the ListView that lays out each item in a grid pattern. Though this is s
   * The color rendered when an item is touched.
 * [ScrollController](#scrollcontroller)
   * The object for manipulating the scroll from such as ViewModel.
+* IsGroupHeaderSticky
+  * Whether a group header is fixed at the top. (iOS only) (default: true)
 
 ### Special Properties
 
@@ -309,6 +319,10 @@ This is the ListView that lays out each item horizontally. This can make the scr
   * The color rendered when an item is touched.
 * [ScrollController](#scrollcontroller)
   * The object for manipulating the scroll from such as ViewModel.
+* GroupFirstSpacing
+  * The spacing of the first item's left in a group.
+* GroupLastSpacing
+  * The spacing of the last item's right in a group.
 
 ### About Row Height
 

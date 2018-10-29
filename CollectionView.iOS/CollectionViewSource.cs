@@ -59,6 +59,11 @@ namespace AiForms.Renderers.iOS
 
         public override nint NumberOfSections(UICollectionView collectionView)
         {
+            if (TemplatedItemsView.TemplatedItems.Count == 0) 
+            {
+                return 0;
+            }
+
             if (CollectionView.IsGroupingEnabled)
             {
                 return TemplatedItemsView.TemplatedItems.Count;
@@ -168,6 +173,7 @@ namespace AiForms.Renderers.iOS
 
             Performance.Start(out string reference);
 
+
             var cachingStrategy = CollectionView.CachingStrategy;
             if (cachingStrategy == ListViewCachingStrategy.RetainElement)
             {
@@ -175,8 +181,6 @@ namespace AiForms.Renderers.iOS
             }
             else if ((cachingStrategy & ListViewCachingStrategy.RecycleElement) != 0)
             {
-                var id = TemplateIdForPath(realIndexPath);
-
                 // Here is used the argument indexPath as it is because header cell will be got not to displayed when IsInfinite.
                 nativeCell = collectionView.DequeueReusableSupplementaryView(
                     UICollectionElementKindSection.Header,
@@ -277,6 +281,17 @@ namespace AiForms.Renderers.iOS
             var reusableCell = _uiCollectionView.DequeueReusableSupplementaryView(UICollectionElementKindSection.Header, CollectionViewRenderer.SectionHeaderId, indexPath) as ContentCellContainer;
 
             var nativeCell = renderer.GetCell(cell, reusableCell, _uiCollectionView) as ContentCellContainer;
+
+            var cellWithContent = nativeCell;
+
+            // Sometimes iOS for returns a dequeued cell whose Layer is hidden. 
+            // This prevents it from showing up, so lets turn it back on!
+            if (cellWithContent.Layer.Hidden)
+                cellWithContent.Layer.Hidden = false;
+
+            // Because the layer was hidden we need to layout the cell by hand
+            if (cellWithContent != null)
+                cellWithContent.LayoutSubviews();
 
             return nativeCell;
         }

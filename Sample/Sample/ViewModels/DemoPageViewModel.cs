@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using AiForms.Extras.Abstractions;
 using Reactive.Bindings;
 using Prism.Services;
 using Sample.Views;
 using Xamarin.Forms;
 using AiForms.Renderers;
+using AiForms.Dialogs.Abstractions;
 
 namespace Sample.ViewModels
 {

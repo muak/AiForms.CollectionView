@@ -8,6 +8,9 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using RectangleF = CoreGraphics.CGRect;
+using Foundation;
+using System.Collections.Generic;
+using CoreFoundation;
 
 [assembly: ExportRenderer(typeof(GridCollectionView), typeof(GridCollectionViewRenderer))]
 namespace AiForms.Renderers.iOS
@@ -22,20 +25,20 @@ namespace AiForms.Renderers.iOS
         bool _disposed;
         GridCollectionView _gridCollectionView => (GridCollectionView)Element;
         GridCollectionViewSource _gridSource => DataSource as GridCollectionViewSource;
+        float _firstSpacing => _gridCollectionView.IsGroupingEnabled ? (float)_gridCollectionView.GroupFirstSpacing : 0;
+        float _lastSpacing => _gridCollectionView.IsGroupingEnabled ? (float)_gridCollectionView.GroupLastSpacing : 0;
         bool _isRatioHeight => _gridCollectionView.ColumnHeight <= 5.0;
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
         {
             if (e.NewElement != null)
             {
-                ViewLayout = new UICollectionViewFlowLayout();
+                ViewLayout = new GridViewLayout();
                 ViewLayout.ScrollDirection = UICollectionViewScrollDirection.Vertical;
                 ViewLayout.SectionInset = new UIEdgeInsets(0, 0, 0, 0);
                 ViewLayout.MinimumLineSpacing = 0.0f;
                 ViewLayout.MinimumInteritemSpacing = 0.0f;
                 ViewLayout.EstimatedItemSize = UICollectionViewFlowLayout.AutomaticSize;
-                ViewLayout.SectionHeadersPinToVisibleBounds = true; // fix header cell
-
 
                 _refreshControl = new UIRefreshControl();
                 _refreshControl.ValueChanged += RefreshControl_ValueChanged;
@@ -59,6 +62,7 @@ namespace AiForms.Renderers.iOS
                 DataSource = new GridCollectionViewSource(e.NewElement, _collectionView);
                 _collectionView.Source = DataSource;
 
+                UpdateIsSticky();
                 UpdateRowSpacing();
                 UpdatePullToRefreshEnabled();
                 UpdatePullToRefreshColor();
@@ -129,10 +133,13 @@ namespace AiForms.Renderers.iOS
                      e.PropertyName == GridCollectionView.ColumnSpacingProperty.PropertyName ||
                      e.PropertyName == GridCollectionView.ColumnHeightProperty.PropertyName ||
                      e.PropertyName == GridCollectionView.SpacingTypeProperty.PropertyName ||
-                     e.PropertyName == GridCollectionView.AdditionalHeightProperty.PropertyName)
+                     e.PropertyName == GridCollectionView.AdditionalHeightProperty.PropertyName ||
+                     e.PropertyName == CollectionView.GroupFirstSpacingProperty.PropertyName ||
+                     e.PropertyName == CollectionView.GroupLastSpacingProperty.PropertyName ||
+                     e.PropertyName == GridCollectionView.BothSidesMarginProperty.PropertyName)
             {
                 UpdateGridType();
-                ViewLayout.InvalidateLayout();
+                InvalidateLayout();
             }
             else if (e.PropertyName == GridCollectionView.RowSpacingProperty.PropertyName)
             {
@@ -144,7 +151,7 @@ namespace AiForms.Renderers.iOS
                 if (_gridCollectionView.GridType != GridType.UniformGrid)
                 {
                     UpdateGridType();
-                    ViewLayout.InvalidateLayout();
+                    InvalidateLayout();
                 }
             }
             else if (e.PropertyName == ListView.IsPullToRefreshEnabledProperty.PropertyName)
@@ -158,6 +165,11 @@ namespace AiForms.Renderers.iOS
             else if (e.PropertyName == Xamarin.Forms.ListView.IsRefreshingProperty.PropertyName)
             {
                 UpdateIsRefreshing();
+            }
+            else if (e.PropertyName == GridCollectionView.IsGroupHeaderStickyProperty.PropertyName)
+            {
+                UpdateIsSticky();
+                InvalidateLayout();
             }
         }
 
@@ -241,9 +253,15 @@ namespace AiForms.Renderers.iOS
             }
         }
 
+        protected virtual void UpdateIsSticky()
+        {
+            ViewLayout.SectionHeadersPinToVisibleBounds = _gridCollectionView.IsGroupHeaderSticky;
+        }
+
         protected virtual void UpdateGridType()
         {
-            ViewLayout.SectionInset = new UIEdgeInsets(0, 0, 0, 0); // Reset insets
+            // Reset insets
+            ViewLayout.SectionInset = new UIEdgeInsets(_firstSpacing, 0,_lastSpacing, 0); 
             ViewLayout.MinimumInteritemSpacing = 0;
             CGSize itemSize = CGSize.Empty;
 
@@ -273,6 +291,7 @@ namespace AiForms.Renderers.iOS
             _gridCollectionView.SetValue(GridCollectionView.ComputedHeightProperty, itemSize.Height);
 
             DataSource.CellSize = itemSize;
+            ViewLayout.EstimatedItemSize = itemSize;
         }
 
         protected virtual double CalcurateColumnHeight(double itemWidth)
@@ -287,7 +306,10 @@ namespace AiForms.Renderers.iOS
 
         protected virtual CGSize GetUniformItemSize(int columns)
         {
-            float width = (float)Frame.Width - (float)_gridCollectionView.ColumnSpacing * (float)(columns - 1.0f);
+            var margin = (float)_gridCollectionView.BothSidesMargin;
+            ViewLayout.SectionInset = new UIEdgeInsets(_firstSpacing,margin, _lastSpacing, margin);
+
+            float width = (float)Frame.Width - margin * 2f - (float)_gridCollectionView.ColumnSpacing * (float)(columns - 1.0f);
 
             _gridSource.SurplusPixel = (int)width % columns;
 
@@ -330,9 +352,28 @@ namespace AiForms.Renderers.iOS
             var insetSurplus = (int)insetSum % 2;
             var inset = (float)Math.Floor(insetSum / 2.0f);
 
-            ViewLayout.SectionInset = new UIEdgeInsets(0, inset + (float)insetSurplus, 0, inset);
+            ViewLayout.SectionInset = new UIEdgeInsets(_firstSpacing, inset + (float)insetSurplus, _lastSpacing, inset);
 
             return new CGSize(itemWidth, itemHeight);
+        }
+
+        void InvalidateLayout()
+        {
+            if (!_gridCollectionView.IsGroupingEnabled)
+            {
+                ViewLayout.InvalidateLayout();
+                return;
+            }
+
+            // HACK: When IsGroupingEnabled is true and changing such layout size as the item size and the spacing size,
+            //       a header cell content is sometimes not reflected or broken layout.
+            //       By reloading with a bit delay after scrolling to Top, this issue can be avoided.
+            Control.SetContentOffset(CGPoint.Empty, false);
+            DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromMilliseconds(150)), () =>
+            {
+                Control.ReloadData();
+                ViewLayout.InvalidateLayout();
+            });
         }
     }
 }
