@@ -2,7 +2,7 @@
 
 CollectionViewは、Xamarin.Formsで使用できるGridや水平方向レイアウトに対応した柔軟なListViewです。AndroidとiOSに対応しています。
 
-[![Build status](https://kamusoft.visualstudio.com/NugetCI/_apis/build/status/AiForms.CollectionView)](https://kamusoft.visualstudio.com/NugetCI/_build/latest?definitionId=4)
+![Build status](https://kamusoft.visualstudio.com/NugetCI/_apis/build/status/AiForms.CollectionView)
 
 ## コントロール
 
