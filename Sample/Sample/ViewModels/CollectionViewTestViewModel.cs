@@ -8,12 +8,14 @@ using Xamarin.Forms;
 using AiForms.Renderers;
 using Prism.Navigation;
 using System.Linq;
+using Prism.Mvvm;
 
 namespace Sample.ViewModels
 {
-    public class CollectionViewTestViewModel:INavigatingAware
+    public class CollectionViewTestViewModel:BindableBase, INavigatingAware
     {
         public PhotoGroup ItemsSource { get; set; }
+        public ObservableCollection<PhotoGroup> ItemsGroupSource { get; set; }
         public ReactiveCommand TapCommand { get; } = new ReactiveCommand();
         public ReactiveCommand LongTapCommand { get; } = new ReactiveCommand();
         public ReactiveProperty<bool> IsRefreshing { get; } = new ReactiveProperty<bool>(false);
@@ -25,7 +27,10 @@ namespace Sample.ViewModels
         public ReactiveCommand DelCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand RepCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand MoveCommand { get; set; } = new ReactiveCommand();
+        public ReactiveCommand NextCommand { get; set; } = new ReactiveCommand();
+        public ReactiveCommand RepeatCommand { get; set; } = new ReactiveCommand();
 
+        public ReactivePropertySlim<double> HeaderHeight { get; } = new ReactivePropertySlim<double>(36);
         public ReactivePropertySlim<Color> Background { get; } = new ReactivePropertySlim<Color>(Color.Transparent);
         public ReactivePropertySlim<Color> FeedbackColor { get; } = new ReactivePropertySlim<Color>(Color.Yellow);
         public ReactivePropertySlim<GridType> GridType { get; } = new ReactivePropertySlim<GridType>(AiForms.Renderers.GridType.UniformGrid);
@@ -45,6 +50,9 @@ namespace Sample.ViewModels
         public ReactivePropertySlim<bool> IsGroupHeaderSticky { get; } = new ReactivePropertySlim<bool>(true);
         public ReactivePropertySlim<double> BothSidesMargin { get; } = new ReactivePropertySlim<double>(0);
 
+        public List<TestSection> TestSections { get; set; }
+        IEnumerator<TestItem> _testEnumerator;
+
         IPageDialogService _pageDlg;
 
         public CollectionViewTestViewModel(IPageDialogService pageDialog)
@@ -52,245 +60,33 @@ namespace Sample.ViewModels
             _pageDlg = pageDialog;
             InitializeProperties();
 
-            TestSource = new TestFormViewModel
+            Action currentAction = null;
+            NextCommand.Subscribe(async _ =>
             {
-                ItemsSource = TestList,
-                PageDialog = pageDialog
-            };
+                if (!_testEnumerator.MoveNext())
+                {
+                    await pageDialog.DisplayAlertAsync("", "Finished", "OK");
+                    return;
+                }
+                currentAction = _testEnumerator.Current.Run;
+                currentAction?.Invoke();
 
-
+            });
+            RepeatCommand.Subscribe(_ =>
+            {
+                currentAction?.Invoke();
+            });
         }
 
-        void CommontTest() {
-            TestList.Add(
-                "PullToRefresh can't be work."
-            ).Add(
-                "Can PullToRefresh be work?",
-                () => {
-                    EnabledPullToRefresh.Value = true;
-                }
-            ).Add(
-                "Has Refresh icon turned red?",
-                () => {
-                    RefreshIconColor.Value = Color.Red;
-                },
-                () => {
-                    RefreshIconColor.Value = Color.DimGray;
-                }
-            ).Add(
-                "Has RowSpacing become much larger?",
-                () => {
-                    RowSpacing.Value = 25;
-                },
-                () => {
-                    RowSpacing.Value = 4;
-                }
-            ).Add(
-                "Has Group First Spacing been 30px in Grouped?",
-                () =>
-                {
-                    GroupFirstSpacing.Value = 30;
-                }
-            ).Add(
-                "Has Group Last Spacing been 30px in Grouped?",
-                () =>
-                {
-                    GroupLastSpacing.Value = 30;
-                }
-            ).Add(
-                "Has HeaderCell position been released from sticky?",
-                () => {
-                    IsGroupHeaderSticky.Value = false;
-                },
-                () => {
-                    IsGroupHeaderSticky.Value = true;
-                }
-            ).Add(
-                "Has ColumnHeight been changed to absolute value(250px)?",
-                () => {
-                    ColumnHeight.Value = 250;
-                }
-            ).Add(
-                "Has ColumnHeight been changed to relative value(0.5)?",
-                () => {
-                    ColumnHeight.Value = 0.5;
-                },
-                () => {
-                    ColumnHeight.Value = 1.0;
-                }
-            ).Add(
-                "Has ColumnHeight been changed to 1.0 + 50px by AdditionalHeight?",
-                () => {
-                    AdditionalHeight.Value = 50;
-                },
-                () => {
-                    AdditionalHeight.Value = 0;
-                }
-            ).Add(
-                "Has Background turned from Yellow to White to Green to transparent?",
-                 async () =>
-                 {
-                     Background.Value = Color.Yellow;
-                     await Task.Delay(1000);
-                     Background.Value = Color.White;
-                     await Task.Delay(1000);
-                     Background.Value = Color.Green;
-                     await Task.Delay(1000);
-                     Background.Value = Color.Transparent;
-                 }
-            ).Add(
-                "Tap some cells. Has FeedBack color turned Red?",
-                () =>
-                {
-                    FeedbackColor.Value = Color.Red;
-                },
-                () =>
-                {
-                    FeedbackColor.Value = Color.Yellow;
-                }
-            ).Add(
-                "UniformGrid Test1. GridType is UniformGrid. PortraitColumns are 2.",
-                () => {
-                    GridType.Value = AiForms.Renderers.GridType.UniformGrid;
-                    PortraitColumns.Value = 2;
-                    BothSidesMargin.Value = 10;
-                }
-            ).Add(
-                "UniformGrid Test2. Has Colums number been changed 2 to 3 to 4 to 5 to 6 on Portrait?",
-                async () => {
-                    PortraitColumns.Value = 3;
-                    await Task.Delay(1000);
-                    PortraitColumns.Value = 4;
-                    await Task.Delay(1000);
-                    PortraitColumns.Value = 5;
-                    await Task.Delay(1000);
-                    PortraitColumns.Value = 6;
-                }
-            ).Add(
-                "UniformGrid Test3. Has ColumnSpacing / BothSidesMargin been changed 0?",
-                () => {
-                    ColumnSpacing.Value = 0;
-                    BothSidesMargin.Value = 0;
-                }
-            ).Add(
-                "UniformGrid Test4. Has Colums number been changed 6 to 5 to 4 to 3 to 2 on Portrait?",
-                async () => {
-                    PortraitColumns.Value = 5;
-                    await Task.Delay(1000);
-                    PortraitColumns.Value = 4;
-                    await Task.Delay(1000);
-                    PortraitColumns.Value = 3;
-                    await Task.Delay(1000);
-                    PortraitColumns.Value = 2;
-                }
-            ).Add(
-                "AutoSpacingGrid Test1. Column width is 150px. SpacingType is Between.",
-                () => {
-                    GridType.Value = AiForms.Renderers.GridType.AutoSpacingGrid;
-                    ColumnWidth.Value = 150;
-                    SpacingType.Value = AiForms.Renderers.SpacingType.Between;
-                    ColumnSpacing.Value = 4;
-                }
-            ).Add(
-                "AutoSpacingGrid Test2. Has Colum width been changed 150 to 120 to 90 to 60 with keeping Between?",
-                async () => {
-                    ColumnWidth.Value = 120;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 90;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 60;
-                }
-            ).Add(
-                "AutoSpacingGrid Test3. Has SpacingType been changed to Center?",
-                () => {
-                    SpacingType.Value = AiForms.Renderers.SpacingType.Center;
-                }
-            ).Add(
-                "AutoSpacingGrid Test4. Has Colum width been changed 60 to 90 to 120 to 150 with keeping Center?",
-                async () => {
-                    ColumnWidth.Value = 90;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 120;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 150;
-                }
-            ).Add(
-                "AutoSpacingGrid Test5. Has ColumnSpacing been changed 0?",
-                () => {
-                    ColumnSpacing.Value = 0;
-                }
-            ).Add(
-                "AutoSpacingGrid Test6. Has Colum width been changed 150 to 120 to 90 to 60 with keeping Center?",
-                async () => {
-                    ColumnWidth.Value = 120;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 90;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 60;
-                }
-            ).Add(
-                "UniformGrid Test5. Change Landscape",
-                () => {
-                    GridType.Value = AiForms.Renderers.GridType.UniformGrid;
-                    ColumnSpacing.Value = 4;
-                }
-            ).Add(
-                "UniformGrid Test6. Has Colums number been changed 5 to 6 to 7 to 8 on Landscape?",
-                async () => {
-                    LandscapeColumns.Value = 6;
-                    await Task.Delay(1000);
-                    LandscapeColumns.Value = 7;
-                    await Task.Delay(1000);
-                    LandscapeColumns.Value = 8;
-                    await Task.Delay(1000);
-                }
-            ).Add(
-                "UniformGrid Test7. Has ColumnSpacing been changed 0?",
-                () => {
-                    ColumnSpacing.Value = 0;
-                }
-            ).Add(
-                "UniformGrid Test8. Has Colums number been changed 8 to 7 to 6 to 5 to 4 on Landscape?",
-                async () => {
-                    LandscapeColumns.Value = 7;
-                    await Task.Delay(1000);
-                    LandscapeColumns.Value = 6;
-                    await Task.Delay(1000);
-                    LandscapeColumns.Value = 5;
-                    await Task.Delay(1000);
-                    LandscapeColumns.Value = 4;
-                }
-            ).Add(
-                "AutoSpacingGrid Test7. Landscape Test. SpacingType is Center and ColumnSpacing is 4.",
-                () => {
-                    GridType.Value = AiForms.Renderers.GridType.AutoSpacingGrid;
-                    SpacingType.Value = AiForms.Renderers.SpacingType.Center;
-                    ColumnSpacing.Value = 4;
-                }
-            ).Add(
-                "AutoSpacingGrid Test8. Has Colum width been changed 60 to 90 to 120 to 150 with keeping Center?",
-                async () => {
-                    ColumnWidth.Value = 90;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 120;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 150;
-                }
-            ).Add(
-                "AutoSpacingGrid Test9. Has SpacingType been changed to Between?",
-                () => {
-                    SpacingType.Value = AiForms.Renderers.SpacingType.Between;
-                }
-            ).Add(
-                "AutoSpacingGrid Test10. Has Colum width been changed 150 to 120 to 90 to 60 with keeping Between?",
-                async () => {
-                    ColumnWidth.Value = 120;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 90;
-                    await Task.Delay(1000);
-                    ColumnWidth.Value = 60;
-                }
-            );
+        public virtual void OnNavigatingTo(NavigationParameters parameters)
+        {
+            TestSections = parameters.GetValue<List<TestSection>>("tests");
+
+            _testEnumerator = TestSections.SelectMany(x => x).Where(y => y.Check.Value).SelectMany(z => z).GetEnumerator();
+
+            TestSections.ForEach(x => x.SetViewModel(this));
+
+            RaisePropertyChanged(nameof(TestSections));
         }
 
         public PhotoItem GetAdditionalItem()
@@ -301,100 +97,6 @@ namespace Sample.ViewModels
                 Title = $"AddItem",
                 Category = "AAA"
             };
-        }
-
-        public virtual void IndividualTest()
-        {
-
-
-            TestList.Add("Test Start").Add(
-                "Manipulation Test1. Has Title10 been scrolled to Top to Bottom To Center?",
-                async () => {
-                    ScrollController.ScrollTo(ItemsSource.First(), ScrollToPosition.Start, false);
-                    await Task.Delay(2000);
-                    ScrollController.ScrollTo(ItemsSource[9], ScrollToPosition.Start, false);
-                    await Task.Delay(2000);
-                    ScrollController.ScrollTo(ItemsSource[9], ScrollToPosition.End, false);
-                    await Task.Delay(2000);
-                    ScrollController.ScrollTo(ItemsSource[9], ScrollToPosition.Center, false);
-                }
-            ).Add(
-                "Manipulation Test2. Has Title10 been scrolled to Top to Bottom To Center with animation?",
-                async () => {
-
-                    ScrollController.ScrollTo(ItemsSource.First(), ScrollToPosition.Start, true);
-                    await Task.Delay(2000);
-                    ScrollController.ScrollTo(ItemsSource[9], ScrollToPosition.Start, true);
-                    await Task.Delay(2000);
-                    ScrollController.ScrollTo(ItemsSource[9], ScrollToPosition.End, true);
-                    await Task.Delay(2000);
-                    ScrollController.ScrollTo(ItemsSource[9], ScrollToPosition.Center, true);
-                }
-            ).Add(
-                "Manipulation Test3. Has new cell been inserted before Title1?",
-                async () => {
-
-                    ScrollController.ScrollTo(ItemsSource.First(), ScrollToPosition.Start, true);
-                    await Task.Delay(2000);
-                    ItemsSource.Insert(0, GetAdditionalItem());  
-                }
-            ).Add(
-                "Manipulation Test4. Click + again. Has new cell been inserted after Title20?",
-                async () => {
-
-                    ScrollController.ScrollTo(ItemsSource.Last(), ScrollToPosition.End, true);
-                    await Task.Delay(2000);
-                    ItemsSource.Add(GetAdditionalItem());
-                }
-            ).Add(
-                "Manipulation Test5. Click + again. Has new cell been inserted between Title8 and Title9?",
-                async () => {
-
-                    ScrollController.ScrollTo(ItemsSource[8], ScrollToPosition.Center, true);
-                    await Task.Delay(2000);
-                    ItemsSource.Insert(9, GetAdditionalItem());
-                }
-            ).Add(
-                "Manipulation Test4. Click -. Has the first cell been deleted?",
-                async () => {
-
-                    ScrollController.ScrollTo(ItemsSource.First(), ScrollToPosition.Start, true);
-                    await Task.Delay(2000);
-                    ItemsSource.RemoveAt(0);
-                }
-            ).Add(
-                "Manipulation Test6. Click - again. Has the last cell been deleted?",
-                async () => {
-
-                    ScrollController.ScrollTo(ItemsSource.Last(), ScrollToPosition.End, true);
-                    await Task.Delay(2000);
-                    ItemsSource.RemoveAt(ItemsSource.Count - 1);
-                }
-            ).Add(
-                "Manipulation Test7. Click - again. Has the cell between Title8 and Title9 been deleted?",
-                async () => {
-
-                    ScrollController.ScrollTo(ItemsSource[8], ScrollToPosition.Center, true);
-                    await Task.Delay(2000);
-                    ItemsSource.RemoveAt(8);
-                }
-            ).Add(
-                "Manipulation Test8. Click R. Has the first cell been changed to AddItem?",
-                async () => {
-
-                    ScrollController.ScrollTo(ItemsSource.First(), ScrollToPosition.Start, true);
-                    await Task.Delay(2000);
-                    ItemsSource[0] = GetAdditionalItem();
-                }
-            ).Add(
-                "Manipulation Test9. Click M. Has the first cell been moved to after Title5?",
-                async () => {
-
-                    ScrollController.ScrollTo(ItemsSource.First(), ScrollToPosition.Start, true);
-                    await Task.Delay(2000);
-                    ItemsSource.Move(0, 4);
-                }
-            );
         }
 
         void InitializeProperties()
@@ -429,85 +131,6 @@ namespace Sample.ViewModels
                 await Task.Delay(3000);
                 IsRefreshing.Value = false;
             });
-        }
-
-        public virtual void InitializeCommand()
-        {
-            var addItem = new PhotoItem
-            {
-                PhotoUrl = $"https://kamusoft.jp/openimage/nativecell/1.jpg",
-                Title = $"AddItem",
-                Category = "AAA"
-            };
-
-            var addPtn = 0;
-            AddCommand.Subscribe(_ =>
-            {
-                switch (addPtn)
-                {
-                    case 0:
-                        //ItemsSource.Insert(0, addItem);
-                        GridType.Value = AiForms.Renderers.GridType.AutoSpacingGrid;
-                        SpacingType.Value = AiForms.Renderers.SpacingType.Between;
-                        break;
-                    case 1:
-                        //ItemsSource.Add(addItem);
-                        SpacingType.Value = AiForms.Renderers.SpacingType.Center;
-                        break;
-                    case 2:
-                        //ItemsSource.Insert(9, addItem);
-                        GridType.Value = AiForms.Renderers.GridType.UniformGrid;
-                        break;
-
-                }
-
-                addPtn++;
-                if (addPtn > 2)
-                {
-                    addPtn = 0;
-                }
-            });
-
-            var delPtn = 0;
-            DelCommand.Subscribe(_ =>
-            {
-                switch (delPtn)
-                {
-                    case 0:
-                        ItemsSource.RemoveAt(0);
-                        break;
-                    case 1:
-                        ItemsSource.RemoveAt(ItemsSource.Count - 1);
-                        break;
-                    case 2:
-                        ItemsSource.RemoveAt(8);
-                        break;
-                }
-                delPtn++;
-                if (delPtn > 2)
-                {
-                    delPtn = 0;
-                }
-            });
-
-            RepCommand.Subscribe(_ =>
-            {
-                ItemsSource[0] = addItem;
-            });
-
-            MoveCommand.Subscribe(_ =>
-            {
-                ItemsSource.Move(0, 4);
-            });
-        }
-
-
-
-        public virtual void OnNavigatingTo(NavigationParameters parameters)
-        {
-            InitializeCommand();
-            IndividualTest();
-            CommontTest();
         }
     }
 }

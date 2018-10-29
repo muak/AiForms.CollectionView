@@ -5,8 +5,7 @@ using UIKit;
 using FFImageLoading.Forms;
 using FFImageLoading.Forms.Touch;
 using CarouselView.FormsPlugin.iOS;
-using AiForms.Extras.Abstractions;
-using AiForms.Extras;
+using AiForms.Dialogs;
 
 namespace Sample.iOS
 {
@@ -29,9 +28,11 @@ namespace Sample.iOS
 
             AiForms.Effects.iOS.Effects.Init();
             AiForms.Renderers.iOS.CollectionViewInit.Init();
+            AiForms.Renderers.iOS.SettingsViewInit.Init();
             Xamarin.Forms.Svg.iOS.SvgImage.Init();
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             CarouselViewRenderer.Init();
+            AiForms.Dialogs.Dialogs.Init();
 
             LoadApplication(new App(new iOSInitializer()));
 

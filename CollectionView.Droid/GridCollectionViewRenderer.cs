@@ -468,7 +468,7 @@ namespace AiForms.Renderers.Droid
                     outRect.Right = _parentRenderer.ColumnSpacing - (spanIndex + 1) * _parentRenderer.ColumnSpacing / _spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
                 }   
 
-                if(position == 0 || _parentRenderer.Adapter.FirstSectionItems.Contains(position)) {
+                if(position  < _spanCount || _parentRenderer.Adapter.FirstSectionItems.Contains(position - spanIndex)) {
                     return;
                 }
 

@@ -7,87 +7,74 @@
     xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     x:Class="Sample.Views.CollectionViewGroupTest">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="+" Command="{Binding AddCommand}" />
-        <ToolbarItem Text="-" Command="{Binding DelCommand}" />
-        <ToolbarItem Text="R" Command="{Binding RepCommand}" />
-        <ToolbarItem Text="M" Command="{Binding MoveCommand}" />
-        <ToolbarItem Text="S+" Command="{Binding AddSecCommand}" />
-        <ToolbarItem Text="S-" Command="{Binding DelSecCommand}" />
+        <ToolbarItem Text="Next" Command="{Binding NextCommand}" />
+        <ToolbarItem Text="Repeat" Command="{Binding RepeatCommand}" />
+
     </ContentPage.ToolbarItems>
-    <StackLayout>
-        <ai:GridCollectionView 
-            x:Name="collectionView"
-            BothSidesMargin="{Binding BothSidesMargin.Value}"
-            IsGroupHeaderSticky="{Binding IsGroupHeaderSticky.Value}"
-            GroupFirstSpacing="{Binding GroupFirstSpacing.Value}"
-            GroupLastSpacing="{Binding GroupLastSpacing.Value}"
-            ItemsSource="{Binding ItemsGroupSource}"
-            IsGroupingEnabled="true"
-            GroupHeaderHeight="{Binding HeaderHeight.Value}" 
-            ItemTapCommand="{Binding TapCommand}" 
-            ItemLongTapCommand="{Binding LongTapCommand}" 
-            ItemTapped="Handle_ItemTapped"
-            IsRefreshing="{Binding IsRefreshing.Value}" 
-            RefreshCommand="{Binding RefreshCommand}"
-            ScrollController="{Binding ScrollController}"
-            BackgroundColor="{Binding Background.Value}"
-            TouchFeedbackColor="{Binding FeedbackColor.Value}"
-            GridType="{Binding GridType.Value}"
-            PortraitColumns="{Binding PortraitColumns.Value}"
-            LandscapeColumns="{Binding LandscapeColumns.Value}"
-            ColumnSpacing="{Binding ColumnSpacing.Value}"
-            RowSpacing="{Binding RowSpacing.Value}" 
-            IsPullToRefreshEnabled="{Binding EnabledPullToRefresh.Value}"
-            PullToRefreshColor="{Binding RefreshIconColor.Value}"
-            SpacingType="{Binding SpacingType.Value}"
-            ColumnWidth="{Binding ColumnWidth.Value}"
-            ColumnHeight="{Binding ColumnHeight.Value}"
-            AdditionalHeight="{Binding AdditionalHeight.Value}"
-        >
-            <x:Arguments>
-                <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
-            </x:Arguments>
-            <ListView.GroupHeaderTemplate>
-                <DataTemplate>
-                    <ai:ContentCell>
-                        <Label Text="{Binding Head}" BackgroundColor="#E6DAB9" />
-                    </ai:ContentCell>
-                </DataTemplate>
-            </ListView.GroupHeaderTemplate>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ai:ContentCell>
-                        <AbsoluteLayout Margin="0" BackgroundColor="Transparent">
-                            <ff:CachedImage StyleId="Image" LoadingPlaceholder="icon.png" DownsampleWidth="180" 
-                                            RetryCount="3" RetryDelay="500" Aspect="AspectFill" 
-                                            Source="{Binding PhotoUrl}"
-                                            AbsoluteLayout.LayoutFlags="SizeProportional" AbsoluteLayout.LayoutBounds="0,0,1,1" />
-                            <Label x:Name="label1" HeightRequest="18" Text="{Binding Title}" BackgroundColor="#AAFFFFFF"
-                                   AbsoluteLayout.LayoutFlags="YProportional,WidthProportional" AbsoluteLayout.LayoutBounds="0,1,1,AutoSize" />
-                            <Label FontSize="8" TextColor="Black" BackgroundColor="#AAFFFFFF" VerticalTextAlignment="Center" 
-                                   AbsoluteLayout.LayoutBounds="0,0,AutoSize,10">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="{Binding ComputedWidth,Mode=OneWay,Source={x:Reference collectionView},StringFormat='{0:0.0}'}" />
-                                        <Span Text="x" />
-                                        <Span Text="{Binding ComputedHeight,Mode=OneWay,Source={x:Reference collectionView},StringFormat='{0:0.0}'}" />
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-                        </AbsoluteLayout>
-                    </ai:ContentCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ai:GridCollectionView>
+
+    <ai:GridCollectionView 
+        x:Name="collectionView"
+        BothSidesMargin="{Binding BothSidesMargin.Value}"
+        IsGroupHeaderSticky="{Binding IsGroupHeaderSticky.Value}"
+        GroupFirstSpacing="{Binding GroupFirstSpacing.Value}"
+        GroupLastSpacing="{Binding GroupLastSpacing.Value}"
+        ItemsSource="{Binding ItemsGroupSource}"
+        IsGroupingEnabled="true"
+        GroupHeaderHeight="{Binding HeaderHeight.Value}" 
+        ItemTapCommand="{Binding TapCommand}" 
+        ItemLongTapCommand="{Binding LongTapCommand}" 
+        ItemTapped="Handle_ItemTapped"
+        IsRefreshing="{Binding IsRefreshing.Value}" 
+        RefreshCommand="{Binding RefreshCommand}"
+        ScrollController="{Binding ScrollController}"
+        BackgroundColor="{Binding Background.Value}"
+        TouchFeedbackColor="{Binding FeedbackColor.Value}"
+        GridType="{Binding GridType.Value}"
+        PortraitColumns="{Binding PortraitColumns.Value}"
+        LandscapeColumns="{Binding LandscapeColumns.Value}"
+        ColumnSpacing="{Binding ColumnSpacing.Value}"
+        RowSpacing="{Binding RowSpacing.Value}" 
+        IsPullToRefreshEnabled="{Binding EnabledPullToRefresh.Value}"
+        PullToRefreshColor="{Binding RefreshIconColor.Value}"
+        SpacingType="{Binding SpacingType.Value}"
+        ColumnWidth="{Binding ColumnWidth.Value}"
+        ColumnHeight="{Binding ColumnHeight.Value}"
+        AdditionalHeight="{Binding AdditionalHeight.Value}"
+    >
+        <x:Arguments>
+            <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+        </x:Arguments>
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate>
+                <ai:ContentCell>
+                    <Label Text="{Binding Head}" BackgroundColor="#E6DAB9" />
+                </ai:ContentCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ai:ContentCell>
+                    <AbsoluteLayout Margin="0" BackgroundColor="Transparent">
+                        <ff:CachedImage StyleId="Image" LoadingPlaceholder="icon.png" DownsampleWidth="180" 
+                                        RetryCount="3" RetryDelay="500" Aspect="AspectFill" 
+                                        Source="{Binding PhotoUrl}"
+                                        AbsoluteLayout.LayoutFlags="SizeProportional" AbsoluteLayout.LayoutBounds="0,0,1,1" />
+                        <Label x:Name="label1" HeightRequest="18" Text="{Binding Title}" BackgroundColor="#AAFFFFFF"
+                               AbsoluteLayout.LayoutFlags="YProportional,WidthProportional" AbsoluteLayout.LayoutBounds="0,1,1,AutoSize" />
+                        <Label FontSize="8" TextColor="Black" BackgroundColor="#AAFFFFFF" VerticalTextAlignment="Center" 
+                               AbsoluteLayout.LayoutBounds="0,0,AutoSize,10">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding ComputedWidth,Mode=OneWay,Source={x:Reference collectionView},StringFormat='{0:0.0}'}" />
+                                    <Span Text="x" />
+                                    <Span Text="{Binding ComputedHeight,Mode=OneWay,Source={x:Reference collectionView},StringFormat='{0:0.0}'}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </AbsoluteLayout>
+                </ai:ContentCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ai:GridCollectionView>
         
-        <local:TestForm BindingContext="{Binding TestSource}" HorizontalOptions="FillAndExpand">
-            <ContentView.HeightRequest>
-                <!-- Carousel で iOS サイズを動的にすると落ちるバグ対策 -->
-                <OnPlatform x:TypeArguments="x:Double" iOS="150" Android="120" />
-            </ContentView.HeightRequest>
-            <ContentView.VerticalOptions>
-                <OnPlatform x:TypeArguments="LayoutOptions" iOS="End" Android="End" />
-            </ContentView.VerticalOptions>
-        </local:TestForm>
-    </StackLayout>
 </ContentPage>
