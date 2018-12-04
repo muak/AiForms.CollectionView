@@ -6,9 +6,9 @@ using AView = Android.Views.View;
 namespace AiForms.Renderers.Droid
 {
     [Android.Runtime.Preserve(AllMembers = true)]
-    public class ViewHolder : RecyclerView.ViewHolder
+    public class CollectionViewHolder : RecyclerView.ViewHolder
     {
-        public ViewHolder(AView view) : base(view) { }
+        public CollectionViewHolder(AView view) : base(view) { }
 
         protected override void Dispose(bool disposing)
         {
@@ -22,7 +22,7 @@ namespace AiForms.Renderers.Droid
     }
 
     [Android.Runtime.Preserve(AllMembers = true)]
-    public class ContentViewHolder : ViewHolder
+    public class ContentViewHolder : CollectionViewHolder
     {
         ICollectionViewRenderer _renderer;
         public bool IsHeader => ItemViewType >= CollectionViewAdapter.DefaultGroupHeaderTemplateId;

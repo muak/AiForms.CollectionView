@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>AiForms.Renderers</RootNamespace>
-    <ReleaseVersion>1.1.2</ReleaseVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -19,5 +18,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Cells\CententCellBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Link>README.md</Link>
+    </None>
+    <None Include="..\README-ja.md">
+      <Link>README-ja.md</Link>
+    </None>
+    <None Include="..\nuget\AzurePipelines.nuspec">
+      <Link>AzurePipelines.nuspec</Link>
+    </None>
   </ItemGroup>
 </Project>

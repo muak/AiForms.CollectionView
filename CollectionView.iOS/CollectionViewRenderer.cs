@@ -214,12 +214,14 @@ namespace AiForms.Renderers.iOS
 
         protected virtual void OnGroupedCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-
             var til = (TemplatedItemsList<ItemsView<Cell>, Cell>)sender;
 
             var templatedItems = TemplatedItemsView.TemplatedItems;
-            var groupIndex = templatedItems.IndexOf(til.HeaderContent);
 
+            // On iOS, sometimes the groupIndex can't be correctly got using 
+            // "templatedItems.IndexOf(til.HeaderContent)" for some reason.
+            // So BindingContext instead of HeaderContent is used and got the group index.
+            var groupIndex = TemplatedItemsView.TemplatedItems.ListProxy.IndexOf(til.BindingContext);
             UpdateItems(e, groupIndex, false);
         }
 
@@ -247,10 +249,10 @@ namespace AiForms.Renderers.iOS
 
             // HACK: When an item is added for the first time, UICollectionView is sometimes crashed for some reason.
             // So, in that case, ReloadData is called.
-            //if (!Control.IndexPathsForVisibleItems.Any())
-            //{
-            //    groupReset = true;
-            //}
+            if (!Control.IndexPathsForVisibleItems.Any())
+            {
+                groupReset = true;
+            }
 
             // We can't do this check on grouped lists because the index doesn't match the number of rows in a section.
             // Likewise, we can't do this check on lists using RecycleElement because the number of rows in a section will remain constant because they are reused.

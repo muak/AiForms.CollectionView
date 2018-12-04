@@ -9,6 +9,7 @@
     <RootNamespace>AiForms.Renderers.iOS</RootNamespace>
     <AssemblyName>CollectionView.iOS</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <ReleaseVersion>1.1.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,7 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectionView\CollectionView.csproj">
-      <Project>{D5C93D88-A5D6-4843-935B-CC72F073B54E}</Project>
+      <Project>{9D6D76D0-B250-4262-B970-52DAE6764B88}</Project>
       <Name>CollectionView</Name>
     </ProjectReference>
   </ItemGroup>
