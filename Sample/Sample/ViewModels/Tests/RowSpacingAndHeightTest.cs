@@ -61,12 +61,11 @@ namespace Sample.ViewModels.Tests
             VM.HeaderHeight.Value *= 2;
         }
 
-
-        [Test(Message = "Has HeaderCell position been released from sticky? (iOS)")]
-        public void Sticky()
-        {
-            VM.IsGroupHeaderSticky.Value = false;
-        }
+        //[Test(Message = "Has HeaderCell position been released from sticky? (iOS)")]
+        //public void Sticky()
+        //{
+        //    VM.IsGroupHeaderSticky.Value = false;
+        //}
 
     }
 }

@@ -68,6 +68,7 @@ namespace AiForms.Renderers.iOS
             {
                 return TemplatedItemsView.TemplatedItems.Count;
             }
+
             return 1;
         }
 

@@ -33,7 +33,7 @@ namespace AiForms.Renderers.Droid
         Context _context;
         RecyclerView _recyclerView;
         ICollectionViewRenderer _collectionViewRenderer;
-        List<ViewHolder> _viewHolders = new List<ViewHolder>();
+        List<CollectionViewHolder> _viewHolders = new List<CollectionViewHolder>();
         Dictionary<DataTemplate, int> _templateToId = new Dictionary<DataTemplate, int>();
 
         IListViewController Controller => _collectionView;

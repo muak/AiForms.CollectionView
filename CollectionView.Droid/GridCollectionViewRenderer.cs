@@ -466,9 +466,15 @@ namespace AiForms.Renderers.Droid
                 {
                     outRect.Left = spanIndex * _parentRenderer.ColumnSpacing / _spanCount; // column * ((1f / spanCount) * spacing)
                     outRect.Right = _parentRenderer.ColumnSpacing - (spanIndex + 1) * _parentRenderer.ColumnSpacing / _spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-                }   
+                }
 
-                if(position  < _spanCount || _parentRenderer.Adapter.FirstSectionItems.Contains(position - spanIndex)) {
+                // Group bottom spacing is applied at the last cell.
+                if (_parentRenderer.Element.IsGroupingEnabled && position >= _parentRenderer.Adapter.ItemCount - _spanCount)
+                {
+                    outRect.Bottom = _parentRenderer._lastSpacing;
+                }
+
+                if (position  < _spanCount || _parentRenderer.Adapter.FirstSectionItems.Contains(position - spanIndex)) {
                     return;
                 }
 

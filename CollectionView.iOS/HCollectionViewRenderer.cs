@@ -136,13 +136,7 @@ namespace AiForms.Renderers.iOS
                 return;
             }
 
-            var til = (TemplatedItemsList<ItemsView<Cell>, Cell>)sender;
-            // When scroll orientation is horizontal, the groupIndex can't be correctly got using 
-            // "templatedItems.IndexOf(til.HeaderContent)" for some reason.
-            // So BindingContext instead of HeaderContent is used and got the group index.
-            var groupIndex = TemplatedItemsView.TemplatedItems.ListProxy.IndexOf(til.BindingContext);
-
-            UpdateItems(e, groupIndex, false);
+            base.OnGroupedCollectionChanged(sender, e);
         }
 
         protected override void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

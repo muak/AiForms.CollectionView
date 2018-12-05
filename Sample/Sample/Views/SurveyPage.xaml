@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:cv="clr-namespace:AiForms.Renderers;assembly=CollectionView"
+    xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Sample.Views.SurveyPage">
+    
+    <cv:GridCollectionView
+       x:Name="collectionView"
+       ItemsSource="{Binding BookList}" 
+       ItemTapCommand="{Binding SelectCommand}"
+       ItemLongTapCommand="{Binding DeleteCommand}"
+       TouchFeedbackColor="#80FF0000"
+       IsGroupingEnabled="true"
+       IsPullToRefreshEnabled="true"
+       RefreshCommand="{Binding RefreshCommand}"
+       IsRefreshing="{Binding IsRefreshing.Value}"
+       GroupHeaderHeight="30"
+       GroupFirstSpacing="6"
+       GroupLastSpacing="16"
+       BothSidesMargin="6"
+       ColumnSpacing="10"
+       RowSpacing="6"
+       GridType="UniformGrid"
+       PortraitColumns="3"
+       SpacingType="Center"
+       ColumnWidth="80" ColumnHeight="1.0" AdditionalHeight="10" >
+            
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate>
+                <cv:ContentCell>
+                    <FlexLayout Direction="Row" JustifyContent="Start" AlignItems="Center" 
+                                BackgroundColor="Silver" HeightRequest="30">
+                        <Label Text="{Binding Title}" TextColor="Black" 
+                               FontSize="12" Margin="10,0,0,0" />
+                    </FlexLayout>
+                </cv:ContentCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+        
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <cv:ContentCell>
+                    <StackLayout Spacing="0" CompressedLayout.IsHeadless="true">
+                        <ff:CachedImage HorizontalOptions="FillAndExpand"
+                                        HeightRequest="{Binding ComputedWidth,Source={x:Reference collectionView}}" Aspect="AspectFill" 
+                                        InputTransparent="true" Source="{Binding Image}" />
+                        <Label LineBreakMode="TailTruncation" Text="{Binding Name}" HorizontalTextAlignment="Center" VerticalTextAlignment="Start" FontSize="9" />
+                    </StackLayout>
+                </cv:ContentCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+        
+    </cv:GridCollectionView>
+</ContentPage>

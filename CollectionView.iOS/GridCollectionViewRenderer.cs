@@ -11,6 +11,8 @@ using RectangleF = CoreGraphics.CGRect;
 using Foundation;
 using System.Collections.Generic;
 using CoreFoundation;
+using System.Collections.Specialized;
+using Xamarin.Forms.Internals;
 
 [assembly: ExportRenderer(typeof(GridCollectionView), typeof(GridCollectionViewRenderer))]
 namespace AiForms.Renderers.iOS
