@@ -5,6 +5,8 @@ using AiForms.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using AView = Android.Views.View;
+using Android.Views;
+using CollectionView.Droid;
 
 namespace AiForms.Renderers.Droid
 {
@@ -75,6 +77,25 @@ namespace AiForms.Renderers.Droid
             {
                 ((IListViewController)e.NewElement).ScrollToRequested += OnScrollToRequested;
                 _scroller = new SelectableSmoothScroller(Context);
+                RecyclerView.AddOnScrollListener(new CollectionViewScrollListener());
+            }
+        }
+
+        void RecyclerView_ScrollChange(object sender, ScrollChangeEventArgs e)
+        {
+            if(LayoutManager.Orientation == LinearLayoutManager.Horizontal)
+            {
+                if(RecyclerView.Width <= e.ScrollX)
+                {
+
+                }
+            }
+            else
+            {
+                if(RecyclerView.Height <= e.ScrollY)
+                {
+
+                }
             }
         }
 

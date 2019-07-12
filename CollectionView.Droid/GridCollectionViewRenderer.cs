@@ -66,8 +66,6 @@ namespace AiForms.Renderers.Droid
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
         {
-            base.OnElementChanged(e);
-
             if (e.NewElement != null)
             {
                 if (RecyclerView == null)
@@ -103,6 +101,8 @@ namespace AiForms.Renderers.Droid
                 UpdatePullToRefreshEnabled();
                 UpdatePullToRefreshColor();
             }
+
+            base.OnElementChanged(e);
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)

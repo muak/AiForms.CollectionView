@@ -15,6 +15,10 @@ namespace AiForms.Renderers
         /// <param name="cachingStrategy">Caching strategy.</param>
         public CollectionView(ListViewCachingStrategy cachingStrategy):base(cachingStrategy){
             ScrollController = new ScrollController(this);
+            EndLoadMore = () =>
+            {
+                EndLoadingAction?.Invoke();
+            };
         }
 
         /// <summary>
@@ -151,6 +155,37 @@ namespace AiForms.Renderers
             set { SetValue(ScrollControllerProperty, value); }
         }
 
+        public static BindableProperty LoadMoreCommandProperty =
+            BindableProperty.Create(
+                nameof(LoadMoreCommand),
+                typeof(ICommand),
+                typeof(CollectionView),
+                default(ICommand),
+                defaultBindingMode: BindingMode.OneWay
+            );
+
+        public ICommand LoadMoreCommand
+        {
+            get { return (ICommand)GetValue(LoadMoreCommandProperty); }
+            set { SetValue(LoadMoreCommandProperty, value); }
+        }
+
+        internal Action EndLoadingAction;
+
+        public static BindableProperty EndLoadMoreProperty =
+            BindableProperty.Create(
+                nameof(EndLoadMore),
+                typeof(Action),
+                typeof(CollectionView),
+                default(Action),
+                defaultBindingMode: BindingMode.OneWayToSource
+            );
+
+        public Action EndLoadMore
+        {
+            get { return (Action)GetValue(EndLoadMoreProperty); }
+            set { SetValue(EndLoadMoreProperty, value); }
+        }
 
         // kill unused properties
         private new object Header { get; }

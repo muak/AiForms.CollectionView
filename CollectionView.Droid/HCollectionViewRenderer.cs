@@ -46,8 +46,6 @@ namespace AiForms.Renderers.Droid
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
         {
-            base.OnElementChanged(e);
-
             if (e.NewElement != null)
             {
                 if (Control == null)
@@ -76,6 +74,8 @@ namespace AiForms.Renderers.Droid
                     UpdateSpacing();
                 }
             }
+
+            base.OnElementChanged(e);
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
