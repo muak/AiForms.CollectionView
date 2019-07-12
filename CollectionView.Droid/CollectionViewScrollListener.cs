@@ -1,18 +1,26 @@
 ﻿using System;
+using AiForms.Renderers;
 using Android.Support.V7.Widget;
-namespace CollectionView.Droid
+
+namespace AiForms.Renderers.Droid
 {
     public class CollectionViewScrollListener:RecyclerView.OnScrollListener
     {
-        public CollectionViewScrollListener()
+        public bool IsReachedBottom { get; set; }
+
+        CollectionView _collectionView;
+
+
+        public CollectionViewScrollListener(CollectionView collectionView)
         {
+            _collectionView = collectionView;
         }
 
         protected override void Dispose(bool disposing)
         {
             if(disposing)
             {
-
+                _collectionView = null;
             }
             base.Dispose(disposing);
         }
@@ -21,7 +29,7 @@ namespace CollectionView.Droid
         {
             base.OnScrolled(recyclerView, dx, dy);
 
-            if(dx < 0 || dy < 0)
+            if(dx < 0 || dy < 0 || IsReachedBottom || _collectionView.LoadMoreCommand == null)
             {
                 return;
             }
@@ -34,7 +42,8 @@ namespace CollectionView.Droid
 
             if(totalItemCount - visibleItemCount <= firstVisibleItem)
             {
-
+                IsReachedBottom = true;
+                _collectionView.LoadMoreCommand?.Execute(null);
             }
         }
     }

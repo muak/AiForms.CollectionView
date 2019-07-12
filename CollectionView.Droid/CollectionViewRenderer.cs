@@ -6,7 +6,6 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using AView = Android.Views.View;
 using Android.Views;
-using CollectionView.Droid;
 
 namespace AiForms.Renderers.Droid
 {
@@ -24,6 +23,7 @@ namespace AiForms.Renderers.Droid
         protected bool IsAttached;
         protected ITemplatedItemsView<Cell> TemplatedItemsView => Element;
 
+        CollectionViewScrollListener _scrollListener;
         SelectableSmoothScroller _scroller;
         ScrollToRequestedEventArgs _pendingScrollTo;
 
@@ -45,6 +45,10 @@ namespace AiForms.Renderers.Droid
             {
                 _scroller?.Dispose();
                 _scroller = null;
+
+                RecyclerView.RemoveOnScrollListener(_scrollListener);
+                _scrollListener?.Dispose();
+                _scrollListener = null;
 
                 Adapter?.Dispose();
                 Adapter = null;
@@ -71,31 +75,16 @@ namespace AiForms.Renderers.Droid
                     Adapter?.Dispose();
                     Adapter = null;
                 }
+                e.OldElement.EndLoadingAction = null;
             }
 
             if (e.NewElement != null)
             {
                 ((IListViewController)e.NewElement).ScrollToRequested += OnScrollToRequested;
                 _scroller = new SelectableSmoothScroller(Context);
-                RecyclerView.AddOnScrollListener(new CollectionViewScrollListener());
-            }
-        }
-
-        void RecyclerView_ScrollChange(object sender, ScrollChangeEventArgs e)
-        {
-            if(LayoutManager.Orientation == LinearLayoutManager.Horizontal)
-            {
-                if(RecyclerView.Width <= e.ScrollX)
-                {
-
-                }
-            }
-            else
-            {
-                if(RecyclerView.Height <= e.ScrollY)
-                {
-
-                }
+                _scrollListener = new CollectionViewScrollListener(e.NewElement);
+                RecyclerView.AddOnScrollListener(_scrollListener);
+                e.NewElement.EndLoadingAction = () => _scrollListener.IsReachedBottom = false;
             }
         }
 

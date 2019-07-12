@@ -13,13 +13,12 @@ using System.Linq;
 namespace AiForms.Renderers.iOS
 {
     [Foundation.Preserve(AllMembers = true)]
-    public class CollectionViewRenderer : ViewRenderer<CollectionView, UICollectionView>,IUIScrollViewDelegate
+    public class CollectionViewRenderer : ViewRenderer<CollectionView, UICollectionView>
     {
         public const string SectionHeaderId = "SectionHeader";
         protected CollectionViewSource DataSource;
         protected UICollectionViewFlowLayout ViewLayout;
         protected ITemplatedItemsView<Cell> TemplatedItemsView => Element;
-        protected bool IsReachedBottom;
         bool _disposed;
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
@@ -33,7 +32,6 @@ namespace AiForms.Renderers.iOS
                 templatedItems.GroupedCollectionChanged -= OnGroupedCollectionChanged;
                 e.OldElement.ScrollToRequested -= OnScrollToRequested;
                 e.OldElement.EndLoadingAction = null;
-                (Control as UIScrollView).Delegate = null;
             }
 
             if (e.NewElement != null)
@@ -44,10 +42,9 @@ namespace AiForms.Renderers.iOS
                 templatedItems.CollectionChanged += OnCollectionChanged;
                 templatedItems.GroupedCollectionChanged += OnGroupedCollectionChanged;
                 e.NewElement.ScrollToRequested += OnScrollToRequested;
-                (Control as UIScrollView).Delegate = this;
                 e.NewElement.EndLoadingAction = () =>
                 {
-                    IsReachedBottom = false;
+                    DataSource.IsReachedBottom = false;
                 };
 
                 UpdateBackgroundColor();
@@ -63,7 +60,6 @@ namespace AiForms.Renderers.iOS
 
             if (disposing)
             {             
-                (Control as UIScrollView).Delegate = null;
                 ViewLayout?.Dispose();
                 ViewLayout = null;
 
@@ -98,36 +94,6 @@ namespace AiForms.Renderers.iOS
             {
                 UpdateBackgroundColor();
             }
-        }
-
-        [Foundation.Export("scrollViewDidScroll:")]
-        public virtual void Scrolled(UIKit.UIScrollView scrollView)
-        {
-            if(IsReachedBottom || Element.LoadMoreCommand == null)
-            {
-                return;
-            }
-
-            if(ViewLayout.ScrollDirection == UICollectionViewScrollDirection.Horizontal)
-            {
-                if(scrollView.ContentSize.Width <= scrollView.ContentOffset.X + scrollView.Bounds.Width)
-                {
-                    RaiseReachedBottom();
-                }
-            }
-            else
-            {
-                if(scrollView.ContentSize.Height <= scrollView.ContentOffset.Y + scrollView.Bounds.Height)
-                {
-                    RaiseReachedBottom();
-                }
-            }
-        }
-
-        void RaiseReachedBottom()
-        {
-            IsReachedBottom = true;
-            Element?.LoadMoreCommand?.Execute(null);
         }
 
         protected virtual async void OnScrollToRequested(object sender, ScrollToRequestedEventArgs e)

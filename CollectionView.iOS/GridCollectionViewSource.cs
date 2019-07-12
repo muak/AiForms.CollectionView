@@ -48,5 +48,15 @@ namespace AiForms.Renderers.iOS
 
             return CellSize;
         }
+
+        public override void Scrolled(UIScrollView scrollView)
+        {
+            base.Scrolled(scrollView);
+
+            if (scrollView.ContentSize.Height <= scrollView.ContentOffset.Y + scrollView.Bounds.Height)
+            {
+                RaiseReachedBottom();
+            }
+        }
     }
 }
