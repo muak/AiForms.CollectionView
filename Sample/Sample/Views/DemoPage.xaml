@@ -65,6 +65,8 @@
                             ItemTemplate="{StaticResource templateA}"
                             TouchFeedbackColor="{Binding FeedbackColor.Value}"
                             ScrollController="{Binding ScrollControllerH}"
+                            LoadMoreCommand="{Binding LoadMoreHCommand}"
+                            EndLoadMore="{Binding EndLoadingH}"
                             >
             <x:Arguments>
                 <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
