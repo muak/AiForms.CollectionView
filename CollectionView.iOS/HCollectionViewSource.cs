@@ -6,7 +6,7 @@ using Foundation;
 namespace AiForms.Renderers.iOS
 {
     [Foundation.Preserve(AllMembers = true)]
-    public class HCollectionViewSource : CollectionViewSource, IUIScrollViewDelegate
+    public class HCollectionViewSource : CollectionViewSource
     {
         HCollectionView _hCollectionView => CollectionView as HCollectionView;
         int _infiniteMultiple = 3;
@@ -48,6 +48,13 @@ namespace AiForms.Renderers.iOS
 
         public override void Scrolled(UIScrollView scrollView)
         {
+            base.Scrolled(scrollView);
+
+            if (scrollView.ContentSize.Width <= scrollView.ContentOffset.X + scrollView.Bounds.Width)
+            {
+                RaiseReachedBottom();
+            }
+
             if (!_hCollectionView.IsInfinite)
             {
                 return;
