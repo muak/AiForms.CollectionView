@@ -19,6 +19,7 @@ namespace AiForms.Renderers.iOS
         public CGSize CellSize { get; set; }
         public Dictionary<int, int> Counts { get; set; }
         public bool IsReachedBottom { get; set; }
+        public float LoadMoreMargin { get; set; }
 
         protected CollectionView CollectionView;
         protected ITemplatedItemsView<Cell> TemplatedItemsView => CollectionView;

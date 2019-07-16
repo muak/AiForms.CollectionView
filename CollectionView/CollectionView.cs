@@ -187,6 +187,21 @@ namespace AiForms.Renderers
             set { SetValue(SetLoadMoreCompletionProperty, value); }
         }
 
+        public static BindableProperty LoadMoreMarginProperty =
+            BindableProperty.Create(
+                nameof(LoadMoreMargin),
+                typeof(int),
+                typeof(CollectionView),
+                default(int),
+                defaultBindingMode: BindingMode.OneWay
+            );
+
+        public int LoadMoreMargin
+        {
+            get { return (int)GetValue(LoadMoreMarginProperty); }
+            set { SetValue(LoadMoreMarginProperty, value); }
+        }
+
         // kill unused properties
         private new object Header { get; }
         private new DataTemplate HeaderTemplate { get; }

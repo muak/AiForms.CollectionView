@@ -40,7 +40,7 @@ namespace AiForms.Renderers.Droid
             var totalItemCount = layoutManager.ItemCount;
             var firstVisibleItem = layoutManager.FindFirstVisibleItemPosition();
 
-            if(totalItemCount - visibleItemCount <= firstVisibleItem)
+            if(totalItemCount - visibleItemCount - _collectionView.LoadMoreMargin <= firstVisibleItem)
             {
                 IsReachedBottom = true;
                 _collectionView.LoadMoreCommand?.Execute(null);

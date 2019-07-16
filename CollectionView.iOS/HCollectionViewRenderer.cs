@@ -158,6 +158,7 @@ namespace AiForms.Renderers.iOS
 
             var height = Element.HeightRequest >= 0 ? Element.HeightRequest : Bounds.Height;
             DataSource.CellSize = new CGSize((float)_hCollectionView.ColumnWidth, (float)height);
+            DataSource.LoadMoreMargin = Element.LoadMoreMargin * (float)DataSource.CellSize.Width;
         }
 
         protected virtual void UpdateSpacing()

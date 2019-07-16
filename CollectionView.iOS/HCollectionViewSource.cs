@@ -66,7 +66,7 @@ namespace AiForms.Renderers.iOS
                 return;
             }
 
-            if (scrollView.ContentSize.Width <= scrollView.ContentOffset.X + scrollView.Bounds.Width)
+            if (scrollView.ContentSize.Width <= scrollView.ContentOffset.X + scrollView.Bounds.Width + LoadMoreMargin)
             {
                 RaiseReachedBottom();
             }
