@@ -271,9 +271,11 @@ Because this library doesn't contain the feature of such as dealing with images 
 * TouchFeedbackColor
   * The color rendered when an item is touched.
 * GroupFirstSpacing
-  * The spacing of the first item's top in a group.
+  * The spacing of the first item's top(Grid) or left(H) in a group.
+  * If the grouping is not enabled, it is applied to the first item.
 * GroupLastSpacing
-  * The spacing of the last item's bottom in a group.
+  * The spacing of the last item's bottom(Grid) or right(H) in a group.
+  * If the grouping is not enabled, it is applied to the last item.
 * LoadMoreCommand
   * The command invoked when appearing the last item is detected.
 * SetLoadMoreCompletion
