@@ -53,6 +53,11 @@ namespace AiForms.Renderers.iOS
         {
             base.Scrolled(scrollView);
 
+            if (IsReachedBottom || CollectionView.LoadMoreCommand == null)
+            {
+                return;
+            }
+
             if (scrollView.ContentSize.Height <= scrollView.ContentOffset.Y + scrollView.Bounds.Height)
             {
                 RaiseReachedBottom();

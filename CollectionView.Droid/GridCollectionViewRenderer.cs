@@ -468,8 +468,14 @@ namespace AiForms.Renderers.Droid
                     outRect.Right = _parentRenderer.ColumnSpacing - (spanIndex + 1) * _parentRenderer.ColumnSpacing / _spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
                 }
 
-                // Group bottom spacing is applied at the last cell.
-                if (_parentRenderer.Element.IsGroupingEnabled && position >= _parentRenderer.Adapter.ItemCount - _spanCount)
+                // Disabled grouping top spacing is applied at the first row cells.
+                if (!_parentRenderer.Element.IsGroupingEnabled && position < _spanCount)
+                {
+                    outRect.Top = _parentRenderer._firstSpacing;
+                }
+
+                // Group bottom or single bottom spacing is applied at the last row cells.
+                if (position >= _parentRenderer.Adapter.ItemCount - _spanCount)
                 {
                     outRect.Bottom = _parentRenderer._lastSpacing;
                 }

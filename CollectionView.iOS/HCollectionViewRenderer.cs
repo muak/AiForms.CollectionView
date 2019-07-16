@@ -19,8 +19,8 @@ namespace AiForms.Renderers.iOS
         CGRect _previousFrame = CGRect.Empty;
         bool _disposed;
         HCollectionView _hCollectionView => Element as HCollectionView;
-        float _firstSpacing => _hCollectionView.IsGroupingEnabled ? (float)_hCollectionView.GroupFirstSpacing : 0;
-        float _lastSpacing => _hCollectionView.IsGroupingEnabled ? (float)_hCollectionView.GroupLastSpacing : 0;
+        float _firstSpacing => (float)_hCollectionView.GroupFirstSpacing;
+        float _lastSpacing => (float)_hCollectionView.GroupLastSpacing;
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
         {
@@ -163,6 +163,12 @@ namespace AiForms.Renderers.iOS
         protected virtual void UpdateSpacing()
         {
             ViewLayout.MinimumLineSpacing = (System.nfloat)_hCollectionView.Spacing;
+
+            if(_hCollectionView.IsInfinite && !_hCollectionView.IsGroupingEnabled)
+            {
+                return;
+            }
+
             ViewLayout.SectionInset = new UIEdgeInsets(0, _firstSpacing, 0, _lastSpacing);
         }
 

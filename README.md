@@ -176,6 +176,44 @@ public class SomeViewModel
 }
 ```
 
+### A example of how to use LoadMoreCommand and SetLoadMoreCompletion.
+
+```xml
+<ai:GridCollectionView 
+    ItemsSource="{Binding ItemsSource}"
+    LoadMoreCommand="{Binding LoadMoreCommand}"
+    SetLoadMoreCompletion="{Binding SetLoadMoreCompletion}" >
+    ...omitting
+</ai:GridCollectionView>
+```
+
+```cs
+public class SomeViewModel
+{
+    public ObservableCollection<Item> ItemsSource { get; } = new ObservableCollection<Item>();
+    public Command LoadMoreCommand { get; set; }
+    public Action<bool> SetLoadMoreCompletion { get; set; }
+
+    public async Task LoadMoreCommandExecute()
+    {
+        var items = await WebApi.GetItems(10);
+
+        if(items.Count == 0)
+        {
+            SetLoadMoreCompletion(true); // All the items was loaded.
+            return;
+        }
+
+        foreach(var item in items)
+        {
+            ItemsSource.Add(item);
+        }
+
+        SetLoadMoreCompletion(false); // All the items is not still loaded.
+    }
+}
+```
+
 ## Available functions deriving from ListView
 
 ### Bindable properties
@@ -224,6 +262,26 @@ var collectionView = new HCollectionView(ListViewCachingStrategy.RetainElement);
 If you use images for a data template item, using **[FFImageLoading](https://github.com/luberda-molinet/FFImageLoading)** is recommended powerfully.
 Because this library doesn't contain the feature of such as dealing with images asynchronously and caching.
 
+## Common Bindable Properties (GridCollectionView / HCollectionView)
+
+* ItemTapCommand
+  * The command invoked when an item is tapped.
+* ItemLongTapCommand
+  * The command invoked when an item is pressed longly.
+* TouchFeedbackColor
+  * The color rendered when an item is touched.
+* GroupFirstSpacing
+  * The spacing of the first item's top(Grid) or left(H) in a group.
+  * If the grouping is not enabled, it is applied to the first item.
+* GroupLastSpacing
+  * The spacing of the last item's bottom(Grid) or right(H) in a group.
+  * If the grouping is not enabled, it is applied to the last item.
+* LoadMoreCommand
+  * The command invoked when appearing the last item is detected.
+* SetLoadMoreCompletion
+  * If it continues using the LoadMore after doing some process, set false; Otherwise set true.
+  * Once the LoadMoreCommand is invoked, it will not be invoked again unless the SetLoadMoreCompletion is set to false.
+
 ## GridCollectionView
 
 This is the ListView that lays out each item in a grid pattern. Though this is similar to [WrapLayout](https://github.com/muak/AiForms.Layouts#wraplayout), is different from it in that cells can be recycled.
@@ -250,24 +308,13 @@ This is the ListView that lays out each item in a grid pattern. Though this is s
     * The height of a group header cell.
 * [SpacingType](#spacingtype-enumeration)
     * Select the spacing type using an enumeration value either Between or Center. This is used only when GridType is AutoSpacingGrid. (Default: Between)
-* GroupFirstSpacing
-  * The spacing of the first item's top in a group.
-* GroupLastSpacing
-  * The spacing of the last item's bottom in a group.
 * BothSidesMargin
   * The margin of the right and left sides in the content area except for a group header cell. This is used only when GridType is UniformGrid. (Default: 0)
 * PullToRefreshColor
     * The color of the PullToRefresh indicator icon.
-* ItemTapCommand
-  * The command invoked when an item is tapped.
-* ItemLongTapCommand
-  * The command invoked when an item is pressed longly.
-* TouchFeedbackColor
-  * The color rendered when an item is touched.
-* [ScrollController](#scrollcontroller)
-  * The object for manipulating the scroll from such as ViewModel.
 * IsGroupHeaderSticky
   * Whether a group header is fixed at the top. (iOS only) (default: true)
+* [The other common properties](#Common-Bindable-Properties-GridCollectionView--HCollectionView)
 
 ### Special Properties
 
@@ -310,19 +357,7 @@ This is the ListView that lays out each item horizontally. This can make the scr
 
     > On iOS, it must be the number of cells enough to fill the container width.
     > On Android, it could reach each edge if keep scrolling for so long, because it is semi-infinite.
-
-* ItemTapCommand
-  * The command invoked when an item is tapped.
-* ItemLongTapCommand
-  * The command invoked when an item is pressed longly.
-* TouchFeedbackColor
-  * The color rendered when an item is touched.
-* [ScrollController](#scrollcontroller)
-  * The object for manipulating the scroll from such as ViewModel.
-* GroupFirstSpacing
-  * The spacing of the first item's left in a group.
-* GroupLastSpacing
-  * The spacing of the last item's right in a group.
+* [The other common properties](#Common-Bindable-Properties-GridCollectionView--HCollectionView)
 
 ### About Row Height
 

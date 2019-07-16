@@ -66,7 +66,7 @@
                             TouchFeedbackColor="{Binding FeedbackColor.Value}"
                             ScrollController="{Binding ScrollControllerH}"
                             LoadMoreCommand="{Binding LoadMoreHCommand}"
-                            EndLoadMore="{Binding EndLoadingH}"
+                            SetLoadMoreCompletion="{Binding SetEndLoadMoreH}"
                             >
             <x:Arguments>
                 <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
@@ -104,7 +104,7 @@
             IsPullToRefreshEnabled="{Binding EnabledPullToRefresh.Value}"
             PullToRefreshColor="{Binding RefreshIconColor.Value}"
             LoadMoreCommand="{Binding LoadMoreCommand}"
-            EndLoadMore="{Binding EndLoading}"
+            SetLoadMoreCompletion="{Binding SetEndLoadMore}"
         >
             <x:Arguments>
                 <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>

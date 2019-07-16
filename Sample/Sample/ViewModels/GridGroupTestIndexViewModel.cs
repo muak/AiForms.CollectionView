@@ -23,6 +23,7 @@ namespace Sample.ViewModels
             Section.Add(new PullToRefreshTest());
             Section.Add(new RowSpacingAndHeightTest());
             Section.Add(new ColorTest());
+            Section.Add(new LoadMoreGroupTest());
 
             TestSections.Add(Section);
 
