@@ -61,10 +61,6 @@ namespace AiForms.Renderers.iOS
 
         public override void Scrolled(UIScrollView scrollView)
         {
-            if (IsReachedBottom || CollectionView.LoadMoreCommand == null)
-            {
-                return;
-            }
         }
 
         protected void RaiseReachedBottom()

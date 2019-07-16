@@ -75,7 +75,7 @@ namespace AiForms.Renderers.Droid
                     Adapter?.Dispose();
                     Adapter = null;
                 }
-                e.OldElement.EndLoadingAction = null;
+                e.OldElement.SetLoadMoreCompletionAction = null;
             }
 
             if (e.NewElement != null)
@@ -84,7 +84,7 @@ namespace AiForms.Renderers.Droid
                 _scroller = new SelectableSmoothScroller(Context);
                 _scrollListener = new CollectionViewScrollListener(e.NewElement);
                 RecyclerView.AddOnScrollListener(_scrollListener);
-                e.NewElement.EndLoadingAction = () => _scrollListener.IsReachedBottom = false;
+                e.NewElement.SetLoadMoreCompletionAction = (isEnd) => _scrollListener.IsReachedBottom = isEnd;
             }
         }
 

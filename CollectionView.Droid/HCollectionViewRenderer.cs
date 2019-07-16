@@ -221,6 +221,18 @@ namespace AiForms.Renderers.Droid
                     return;
                 }
 
+                // Disabled grouping first spacing is applied at the first cell.
+                if (!_renderer._hCollectionView.IsGroupingEnabled && position == 0)                  
+                {
+                    outRect.Left = _renderer._firstSpacing;            
+                }
+
+                // Group last or single last spacing is applied at the last cell.
+                if (position == _renderer.Adapter.ItemCount - 1)
+                {
+                    outRect.Right = _renderer._lastSpacing;
+                }
+
                 if (position == 0 || _renderer.Adapter.FirstSectionItems.Contains(realPosition))
                 {
                     return;

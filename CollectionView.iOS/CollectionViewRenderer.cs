@@ -31,7 +31,7 @@ namespace AiForms.Renderers.iOS
                 templatedItems.CollectionChanged -= OnCollectionChanged;
                 templatedItems.GroupedCollectionChanged -= OnGroupedCollectionChanged;
                 e.OldElement.ScrollToRequested -= OnScrollToRequested;
-                e.OldElement.EndLoadingAction = null;
+                e.OldElement.SetLoadMoreCompletionAction = null;
             }
 
             if (e.NewElement != null)
@@ -42,9 +42,9 @@ namespace AiForms.Renderers.iOS
                 templatedItems.CollectionChanged += OnCollectionChanged;
                 templatedItems.GroupedCollectionChanged += OnGroupedCollectionChanged;
                 e.NewElement.ScrollToRequested += OnScrollToRequested;
-                e.NewElement.EndLoadingAction = () =>
+                e.NewElement.SetLoadMoreCompletionAction = (isEnd) =>
                 {
-                    DataSource.IsReachedBottom = false;
+                    DataSource.IsReachedBottom = isEnd;
                 };
 
                 UpdateBackgroundColor();
@@ -69,12 +69,12 @@ namespace AiForms.Renderers.iOS
                 }
 
                 if (Element != null)
-                {
+                {                  
                     var templatedItems = TemplatedItemsView.TemplatedItems;
                     templatedItems.CollectionChanged -= OnCollectionChanged;
                     templatedItems.GroupedCollectionChanged -= OnGroupedCollectionChanged;
                     Element.ScrollToRequested -= OnScrollToRequested;
-                    Element.EndLoadMore = null;
+                    Element.SetLoadMoreCompletion = null;
                 }
             }
 

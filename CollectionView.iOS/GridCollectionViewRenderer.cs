@@ -27,8 +27,8 @@ namespace AiForms.Renderers.iOS
         bool _disposed;
         GridCollectionView _gridCollectionView => (GridCollectionView)Element;
         GridCollectionViewSource _gridSource => DataSource as GridCollectionViewSource;
-        float _firstSpacing => _gridCollectionView.IsGroupingEnabled ? (float)_gridCollectionView.GroupFirstSpacing : 0;
-        float _lastSpacing => _gridCollectionView.IsGroupingEnabled ? (float)_gridCollectionView.GroupLastSpacing : 0;
+        float _firstSpacing => (float)_gridCollectionView.GroupFirstSpacing;
+        float _lastSpacing => (float)_gridCollectionView.GroupLastSpacing;
         bool _isRatioHeight => _gridCollectionView.ColumnHeight <= 5.0;
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)

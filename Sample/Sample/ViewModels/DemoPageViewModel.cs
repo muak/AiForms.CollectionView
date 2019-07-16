@@ -40,8 +40,8 @@ namespace Sample.ViewModels
         public ReactivePropertySlim<double> AdditionalHeight { get; } = new ReactivePropertySlim<double>(0);
         public ReactivePropertySlim<bool> IsInfinite { get; } = new ReactivePropertySlim<bool>(false);
 
-        public Action EndLoading { get;set; }
-        public Action EndLoadingH { get; set; }
+        public Action<bool> SetEndLoadMore { get;set; }
+        public Action<bool> SetEndLoadMoreH { get; set; }
 
         public IScrollController ScrollController { get; set; }
         public IScrollController ScrollControllerH { get; set; }
@@ -116,6 +116,7 @@ namespace Sample.ViewModels
             {
                 if( loadCount == 10 )
                 {
+                    SetEndLoadMore(true);
                     return;
                 }
                 var list = new List<PhotoItem>();
@@ -131,7 +132,7 @@ namespace Sample.ViewModels
 
                 var group = new PhotoGroup(list) { Head = $"SectionX{loadCount}" };
                 ItemsSource.Add(group);
-                EndLoading();
+                SetEndLoadMore(false);
                 loadCount++;
             });
 
@@ -140,6 +141,7 @@ namespace Sample.ViewModels
             {
                 if(loadHCount == 10)
                 {
+                    SetEndLoadMoreH(true);
                     return;
                 }
                 var list = new List<PhotoItem>();
@@ -155,7 +157,7 @@ namespace Sample.ViewModels
 
                 var group = new PhotoGroup(list) { Head = $"SectionX{loadHCount}" };
                 ItemsSourceH.Add(group);
-                EndLoadingH();
+                SetEndLoadMoreH(false);
                 loadHCount++;
             });
 

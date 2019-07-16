@@ -50,23 +50,26 @@ namespace AiForms.Renderers.iOS
         {
             base.Scrolled(scrollView);
 
-            if (scrollView.ContentSize.Width <= scrollView.ContentOffset.X + scrollView.Bounds.Width)
+            if (_hCollectionView.IsInfinite)
             {
-                RaiseReachedBottom();
+                _visibleContentWidth = scrollView.ContentSize.Width / _infiniteMultiple;
+
+                if (scrollView.ContentOffset.X <= 0f || scrollView.ContentOffset.X > _visibleContentWidth * 2f)
+                {
+                    scrollView.ContentOffset = new CGPoint(_visibleContentWidth, scrollView.ContentOffset.Y);
+                }
+                return;
             }
 
-            if (!_hCollectionView.IsInfinite)
+            if (IsReachedBottom || CollectionView.LoadMoreCommand == null)
             {
                 return;
             }
 
-            _visibleContentWidth = scrollView.ContentSize.Width / _infiniteMultiple;
-
-            if (scrollView.ContentOffset.X <= 0f || scrollView.ContentOffset.X > _visibleContentWidth * 2f)
+            if (scrollView.ContentSize.Width <= scrollView.ContentOffset.X + scrollView.Bounds.Width)
             {
-                scrollView.ContentOffset = new CGPoint(_visibleContentWidth, scrollView.ContentOffset.Y);
+                RaiseReachedBottom();
             }
-
         }
 
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
