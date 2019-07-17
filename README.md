@@ -281,6 +281,8 @@ Because this library doesn't contain the feature of such as dealing with images 
 * SetLoadMoreCompletion
   * If it continues using the LoadMore after doing some process, set false; Otherwise set true.
   * Once the LoadMoreCommand is invoked, it will not be invoked again unless the SetLoadMoreCompletion is set to false.
+* LoadMoreMargin
+  * The number of items from the last as the threshold value to invoke the LoadMoreCommand. For example, if set this property to 3, when appearing the 3rd item from the last, the LoadMoreCommand will be invoked. This value is approximate. the default value is 0.
 
 ## GridCollectionView
 

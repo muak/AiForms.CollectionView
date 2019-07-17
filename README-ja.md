@@ -283,6 +283,8 @@ CollectionViewには画像を非同期で処理したりキャッシュしたり
 * SetLoadMoreCompletion
   * 何か処理をした後で LoadMoreCommand を使い続ける場合は false を、そうでない場合は true をセットします。
   * LoadMoreCommand が一度実行されると、SetLoadMoreCompletionに false をセットするまで再び LoadMoreCommand が実行されることはありません。
+* LoadMoreMargin
+  * LoadMoreCommandを発火させるまでの残りアイテム数。例えば3をセットすればおおよそ最後から3番目のアイテムが現れるくらいのタイミングでLoadMoreCommandが発火されます。規定値は0です。
 
 ## GridCollectionView
 
