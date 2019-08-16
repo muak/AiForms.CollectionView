@@ -55,7 +55,7 @@ namespace Sample.ViewModels
             _pageDlg = pageDialog;
 
             var list1 = new List<PhotoItem>();
-            for (var i = 0; i < 2; i++)
+            for (var i = 0; i < 20; i++)
             {
                 list1.Add(new PhotoItem
                 {
@@ -65,7 +65,7 @@ namespace Sample.ViewModels
                 });
             }
             var list2 = new List<PhotoItem>();
-            for (var i = 10; i < 13; i++)
+            for (var i = 10; i < 15; i++)
             {
                 list2.Add(new PhotoItem
                 {
@@ -93,10 +93,6 @@ namespace Sample.ViewModels
             ItemsSource.Add(group3);
             ItemsSourceH.Add(group1);
             ItemsSourceH.Add(group2);
-
-            PortraitColumns.Value = 4;
-
-
 
             TapCommand.Subscribe(async item => {
                 var photo = item as PhotoItem;

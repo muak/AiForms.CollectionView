@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
@@ -50,7 +50,7 @@
     </ContentPage.ToolbarItems>
     
     <FlexLayout Direction="Column" BackgroundColor="White">
-        <Label Text="HorizontalCollectionView" FontSize="12" FlexLayout.Shrink="0" TextColor="Black" />
+        <!--<Label Text="HorizontalCollectionView" FontSize="12" FlexLayout.Shrink="0" TextColor="Black" />
         <ai:HCollectionView FlexLayout.Shrink="0" Margin="0,0,0,0"
                             ItemsSource="{Binding ItemsSourceH}" 
                             ItemTapCommand="{Binding TapCommand}" 
@@ -65,9 +65,6 @@
                             ItemTemplate="{StaticResource templateA}"
                             TouchFeedbackColor="{Binding FeedbackColor.Value}"
                             ScrollController="{Binding ScrollControllerH}"
-                            LoadMoreCommand="{Binding LoadMoreHCommand}"
-                            SetLoadMoreCompletion="{Binding SetEndLoadMoreH}"
-                            LoadMoreMargin="1"
                             >
             <x:Arguments>
                 <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
@@ -79,25 +76,25 @@
                     </ai:ContentCell>
                 </DataTemplate>
             </ListView.GroupHeaderTemplate>
-        </ai:HCollectionView>
+        </ai:HCollectionView>-->
         <Label Text="GridCollectionView" FontSize="12" FlexLayout.Shrink="0" TextColor="Black" />
         <ai:GridCollectionView
             x:Name="collectionView"
             FlexLayout.Grow="1" FlexLayout.Shrink="1" Margin="0,0,0,0" 
             ItemsSource="{Binding ItemsSource}"
             IsGroupingEnabled="true"
-            GroupHeaderHeight="36"
-            GroupLastSpacing="16"
-            GroupFirstSpacing="0"
-            BothSidesMargin="6"
+            GroupHeaderHeight="36" 
             GridType="{Binding GridType.Value}"
             SpacingType="{Binding SpacingType.Value}"
             ColumnWidth="{Binding ColumnWidth.Value}"
             PortraitColumns="{Binding PortraitColumns.Value}"
             LandscapeColumns="5"
-            ColumnSpacing="10"
-            RowSpacing="6" 
+            ColumnSpacing="4"
+            RowSpacing="4" 
             ColumnHeight="1.0"
+            BothSidesMargin="6"
+            GroupFirstSpacing="0"
+            GroupLastSpacing="16"
             ItemTemplate="{StaticResource templateB}"
             ItemTapCommand="{Binding TapCommand}" 
             ItemLongTapCommand="{Binding LongTapCommand}" 
@@ -107,9 +104,6 @@
             RefreshCommand="{Binding RefreshCommand}"
             IsPullToRefreshEnabled="{Binding EnabledPullToRefresh.Value}"
             PullToRefreshColor="{Binding RefreshIconColor.Value}"
-            LoadMoreCommand="{Binding LoadMoreCommand}"
-            SetLoadMoreCompletion="{Binding SetEndLoadMore}"
-            LoadMoreMargin="3"
         >
             <x:Arguments>
                 <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
