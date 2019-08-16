@@ -50,7 +50,7 @@
     </ContentPage.ToolbarItems>
     
     <FlexLayout Direction="Column" BackgroundColor="White">
-        <!--<Label Text="HorizontalCollectionView" FontSize="12" FlexLayout.Shrink="0" TextColor="Black" />
+        <Label Text="HorizontalCollectionView" FontSize="12" FlexLayout.Shrink="0" TextColor="Black" />
         <ai:HCollectionView FlexLayout.Shrink="0" Margin="0,0,0,0"
                             ItemsSource="{Binding ItemsSourceH}" 
                             ItemTapCommand="{Binding TapCommand}" 
@@ -76,7 +76,7 @@
                     </ai:ContentCell>
                 </DataTemplate>
             </ListView.GroupHeaderTemplate>
-        </ai:HCollectionView>-->
+        </ai:HCollectionView>
         <Label Text="GridCollectionView" FontSize="12" FlexLayout.Shrink="0" TextColor="Black" />
         <ai:GridCollectionView
             x:Name="collectionView"
