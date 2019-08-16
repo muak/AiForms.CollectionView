@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>AiForms.CollectionView</id>
@@ -14,24 +14,21 @@ This has two layouts (GridCollectionView, HorizontalCollectonView). HorizontalCo
         </description>
         <summary></summary>
         <releaseNotes>
-## Bug fixes
-
-* [iOS][GridCollectionView] When a item just exists in ItemsSource, it is arranged at center.
-* some bug fixes
-
-## New Properties
+## Changes
 
 ### GridCollectionView / HCollectionView
 
-* GroupFirstSpacing – The spacing of the first item's top or left in a group.
-* GroupLastSpacing – The spacing of the last item's bottom or right in a group.
+* GroupFirstSpacing / GroupLastSpacing – Even if not using the grouping, this spacing is applied.
 
-### GridCollectionView
+## New Bindable Properties
 
-* BothSidesMargin – The margin of the right and left sides in the content area except for a group header cell.
-* IsGroupHeaderSticky – Whether a group header is fixed at the top. (iOS only) (default: true)
+### GridCollectionView / HCollectionView
+
+* LoadMoreCommand – When detecting appearing the last item, this command is invoked.
+* LoadMoreMargin – The number of items from the last as the threshold value to invoke the LoadMoreCommand.
+* SetLoadMoreCompletion – If it continues using the LoadMore after doing some process, set false; Otherwise set true.
         </releaseNotes>
-        <tags>Xamarin.Forms ListView CollectionView Grid Infinite Circular Scroll UICollectionView RecyclerView FlowLayout WrapLayout HorizontalListView</tags>
+        <tags>Xamarin.Forms ListView CollectionView Grid Infinite Circular Scroll UICollectionView RecyclerView FlowLayout WrapLayout HorizontalListView LoadMore</tags>
         <language>en-US</language>
         <dependencies>
             <group targetFramework="netstandard2.0">

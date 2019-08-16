@@ -27,8 +27,8 @@ namespace AiForms.Renderers.iOS
         bool _disposed;
         GridCollectionView _gridCollectionView => (GridCollectionView)Element;
         GridCollectionViewSource _gridSource => DataSource as GridCollectionViewSource;
-        float _firstSpacing => _gridCollectionView.IsGroupingEnabled ? (float)_gridCollectionView.GroupFirstSpacing : 0;
-        float _lastSpacing => _gridCollectionView.IsGroupingEnabled ? (float)_gridCollectionView.GroupLastSpacing : 0;
+        float _firstSpacing => (float)_gridCollectionView.GroupFirstSpacing;
+        float _lastSpacing => (float)_gridCollectionView.GroupLastSpacing;
         bool _isRatioHeight => _gridCollectionView.ColumnHeight <= 5.0;
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
@@ -275,11 +275,12 @@ namespace AiForms.Renderers.iOS
                     case UIInterfaceOrientation.PortraitUpsideDown:
                     case UIInterfaceOrientation.Unknown:
                         itemSize = GetUniformItemSize(_gridCollectionView.PortraitColumns);
-
+                        DataSource.LoadMoreMargin = Element.LoadMoreMargin / _gridCollectionView.PortraitColumns * (float)itemSize.Height;
                         break;
                     case UIInterfaceOrientation.LandscapeLeft:
                     case UIInterfaceOrientation.LandscapeRight:
                         itemSize = GetUniformItemSize(_gridCollectionView.LandscapeColumns);
+                        DataSource.LoadMoreMargin = Element.LoadMoreMargin / _gridCollectionView.LandscapeColumns * (float)itemSize.Height;
                         break;
                 }
                 ViewLayout.MinimumInteritemSpacing = (System.nfloat)_gridCollectionView.ColumnSpacing;
@@ -317,6 +318,7 @@ namespace AiForms.Renderers.iOS
 
             var itemWidth = Math.Floor((float)(width / (float)columns));
             var itemHeight = CalcurateColumnHeight(itemWidth);
+
             return new CGSize(itemWidth, itemHeight);
         }
 
@@ -326,6 +328,7 @@ namespace AiForms.Renderers.iOS
             var itemHeight = CalcurateColumnHeight(itemWidth);
             if (_gridCollectionView.SpacingType == SpacingType.Between)
             {
+                DataSource.LoadMoreMargin = Element.LoadMoreMargin / ((float)Frame.Width / itemWidth) * (float)itemHeight;
                 return new CGSize(itemWidth, itemHeight);
             }
 
@@ -347,6 +350,8 @@ namespace AiForms.Renderers.iOS
                 }
                 leftSize -= spacing;
             } while (true);
+
+            DataSource.LoadMoreMargin = Element.LoadMoreMargin / (float)columnCount * (float)itemHeight;
 
             var contentWidth = itemWidth * columnCount + spacing * (columnCount - 1f);
 

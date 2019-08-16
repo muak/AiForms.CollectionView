@@ -40,13 +40,29 @@ namespace AiForms.Renderers.iOS
             }
 
             var column = indexPath.Row % totalColumns; 
-
-            if(column <= SurplusPixel - 1) {
-                // assign 1px to the cell width in order from the first cell until the surplus is gone.
+            
+            if(column >= totalColumns - SurplusPixel) {
+                // assign 1px to the cell width in order from the last cell until the surplus is gone.
+                // if assigning from the first cell, the layout is sometimes broken when items is a few.
                 return new CGSize(CellSize.Width + 1, CellSize.Height);
             }
 
             return CellSize;
+        }
+
+        public override void Scrolled(UIScrollView scrollView)
+        {
+            base.Scrolled(scrollView);
+
+            if (IsReachedBottom || CollectionView.LoadMoreCommand == null)
+            {
+                return;
+            }
+
+            if (scrollView.ContentSize.Height <= scrollView.ContentOffset.Y + scrollView.Bounds.Height + LoadMoreMargin)
+            {
+                RaiseReachedBottom();
+            }
         }
     }
 }

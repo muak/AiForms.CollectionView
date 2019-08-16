@@ -6,7 +6,7 @@ using Foundation;
 namespace AiForms.Renderers.iOS
 {
     [Foundation.Preserve(AllMembers = true)]
-    public class HCollectionViewSource : CollectionViewSource, IUIScrollViewDelegate
+    public class HCollectionViewSource : CollectionViewSource
     {
         HCollectionView _hCollectionView => CollectionView as HCollectionView;
         int _infiniteMultiple = 3;
@@ -48,18 +48,28 @@ namespace AiForms.Renderers.iOS
 
         public override void Scrolled(UIScrollView scrollView)
         {
-            if (!_hCollectionView.IsInfinite)
+            base.Scrolled(scrollView);
+
+            if (_hCollectionView.IsInfinite)
+            {
+                _visibleContentWidth = scrollView.ContentSize.Width / _infiniteMultiple;
+
+                if (scrollView.ContentOffset.X <= 0f || scrollView.ContentOffset.X > _visibleContentWidth * 2f)
+                {
+                    scrollView.ContentOffset = new CGPoint(_visibleContentWidth, scrollView.ContentOffset.Y);
+                }
+                return;
+            }
+
+            if (IsReachedBottom || CollectionView.LoadMoreCommand == null)
             {
                 return;
             }
 
-            _visibleContentWidth = scrollView.ContentSize.Width / _infiniteMultiple;
-
-            if (scrollView.ContentOffset.X <= 0f || scrollView.ContentOffset.X > _visibleContentWidth * 2f)
+            if (scrollView.ContentSize.Width <= scrollView.ContentOffset.X + scrollView.Bounds.Width + LoadMoreMargin)
             {
-                scrollView.ContentOffset = new CGPoint(_visibleContentWidth, scrollView.ContentOffset.Y);
+                RaiseReachedBottom();
             }
-
         }
 
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)

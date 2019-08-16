@@ -15,6 +15,10 @@ namespace AiForms.Renderers
         /// <param name="cachingStrategy">Caching strategy.</param>
         public CollectionView(ListViewCachingStrategy cachingStrategy):base(cachingStrategy){
             ScrollController = new ScrollController(this);
+            SetLoadMoreCompletion = (isEnd) =>
+            {
+                SetLoadMoreCompletionAction?.Invoke(isEnd);
+            };
         }
 
         /// <summary>
@@ -151,6 +155,52 @@ namespace AiForms.Renderers
             set { SetValue(ScrollControllerProperty, value); }
         }
 
+        public static BindableProperty LoadMoreCommandProperty =
+            BindableProperty.Create(
+                nameof(LoadMoreCommand),
+                typeof(ICommand),
+                typeof(CollectionView),
+                default(ICommand),
+                defaultBindingMode: BindingMode.OneWay
+            );
+
+        public ICommand LoadMoreCommand
+        {
+            get { return (ICommand)GetValue(LoadMoreCommandProperty); }
+            set { SetValue(LoadMoreCommandProperty, value); }
+        }
+
+        internal Action<bool> SetLoadMoreCompletionAction;
+
+        public static BindableProperty SetLoadMoreCompletionProperty =
+            BindableProperty.Create(
+                nameof(SetLoadMoreCompletion),
+                typeof(Action<bool>),
+                typeof(CollectionView),
+                default(Action),
+                defaultBindingMode: BindingMode.OneWayToSource
+            );
+
+        public Action<bool> SetLoadMoreCompletion
+        {
+            get { return (Action<bool>)GetValue(SetLoadMoreCompletionProperty); }
+            set { SetValue(SetLoadMoreCompletionProperty, value); }
+        }
+
+        public static BindableProperty LoadMoreMarginProperty =
+            BindableProperty.Create(
+                nameof(LoadMoreMargin),
+                typeof(int),
+                typeof(CollectionView),
+                default(int),
+                defaultBindingMode: BindingMode.OneWay
+            );
+
+        public int LoadMoreMargin
+        {
+            get { return (int)GetValue(LoadMoreMarginProperty); }
+            set { SetValue(LoadMoreMarginProperty, value); }
+        }
 
         // kill unused properties
         private new object Header { get; }

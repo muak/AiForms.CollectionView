@@ -29,6 +29,7 @@ namespace Sample.ViewModels
         public ReactiveCommand MoveCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand NextCommand { get; set; } = new ReactiveCommand();
         public ReactiveCommand RepeatCommand { get; set; } = new ReactiveCommand();
+        public ReactiveCommand LoadMoreCommand { get; set; } = new ReactiveCommand();
 
         public ReactivePropertySlim<double> HeaderHeight { get; } = new ReactivePropertySlim<double>(36);
         public ReactivePropertySlim<Color> Background { get; } = new ReactivePropertySlim<Color>(Color.Transparent);
@@ -49,6 +50,7 @@ namespace Sample.ViewModels
         public ReactivePropertySlim<double> GroupLastSpacing { get; } = new ReactivePropertySlim<double>(0);
         public ReactivePropertySlim<bool> IsGroupHeaderSticky { get; } = new ReactivePropertySlim<bool>(true);
         public ReactivePropertySlim<double> BothSidesMargin { get; } = new ReactivePropertySlim<double>(0);
+        public Action<bool> SetEndLoadMore { get; set; }
 
         public List<TestSection> TestSections { get; set; }
         IEnumerator<TestItem> _testEnumerator;

@@ -12,15 +12,18 @@ using Xamarin.Forms.Internals;
 namespace AiForms.Renderers.iOS
 {
     [Foundation.Preserve(AllMembers = true)]
-    public class CollectionViewSource : UICollectionViewSource, IUICollectionViewDelegateFlowLayout
+    public class CollectionViewSource : UICollectionViewSource, IUICollectionViewDelegateFlowLayout,IUIScrollViewDelegate
     {
         static int s_dataTemplateIncrementer = 2; // lets start at not 0 because
 
         public CGSize CellSize { get; set; }
         public Dictionary<int, int> Counts { get; set; }
+        public bool IsReachedBottom { get; set; }
+        public float LoadMoreMargin { get; set; }
 
         protected CollectionView CollectionView;
         protected ITemplatedItemsView<Cell> TemplatedItemsView => CollectionView;
+
 
         const int DefaultItemTemplateId = 1;
         bool _isLongTap;
@@ -55,6 +58,16 @@ namespace AiForms.Renderers.iOS
             _disposed = true;
 
             base.Dispose(disposing);
+        }
+
+        public override void Scrolled(UIScrollView scrollView)
+        {
+        }
+
+        protected void RaiseReachedBottom()
+        {
+            IsReachedBottom = true;
+            CollectionView?.LoadMoreCommand?.Execute(null);
         }
 
         public override nint NumberOfSections(UICollectionView collectionView)

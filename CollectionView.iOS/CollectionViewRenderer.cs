@@ -19,7 +19,6 @@ namespace AiForms.Renderers.iOS
         protected CollectionViewSource DataSource;
         protected UICollectionViewFlowLayout ViewLayout;
         protected ITemplatedItemsView<Cell> TemplatedItemsView => Element;
-        ScrollToRequestedEventArgs _requestedScroll;
         bool _disposed;
 
         protected override void OnElementChanged(ElementChangedEventArgs<CollectionView> e)
@@ -32,6 +31,7 @@ namespace AiForms.Renderers.iOS
                 templatedItems.CollectionChanged -= OnCollectionChanged;
                 templatedItems.GroupedCollectionChanged -= OnGroupedCollectionChanged;
                 e.OldElement.ScrollToRequested -= OnScrollToRequested;
+                e.OldElement.SetLoadMoreCompletionAction = null;
             }
 
             if (e.NewElement != null)
@@ -42,6 +42,10 @@ namespace AiForms.Renderers.iOS
                 templatedItems.CollectionChanged += OnCollectionChanged;
                 templatedItems.GroupedCollectionChanged += OnGroupedCollectionChanged;
                 e.NewElement.ScrollToRequested += OnScrollToRequested;
+                e.NewElement.SetLoadMoreCompletionAction = (isEnd) =>
+                {
+                    DataSource.IsReachedBottom = isEnd;
+                };
 
                 UpdateBackgroundColor();
             }
@@ -55,7 +59,7 @@ namespace AiForms.Renderers.iOS
             }
 
             if (disposing)
-            {
+            {             
                 ViewLayout?.Dispose();
                 ViewLayout = null;
 
@@ -65,11 +69,12 @@ namespace AiForms.Renderers.iOS
                 }
 
                 if (Element != null)
-                {
+                {                  
                     var templatedItems = TemplatedItemsView.TemplatedItems;
                     templatedItems.CollectionChanged -= OnCollectionChanged;
                     templatedItems.GroupedCollectionChanged -= OnGroupedCollectionChanged;
                     Element.ScrollToRequested -= OnScrollToRequested;
+                    Element.SetLoadMoreCompletion = null;
                 }
             }
 
@@ -89,14 +94,12 @@ namespace AiForms.Renderers.iOS
             {
                 UpdateBackgroundColor();
             }
-
         }
 
         protected virtual async void OnScrollToRequested(object sender, ScrollToRequestedEventArgs e)
         {
             if (Superview == null)
             {
-                _requestedScroll = e;
                 return;
             }
 

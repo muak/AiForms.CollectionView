@@ -174,6 +174,46 @@ public class SomeViewModel
 }
 ```
 
+### LoadMoreCommand と SetLoadMoreCompletion を使った実装例
+
+最後の項目までスクロールしたら続きを読み込むような処理は LoadMoreCommand と SetLoadMoreCompletion を使って実装できます。
+
+```xml
+<ai:GridCollectionView 
+    ItemsSource="{Binding ItemsSource}"
+    LoadMoreCommand="{Binding LoadMoreCommand}"
+    SetLoadMoreCompletion="{Binding SetLoadMoreCompletion}" >
+    ...omitting
+</ai:GridCollectionView>
+```
+
+```cs
+public class SomeViewModel
+{
+    public ObservableCollection<Item> ItemsSource { get; } = new ObservableCollection<Item>();
+    public Command LoadMoreCommand { get; set; }
+    public Action<bool> SetLoadMoreCompletion { get; set; }
+
+    public async Task LoadMoreCommandExecute()
+    {
+        var items = await WebApi.GetItems(10);
+
+        if(items.Count == 0)
+        {
+            SetLoadMoreCompletion(true); // 全ての項目を読み込んだ
+            return;
+        }
+
+        foreach(var item in items)
+        {
+            ItemsSource.Add(item);
+        }
+
+        SetLoadMoreCompletion(false); // まだ全ての項目は読み込んでいない.
+    }
+}
+```
+
 ## 使用可能なListViewの機能
 
 ### Bindable properties
@@ -222,6 +262,30 @@ var collectionView = new HCollectionView(ListViewCachingStrategy.RetainElement);
 DataTemplateの要素に画像を使用する場合は、**[FFImageLoading](https://github.com/luberda-molinet/FFImageLoading)** を利用することを強く推奨します。
 CollectionViewには画像を非同期で処理したりキャッシュしたりする機能がないためです。
 
+## 共通の Bindable Properties (GridCollectionView / HCollectionView)
+
+* ItemTapCommand
+  * アイテムがタップされた時に発火するコマンド。
+* ItemLongTapCommand
+  * アイテムがロングタップされた時に発火するコマンド。
+* TouchFeedbackColor
+  * アイテムをタッチした時に表示するエフェクト色。
+* GroupFirstSpacing
+  * グループ内の最初のアイテムの上（GridCollectionView）または左（HCollectionView）の間隔。
+  * グループ機能を使っていない場合は最初のアイテムに適用されます。
+* GroupLastSpacing
+  * グループ内の最後のアイテムの下（GridCollectionView）または右（HCollectionView)の間隔。
+  * グループ機能を使っていない場合は最後のアイテムに適用されます。
+* [ScrollController](#scrollcontroller)
+  * ViewModelなどでCollectionViewのスクロールを制御する場合に使用するオブジェクト。
+* LoadMoreCommand
+  * 最後のアイテムの表示が検出された時に発火するコマンド。
+* SetLoadMoreCompletion
+  * 何か処理をした後で LoadMoreCommand を使い続ける場合は false を、そうでない場合は true をセットします。
+  * LoadMoreCommand が一度実行されると、SetLoadMoreCompletionに false をセットするまで再び LoadMoreCommand が実行されることはありません。
+* LoadMoreMargin
+  * LoadMoreCommandを発火させるまでの残りアイテム数。例えば3をセットすればおおよそ最後から3番目のアイテムが現れるくらいのタイミングでLoadMoreCommandが発火されます。規定値は0です。
+
 ## GridCollectionView
 
 Grid状に各要素を配置するListViewです。これは [WrapLayout](https://github.com/muak/AiForms.Layouts#wraplayout) に似ていますが、セルをリサイクルできるという点などで異なります。
@@ -248,24 +312,13 @@ Grid状に各要素を配置するListViewです。これは [WrapLayout](https:
     * グループヘッダーのセルの高さ。
 * [SpacingType](#spacingtype-enumeration)
     * 列間の間隔の決め方を、Between と Center から選択します。GridType が AutoSpacingGrid のときのみ有効です。(Default: Between)
-* GroupFirstSpacing
-  * グループ内の最初のアイテムの上の間隔。
-* GroupLastSpacing
-  * グループ内の最後のアイテムの下の間隔。
 * BothSidesMargin
   * グループヘッダーセル以外のコンテンツ領域の左右の余白。GridType が UniformGrid のときのみ有効です。 (Default: 0)
 * PullToRefreshColor
     * PullToRefreshのインジケータに使用する色。
-* ItemTapCommand
-  * アイテムがタップられた時に発火するコマンド。
-* ItemLongTapCommand
-  * アイテムがロングタップされた時に発火するコマンド。
-* TouchFeedbackColor
-  * アイテムをタッチした時に表示するエフェクト色。
-* [ScrollController](#scrollcontroller)
-  * ViewModelなどでCollectionViewのスクロールを制御する場合に使用するオブジェクト。
 * IsGroupHeaderSticky
   * グループヘッダーを上に固定するかどうか (iOS のみ) (default: true)
+* [その他の共通プロパティ](#%E5%85%B1%E9%80%9A%E3%81%AE-Bindable-Properties-GridCollectionView--HCollectionView)
 
 ### Special Properties
 
@@ -308,19 +361,7 @@ Grid状に各要素を配置するListViewです。これは [WrapLayout](https:
 
     > iOSの場合、コンテナ幅を十分に満たす数のセルが必要です。
     > Androidの場合、完全に無限ではないので長時間スクロールすると端に到達することがあります。
-
-* ItemTapCommand
-  * アイテムがタップられた時に発火するコマンド。
-* ItemLongTapCommand
-  * アイテムがロングタップされた時に発火するコマンド。
-* TouchFeedbackColor
-  * アイテムをタッチした時に表示するエフェクト色。
-* [ScrollController](#scrollcontroller)
-  * ViewModelなどでCollectionViewのスクロールを制御する場合に使用するオブジェクト。
-* GroupFirstSpacing
-  * グループ内の最初のアイテムの左の間隔。
-* GroupLastSpacing
-  * グループ内の最後のアイテムの右の間隔。
+* [その他の共通プロパティ](#%E5%85%B1%E9%80%9A%E3%81%AE-Bindable-Properties-GridCollectionView--HCollectionView)
 
 ### 行の高さについて
 

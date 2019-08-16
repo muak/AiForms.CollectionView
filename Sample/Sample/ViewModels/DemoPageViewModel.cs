@@ -20,6 +20,8 @@ namespace Sample.ViewModels
         public ReactiveProperty<bool> IsRefreshing { get; } = new ReactiveProperty<bool>(false);
         public AsyncReactiveCommand RefreshCommand { get; } = new AsyncReactiveCommand();
         public AsyncReactiveCommand NextCommand { get; } = new AsyncReactiveCommand();
+        public ReactiveCommand LoadMoreCommand { get; } = new ReactiveCommand();
+        public ReactiveCommand LoadMoreHCommand { get; } = new ReactiveCommand();
 
         public TestCollection TestList { get; set; } = new TestCollection();
 
@@ -37,6 +39,9 @@ namespace Sample.ViewModels
         public ReactivePropertySlim<Color> RefreshIconColor { get; } = new ReactivePropertySlim<Color>(Color.DimGray);
         public ReactivePropertySlim<double> AdditionalHeight { get; } = new ReactivePropertySlim<double>(0);
         public ReactivePropertySlim<bool> IsInfinite { get; } = new ReactivePropertySlim<bool>(false);
+
+        public Action<bool> SetEndLoadMore { get;set; }
+        public Action<bool> SetEndLoadMoreH { get; set; }
 
         public IScrollController ScrollController { get; set; }
         public IScrollController ScrollControllerH { get; set; }
@@ -105,6 +110,56 @@ namespace Sample.ViewModels
             });
 
             NextCommand.Subscribe(NextAction);
+
+            var loadCount = 1;
+            LoadMoreCommand.Subscribe(_ =>
+            {
+                if( loadCount == 10 )
+                {
+                    SetEndLoadMore(true);
+                    return;
+                }
+                var list = new List<PhotoItem>();
+                for (var i = 5; i < 20; i++)
+                {
+                    list.Add(new PhotoItem
+                    {
+                        PhotoUrl = $"https://kamusoft.jp/openimage/nativecell/{i + 1}.jpg",
+                        Title = $"Title {i + 1}",
+                        Category = "XXX",
+                    });
+                }
+
+                var group = new PhotoGroup(list) { Head = $"SectionX{loadCount}" };
+                ItemsSource.Add(group);
+                SetEndLoadMore(false);
+                loadCount++;
+            });
+
+            var loadHCount = 1;
+            LoadMoreHCommand.Subscribe(_ =>
+            {
+                if(loadHCount == 10)
+                {
+                    SetEndLoadMoreH(true);
+                    return;
+                }
+                var list = new List<PhotoItem>();
+                for (var i = 5; i < 20; i++)
+                {
+                    list.Add(new PhotoItem
+                    {
+                        PhotoUrl = $"https://kamusoft.jp/openimage/nativecell/{i + 1}.jpg",
+                        Title = $"Title {i + 1}",
+                        Category = "XXX",
+                    });
+                }
+
+                var group = new PhotoGroup(list) { Head = $"SectionX{loadHCount}" };
+                ItemsSourceH.Add(group);
+                SetEndLoadMoreH(false);
+                loadHCount++;
+            });
 
             SetDemoItems();
         }
