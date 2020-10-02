@@ -4,9 +4,9 @@ using AiForms.Renderers;
 using AiForms.Renderers.Droid;
 using Android.Content;
 using Android.Content.Res;
-using Android.Support.V4.Widget;
-using Android.Support.V7.Widget;
 using Android.Views;
+using AndroidX.RecyclerView.Widget;
+using AndroidX.SwipeRefreshLayout.Widget;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 

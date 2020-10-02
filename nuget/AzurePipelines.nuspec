@@ -14,19 +14,7 @@ This has two layouts (GridCollectionView, HorizontalCollectonView). HorizontalCo
         </description>
         <summary></summary>
         <releaseNotes>
-## Changes
-
-### GridCollectionView / HCollectionView
-
-* GroupFirstSpacing / GroupLastSpacing – Even if not using the grouping, this spacing is applied.
-
-## New Bindable Properties
-
-### GridCollectionView / HCollectionView
-
-* LoadMoreCommand – When detecting appearing the last item, this command is invoked.
-* LoadMoreMargin – The number of items from the last as the threshold value to invoke the LoadMoreCommand.
-* SetLoadMoreCompletion – If it continues using the LoadMore after doing some process, set false; Otherwise set true.
+Corresponded to AndroidX
         </releaseNotes>
         <tags>Xamarin.Forms ListView CollectionView Grid Infinite Circular Scroll UICollectionView RecyclerView FlowLayout WrapLayout HorizontalListView LoadMore</tags>
         <language>en-US</language>

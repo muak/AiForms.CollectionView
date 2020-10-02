@@ -1,6 +1,6 @@
 ﻿using System.Collections.Specialized;
 using Android.Content;
-using Android.Support.V7.Widget;
+using AndroidX.RecyclerView.Widget;
 
 namespace AiForms.Renderers.Droid
 {

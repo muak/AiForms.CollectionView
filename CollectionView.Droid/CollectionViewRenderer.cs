@@ -1,11 +1,11 @@
 ﻿using System;
 using Android.Content;
-using Android.Support.V7.Widget;
 using AiForms.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using AView = Android.Views.View;
 using Android.Views;
+using AndroidX.RecyclerView.Widget;
 
 namespace AiForms.Renderers.Droid
 {

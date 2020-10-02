@@ -3,7 +3,7 @@ using AiForms.Renderers;
 using AiForms.Renderers.Droid;
 using Android.Content;
 using Android.Graphics;
-using Android.Support.V7.Widget;
+using AndroidX.RecyclerView.Widget;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -200,7 +200,7 @@ namespace AiForms.Renderers.Droid
                 base.Dispose(disposing);
             }
 
-            public override void GetItemOffsets(Rect outRect, Android.Views.View view, RecyclerView parent, RecyclerView.State state)
+            public override void GetItemOffsets(Android.Graphics.Rect outRect, Android.Views.View view, RecyclerView parent, RecyclerView.State state)
             {
                 var holder = parent.GetChildViewHolder(view) as ContentViewHolder;
                 var position = parent.GetChildAdapterPosition(view);

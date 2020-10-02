@@ -1,6 +1,6 @@
 ﻿using AiForms.Renderers.Droid.Cells;
-using Android.Support.V7.Widget;
 using Android.Views;
+using AndroidX.RecyclerView.Widget;
 using AView = Android.Views.View;
 
 namespace AiForms.Renderers.Droid

@@ -19,7 +19,7 @@ namespace Sample.Droid
 
             global::Xamarin.Forms.Forms.SetFlags("FastRenderers_Experimental");
 			global::Xamarin.Forms.Forms.Init(this, bundle);
-            Xamarin.Forms.Svg.Droid.SvgImage.Init();
+            Xamarin.Forms.Svg.Droid.SvgImage.Init(this);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
             CarouselViewRenderer.Init();
             AiForms.Dialogs.Dialogs.Init(this);
