@@ -14,6 +14,7 @@
         <Button Text="GridTestIndex" Command="{Binding GoToTest}"  CommandParameter="GridTestIndex" />
         <Button Text="GridGroupTestIndex" Command="{Binding GoToTest}"  CommandParameter="GridGroupTestIndex" />
         <Button Text="DemoPage" Command="{Binding GoToTest}"  CommandParameter="DemoPage" />
+        <Button Text="SurveyPage" Command="{Binding GoToTest}"  CommandParameter="SurveyPage" />
 	</StackLayout>
     </ScrollView>
 </ContentPage>

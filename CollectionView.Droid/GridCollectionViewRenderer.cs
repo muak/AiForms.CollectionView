@@ -428,11 +428,12 @@ namespace AiForms.Renderers.Droid
                 var spanSize = param.SpanSize;
                 var position = parent.GetChildAdapterPosition(view);
 
-                if (spanSize == _spanCount)
+                // TODO: 1 column grid with grouped is not work
+                if (_gridCollectionView.IsGroupingEnabled && spanSize == _spanCount)
                 {
                     var headparams = view.LayoutParameters as ViewGroup.MarginLayoutParams;
                     var margin = 0;
-                    if (_gridCollectionView.GridType == GridType.AutoSpacingGrid && _gridCollectionView.SpacingType == SpacingType.Center || 
+                    if (_gridCollectionView.GridType == GridType.AutoSpacingGrid && _gridCollectionView.SpacingType == SpacingType.Center ||
                        _gridCollectionView.GridType == GridType.UniformGrid && _gridCollectionView.BothSidesMargin > 0)
                     {
                         margin = _parentRenderer.RecyclerView.PaddingLeft * -1;
@@ -446,13 +447,14 @@ namespace AiForms.Renderers.Droid
                     }
 
                     outRect.Bottom = _parentRenderer._firstSpacing;
-                    if(position != 0) {
+                    if (position != 0)
+                    {
                         outRect.Top = _parentRenderer._lastSpacing;
                     }
                     return;
                 }
 
-                if (_spanCount == 1)
+                if (_gridCollectionView.IsGroupingEnabled && _spanCount == 1)
                 {
                     return;
                 }
