@@ -70,7 +70,7 @@ namespace AiForms.Renderers.Droid
             {
                 if (RecyclerView == null)
                 {
-                    RecyclerView = new RecyclerView(Context);
+                    RecyclerView = new RecyclerView(new ContextThemeWrapper(Context, Resource.Style.scrollViewScrollBars),null,Resource.Attribute.collectionViewStyle);
                     _refresh = new SwipeRefreshLayout(Context);
                     _refresh.SetOnRefreshListener(this);
                     _refresh.AddView(RecyclerView, LayoutParams.MatchParent, LayoutParams.MatchParent);

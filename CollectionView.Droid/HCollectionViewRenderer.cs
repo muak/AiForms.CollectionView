@@ -3,6 +3,7 @@ using AiForms.Renderers;
 using AiForms.Renderers.Droid;
 using Android.Content;
 using Android.Graphics;
+using AndroidX.AppCompat.View;
 using AndroidX.RecyclerView.Widget;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -50,7 +51,7 @@ namespace AiForms.Renderers.Droid
             {
                 if (Control == null)
                 {
-                    RecyclerView = new RecyclerView(Context);
+                    RecyclerView = new RecyclerView(new ContextThemeWrapper(Context, Resource.Style.scrollViewScrollBars), null, Resource.Attribute.collectionViewStyle);
                     LayoutManager = new LinearLayoutManager(Context);
                     LayoutManager.Orientation = LinearLayoutManager.Horizontal;
 
