@@ -2,6 +2,10 @@
 using UIKit;
 using CoreGraphics;
 using Foundation;
+using Xamarin.Forms.Internals;
+using Xamarin.Forms;
+using AiForms.Renderers.iOS.Cells;
+using System.Collections;
 
 namespace AiForms.Renderers.iOS
 {
