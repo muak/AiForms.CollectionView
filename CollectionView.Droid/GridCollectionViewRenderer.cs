@@ -159,14 +159,20 @@ namespace AiForms.Renderers.Droid
 
         protected virtual void RefreshAll()
         {
+            try
+            {
+                RecyclerView.RemoveItemDecoration(_itemDecoration);
+                _gridLayoutManager.GetSpanSizeLookup().InvalidateSpanIndexCache();
 
-            RecyclerView.RemoveItemDecoration(_itemDecoration);
-            _gridLayoutManager.GetSpanSizeLookup().InvalidateSpanIndexCache();
-
-            Adapter.OnDataChanged();
-            RecyclerView.AddItemDecoration(_itemDecoration);
-            RequestLayout();
-            Invalidate();
+                Adapter.OnDataChanged();
+                RecyclerView.AddItemDecoration(_itemDecoration);
+                RequestLayout();
+                Invalidate();
+            }
+            catch
+            {
+                ;
+            }
         }
 
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
